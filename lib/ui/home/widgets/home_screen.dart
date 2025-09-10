@@ -1,3 +1,4 @@
+import 'package:brasil_cripto/config/env.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -9,7 +10,9 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(''),
       ),
-      body: Container(),
+      body: Container(
+        child: Text(Env.coingeckoApiKey),
+      ),
     );
   }
 }
