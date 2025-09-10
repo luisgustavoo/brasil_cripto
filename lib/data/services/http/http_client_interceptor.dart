@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:brasil_cripto/config/env.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
@@ -11,6 +12,11 @@ class HttpClientInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
+    final authRequired = options.extra['auth_required'] as bool? ?? true;
+    if (authRequired) {
+      options.headers['x-cg-demo-api-key'] = Env.coingeckoApiKey;
+    }
+
     handler.next(options);
   }
 
