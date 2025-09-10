@@ -1,0 +1,7 @@
+{
+  "@@locale": "en",
+  "brazilCripto": "Brazil Cripto",
+  "@brazilCripto": {
+    "description": "App name"
+  }
+}
