@@ -1,3 +1,4 @@
+import 'package:brasil_cripto/config/env.dart';
 import 'package:brasil_cripto/data/services/http/http_client.dart';
 import 'package:brasil_cripto/data/services/http/http_client_exception.dart';
 import 'package:brasil_cripto/data/services/http/http_client_interceptor.dart';
@@ -15,6 +16,7 @@ class DioHttpClient implements HttpClient {
   late Dio _dio;
 
   final _options = BaseOptions(
+    baseUrl: Env.baseUrl,
     connectTimeout: const Duration(milliseconds: 60000),
     receiveTimeout: const Duration(milliseconds: 60000),
   );
