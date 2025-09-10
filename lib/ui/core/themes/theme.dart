@@ -1,97 +1,86 @@
-import 'package:brasil_cripto/ui/core/themes/colors.dart';
 import 'package:flutter/material.dart';
+import 'colors.dart';
 
 abstract final class AppTheme {
-  // TextTheme unificado para light e dark
-  static const _textTheme = TextTheme(
-    headlineLarge: TextStyle(
-      fontSize: 32,
-      fontWeight: FontWeight.w500,
-      color: AppColors.black1, // para light, override no dark se necessário
-    ),
-    headlineSmall: TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w400,
-      color: AppColors.black1,
-    ),
-    titleMedium: TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w500,
-      color: AppColors.black1,
-    ),
-    bodyLarge: TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w400,
-      color: AppColors.black1,
-    ),
-    bodyMedium: TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.w400,
-      color: AppColors.black1,
-    ),
-    bodySmall: TextStyle(
-      fontSize: 14,
-      fontWeight: FontWeight.w400,
-      color: AppColors.grey3,
-    ),
-    labelSmall: TextStyle(
-      fontSize: 10,
-      fontWeight: FontWeight.w500,
-      color: AppColors.grey3,
-    ),
-    labelLarge: TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w400,
-      color: AppColors.grey3,
-    ),
+  static final _textTheme = TextTheme(
+    headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.w500),
+    headlineSmall: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+    bodyLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+    bodyMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+    bodySmall: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+    labelSmall: TextStyle(fontSize: 10, fontWeight: FontWeight.w500),
+    labelLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
   );
 
-  // InputDecorationTheme unificado
-  static const _inputDecorationTheme = InputDecorationTheme(
-    hintStyle: TextStyle(
-      color: AppColors.grey3,
-      fontSize: 18,
-      fontWeight: FontWeight.w400,
-    ),
-  );
-
-  // Tema claro
-  static ThemeData lightTheme = ThemeData(
+  static final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     colorScheme: AppColors.lightColorScheme,
-    scaffoldBackgroundColor: AppColors.lightColorScheme.surface,
+    scaffoldBackgroundColor: AppColors.lightBackground,
+    cardColor: AppColors.lightCard,
     appBarTheme: AppBarTheme(
-      backgroundColor: AppColors.lightColorScheme.primary,
-      foregroundColor: AppColors.lightColorScheme.onPrimary,
-    ),
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: AppColors.green1,
-      foregroundColor: AppColors.white1,
+      backgroundColor: AppColors.lightHighlight,
+      foregroundColor: Colors.white,
     ),
     textTheme: _textTheme.apply(
-      bodyColor: AppColors.black1,
-      displayColor: AppColors.black1,
+      bodyColor: AppColors.lightTextPrimary,
+      displayColor: AppColors.lightTextPrimary,
     ),
-    inputDecorationTheme: _inputDecorationTheme,
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: AppColors.lightHighlight,
+      foregroundColor: Colors.white,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.lightHighlight,
+        foregroundColor: Colors.white,
+      ),
+    ),
   );
 
-  // Tema escuro
-  static ThemeData darkTheme = ThemeData(
+  static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     colorScheme: AppColors.darkColorScheme,
-    scaffoldBackgroundColor: AppColors.darkColorScheme.surface,
+    scaffoldBackgroundColor: AppColors.darkBackground,
+    cardColor: AppColors.darkCard,
     appBarTheme: AppBarTheme(
-      backgroundColor: AppColors.darkColorScheme.primary,
-      foregroundColor: AppColors.darkColorScheme.onPrimary,
-    ),
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: AppColors.green1,
-      foregroundColor: AppColors.white1,
+      backgroundColor: AppColors.darkHighlight,
+      foregroundColor: Colors.white,
     ),
     textTheme: _textTheme.apply(
-      bodyColor: AppColors.white1,
-      displayColor: AppColors.white1,
+      bodyColor: AppColors.darkTextPrimary,
+      displayColor: AppColors.darkTextPrimary,
     ),
-    inputDecorationTheme: _inputDecorationTheme,
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: AppColors.darkHighlight,
+      foregroundColor: Colors.white,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.darkHighlight,
+        foregroundColor: Colors.white,
+      ),
+    ),
   );
 }
+
+
+
+
+
+  // // Light Theme
+  // static final _elevatedButtonLightTheme = ElevatedButtonThemeData(
+  //   style: ElevatedButton.styleFrom(
+  //     backgroundColor: AppColors.lightColorScheme.primary, // cor do botão
+  //     foregroundColor: AppColors.lightColorScheme.onPrimary, // cor do texto
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+  //   ),
+  // );
+
+  // // Dark Theme
+  // static final _elevatedButtonDarkTheme = ElevatedButtonThemeData(
+  //   style: ElevatedButton.styleFrom(
+  //     backgroundColor: AppColors.darkColorScheme.primary,
+  //     foregroundColor: AppColors.darkColorScheme.onPrimary,
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+  //   ),
+  // );

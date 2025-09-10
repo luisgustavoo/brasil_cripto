@@ -1,3 +1,4 @@
+import 'package:brasil_cripto/routing/router.dart';
 import 'package:brasil_cripto/ui/core/themes/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -10,10 +11,10 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: router(),
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      home: const Scaffold(body: Center(child: Text('Hello World!'))),
     );
   }
 }
