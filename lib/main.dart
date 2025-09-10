@@ -1,8 +1,11 @@
+import 'package:brasil_cripto/config/dependencies.dart';
 import 'package:brasil_cripto/routing/router.dart';
 import 'package:brasil_cripto/ui/core/themes/theme.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await configureDependencies();
   runApp(const MainApp());
 }
 
