@@ -19,4 +19,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noCryptocurrencyFound => 'No cryptocurrency found';
+
+  @override
+  String get price => 'Price';
+
+  @override
+  String get oneHour => '1h';
+
+  @override
+  String get oneDay => '24h';
+
+  @override
+  String get sevenDays => '7d';
+
+  @override
+  String get volumeDay => '24h Volume';
+
+  @override
+  String get marketCap => 'Market Cap';
 }

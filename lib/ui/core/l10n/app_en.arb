@@ -15,5 +15,29 @@
   "noCryptocurrencyFound": "No cryptocurrency found",
   "@noCryptocurrencyFound": {
     "description": "No cryptocurrency found"
+  },
+  "price": "Price",
+  "@price": {
+    "description": "Price"
+  },
+  "oneHour": "1h",
+  "@oneHour": {
+    "description": "1h"
+  },
+  "oneDay": "24h",
+  "@oneDay": {
+    "description": "24h"
+  },
+  "sevenDays": "7d",
+  "@sevenDays": {
+    "description": "7d"
+  },
+  "volumeDay": "24h Volume",
+  "@volumeDay": {
+    "description": "24h Volume"
+  },
+  "marketCap": "Market Cap",
+  "@marketCap": {
+    "description": "Market Cap"
   }
 }

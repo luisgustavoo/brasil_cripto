@@ -39,7 +39,13 @@ class _SparkLineChartState extends State<SparkLineChart> {
           ),
           lineBarsData: [
             LineChartBarData(
-              color: AppColors.lightPositive,
+              color:
+                  widget
+                      .coinsMarkets
+                      .priceChangePercentage7dInCurrency
+                      .isNegative
+                  ? AppColors.darkNegative
+                  : AppColors.lightPositive,
               // Espessura do linha
               barWidth: 1,
               // Se a linha vai fazer curava

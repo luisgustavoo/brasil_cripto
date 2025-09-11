@@ -1,6 +1,8 @@
 import 'package:brasil_cripto/domain/models/coins_markets.dart';
+import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/core/themes/colors.dart';
 import 'package:brasil_cripto/ui/core/themes/dimens.dart';
+import 'package:brasil_cripto/ui/home/widgets/coins_market_summary.dart';
 import 'package:brasil_cripto/ui/home/widgets/spark_line_chart.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -25,19 +27,20 @@ class CoinsCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         color: AppColors.darkCard,
       ),
-      width: MediaQuery.sizeOf(context).width, // Largura total da tela
+      width: MediaQuery.sizeOf(context).width,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween, // Distribui espaço
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Ícone à esquerda
-          const Icon(
-            Icons.star,
-            color: Colors.yellow,
+          IconButton(
+            icon: Icon(Icons.star_border),
+            // color: Colors.yellow,
+            onPressed: () {},
           ),
-          // Conteúdo principal
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 16,
               children: [
                 Row(
                   spacing: 8,
@@ -69,10 +72,7 @@ class CoinsCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                Text(
-                  _formatarValor(coinsMarkets.currentPrice),
-                ),
-                // Gráfico com largura dinâmica
+                CoinsMarketSummary(coinsMarkets: coinsMarkets, locale: locale),
                 LayoutBuilder(
                   builder: (context, constraints) {
                     return SizedBox(
@@ -88,11 +88,5 @@ class CoinsCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String _formatarValor(double valor) {
-    return NumberFormat.currency(
-      locale: locale.languageCode,
-    ).format(valor);
   }
 }

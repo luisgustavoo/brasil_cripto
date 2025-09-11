@@ -121,6 +121,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No cryptocurrency found'**
   String get noCryptocurrencyFound;
+
+  /// Price
+  ///
+  /// In en, this message translates to:
+  /// **'Price'**
+  String get price;
+
+  /// 1h
+  ///
+  /// In en, this message translates to:
+  /// **'1h'**
+  String get oneHour;
+
+  /// 24h
+  ///
+  /// In en, this message translates to:
+  /// **'24h'**
+  String get oneDay;
+
+  /// 7d
+  ///
+  /// In en, this message translates to:
+  /// **'7d'**
+  String get sevenDays;
+
+  /// 24h Volume
+  ///
+  /// In en, this message translates to:
+  /// **'24h Volume'**
+  String get volumeDay;
+
+  /// Market Cap
+  ///
+  /// In en, this message translates to:
+  /// **'Market Cap'**
+  String get marketCap;
 }
 
 class _AppLocalizationsDelegate
