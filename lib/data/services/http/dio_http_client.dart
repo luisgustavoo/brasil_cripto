@@ -3,6 +3,7 @@ import 'package:brasil_cripto/data/services/http/http_client.dart';
 import 'package:brasil_cripto/data/services/http/http_client_exception.dart';
 import 'package:brasil_cripto/data/services/http/http_client_interceptor.dart';
 import 'package:brasil_cripto/data/services/http/http_client_response.dart';
+import 'package:brasil_cripto/utils/result.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
@@ -34,7 +35,7 @@ class DioHttpClient implements HttpClient {
   }
 
   @override
-  Future<HttpClientResponse<T>> post<T>(
+  Future<Result<HttpClientResponse<T>>> post<T>(
     String path, {
     Object? data,
     Map<String, dynamic>? queryParameters,
@@ -49,10 +50,12 @@ class DioHttpClient implements HttpClient {
         options: options ?? Options(headers: headers),
       );
 
-      return HttpClientResponse(
-        data: response.data,
-        statusCode: response.statusCode,
-        statusMessage: response.statusMessage,
+      return Result.ok(
+        HttpClientResponse(
+          data: response.data,
+          statusCode: response.statusCode,
+          statusMessage: response.statusMessage,
+        ),
       );
     } on DioException catch (e) {
       throw HttpClientException(
@@ -65,7 +68,7 @@ class DioHttpClient implements HttpClient {
   }
 
   @override
-  Future<HttpClientResponse<T>> get<T>(
+  Future<Result<HttpClientResponse<T>>> get<T>(
     String path, {
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
@@ -78,23 +81,27 @@ class DioHttpClient implements HttpClient {
         options: options,
       );
 
-      return HttpClientResponse(
-        data: response.data,
-        statusCode: response.statusCode,
-        statusMessage: response.statusMessage,
+      return Result.ok(
+        HttpClientResponse(
+          data: response.data,
+          statusCode: response.statusCode,
+          statusMessage: response.statusMessage,
+        ),
       );
     } on DioException catch (e) {
-      throw HttpClientException(
-        error: e.error,
-        message: e.response?.statusMessage,
-        statusCode: e.response?.statusCode,
-        response: _dioErrorConvert(e.response),
+      return Result.error(
+        HttpClientException(
+          error: e.error,
+          message: e.response?.statusMessage,
+          statusCode: e.response?.statusCode,
+          response: _dioErrorConvert(e.response),
+        ),
       );
     }
   }
 
   @override
-  Future<HttpClientResponse<T>> put<T>(
+  Future<Result<HttpClientResponse<T>>> put<T>(
     String path, {
     T? data,
     Map<String, dynamic>? queryParameters,
@@ -109,23 +116,27 @@ class DioHttpClient implements HttpClient {
         options: options ?? Options(headers: headers),
       );
 
-      return HttpClientResponse(
-        data: response.data,
-        statusCode: response.statusCode,
-        statusMessage: response.statusMessage,
+      return Result.ok(
+        HttpClientResponse(
+          data: response.data,
+          statusCode: response.statusCode,
+          statusMessage: response.statusMessage,
+        ),
       );
     } on DioException catch (e) {
-      throw HttpClientException(
-        error: e.error,
-        message: e.response?.statusMessage,
-        statusCode: e.response?.statusCode,
-        response: _dioErrorConvert(e.response),
+      return Result.error(
+        HttpClientException(
+          error: e.error,
+          message: e.response?.statusMessage,
+          statusCode: e.response?.statusCode,
+          response: _dioErrorConvert(e.response),
+        ),
       );
     }
   }
 
   @override
-  Future<HttpClientResponse<T>> delete<T>(
+  Future<Result<HttpClientResponse<T>>> delete<T>(
     String path, {
     T? data,
     Map<String, dynamic>? queryParameters,
@@ -139,24 +150,27 @@ class DioHttpClient implements HttpClient {
         queryParameters: queryParameters,
         options: options ?? Options(headers: headers),
       );
-
-      return HttpClientResponse(
-        data: response.data,
-        statusCode: response.statusCode,
-        statusMessage: response.statusMessage,
+      return Result.ok(
+        HttpClientResponse(
+          data: response.data,
+          statusCode: response.statusCode,
+          statusMessage: response.statusMessage,
+        ),
       );
     } on DioException catch (e) {
-      throw HttpClientException(
-        error: e.error,
-        message: e.response?.statusMessage,
-        statusCode: e.response?.statusCode,
-        response: _dioErrorConvert(e.response),
+      return Result.error(
+        HttpClientException(
+          error: e.error,
+          message: e.response?.statusMessage,
+          statusCode: e.response?.statusCode,
+          response: _dioErrorConvert(e.response),
+        ),
       );
     }
   }
 
   @override
-  Future<HttpClientResponse<T>> patch<T>(
+  Future<Result<HttpClientResponse<T>>> patch<T>(
     String path, {
     T? data,
     Map<String, dynamic>? queryParameters,
@@ -171,23 +185,27 @@ class DioHttpClient implements HttpClient {
         options: options ?? Options(headers: headers),
       );
 
-      return HttpClientResponse(
-        data: response.data,
-        statusCode: response.statusCode,
-        statusMessage: response.statusMessage,
+      return Result.ok(
+        HttpClientResponse(
+          data: response.data,
+          statusCode: response.statusCode,
+          statusMessage: response.statusMessage,
+        ),
       );
     } on DioException catch (e) {
-      throw HttpClientException(
-        error: e.error,
-        message: e.response?.statusMessage,
-        statusCode: e.response?.statusCode,
-        response: _dioErrorConvert(e.response),
+      return Result.error(
+        HttpClientException(
+          error: e.error,
+          message: e.response?.statusMessage,
+          statusCode: e.response?.statusCode,
+          response: _dioErrorConvert(e.response),
+        ),
       );
     }
   }
 
   @override
-  Future<HttpClientResponse<T>> request<T>(
+  Future<Result<HttpClientResponse<T>>> request<T>(
     String path, {
     required String method,
     T? data,
@@ -203,17 +221,21 @@ class DioHttpClient implements HttpClient {
         options: options ?? Options(headers: headers, method: method),
       );
 
-      return HttpClientResponse(
-        data: response.data,
-        statusCode: response.statusCode,
-        statusMessage: response.statusMessage,
+      return Result.ok(
+        HttpClientResponse(
+          data: response.data,
+          statusCode: response.statusCode,
+          statusMessage: response.statusMessage,
+        ),
       );
     } on DioException catch (e) {
-      throw HttpClientException(
-        error: e.error,
-        message: e.response?.statusMessage,
-        statusCode: e.response?.statusCode,
-        response: _dioErrorConvert(e.response),
+      return Result.error(
+        HttpClientException(
+          error: e.error,
+          message: e.response?.statusMessage,
+          statusCode: e.response?.statusCode,
+          response: _dioErrorConvert(e.response),
+        ),
       );
     }
   }

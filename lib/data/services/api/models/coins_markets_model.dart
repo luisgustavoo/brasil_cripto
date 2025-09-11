@@ -1,11 +1,11 @@
 import 'package:brasil_cripto/data/services/api/models/spark_line.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'crypto_model.g.dart';
+part 'coins_markets_model.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
-class CryptoModel {
-  CryptoModel({
+@JsonSerializable()
+class CoinsMarketsModel {
+  CoinsMarketsModel({
     required this.id,
     required this.symbol,
     required this.name,
@@ -38,8 +38,8 @@ class CryptoModel {
     this.priceChangePercentage7dInCurrency,
   });
 
-  factory CryptoModel.fromJson(Map<String, dynamic> json) =>
-      _$CryptoModelFromJson(json);
+  factory CoinsMarketsModel.fromJson(Map<String, dynamic> json) =>
+      _$CoinsMarketsModelFromJson(json);
 
   final String id;
   final String symbol;
@@ -72,5 +72,5 @@ class CryptoModel {
   final double? priceChangePercentage24hInCurrency;
   final double? priceChangePercentage7dInCurrency;
 
-  Map<String, dynamic> toJson() => _$CryptoModelToJson(this);
+  Map<String, dynamic> toJson() => _$CoinsMarketsModelToJson(this);
 }

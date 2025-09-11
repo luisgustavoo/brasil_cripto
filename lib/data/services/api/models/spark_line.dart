@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'spark_line.g.dart';
 
-@JsonSerializable(fieldRename: FieldRename.snake)
+@JsonSerializable()
 class SparkLine {
   SparkLine({required this.price});
 
