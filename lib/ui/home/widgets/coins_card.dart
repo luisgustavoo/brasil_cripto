@@ -21,33 +21,36 @@ class CoinsCard extends StatelessWidget {
           Icons.star,
           color: Colors.yellow,
         ),
-        title: Expanded(
-          child: Row(
-            spacing: 8,
-            children: [
-              CachedNetworkImage(
-                fit: BoxFit.cover,
+        title: Row(
+          spacing: 8,
+          children: [
+            CachedNetworkImage(
+              fit: BoxFit.cover,
+              height: 30,
+              width: 30,
+              imageUrl: coinsMarkets.image,
+              placeholder: (context, url) => const SizedBox(
                 height: 30,
                 width: 30,
-                imageUrl: coinsMarkets.image,
-                placeholder: (context, url) => const SizedBox(
-                  height: 30,
-                  width: 30,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 0.5,
-                  ),
+                child: CircularProgressIndicator(
+                  strokeWidth: 0.5,
                 ),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
+            ),
 
-              Text(coinsMarkets.name),
-
-              Text(
-                '(${coinsMarkets.symbol.toUpperCase()})',
-                style: const TextStyle(color: Colors.grey),
+            Expanded(
+              child: Text(
+                coinsMarkets.name,
+                overflow: TextOverflow.ellipsis,
               ),
-            ],
-          ),
+            ),
+
+            Text(
+              '(${coinsMarkets.symbol.toUpperCase()})',
+              style: const TextStyle(color: Colors.grey),
+            ),
+          ],
         ),
         subtitle: Text(_formatarValor(coinsMarkets.currentPrice)),
       ),
@@ -55,8 +58,10 @@ class CoinsCard extends StatelessWidget {
   }
 
   String _formatarValor(double valor) {
+    // final symbol = locale.languageCode == 'pt' ? r'R$' : r'US$';
     return NumberFormat.currency(
       locale: locale.languageCode,
+      // symbol: symbol,
       // Se preferir deixar que o Intl escolha o símbolo padrão, pode omitir `symbol`
     ).format(valor);
   }

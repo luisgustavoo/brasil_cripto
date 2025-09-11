@@ -1,7 +1,7 @@
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
-import 'package:brasil_cripto/ui/core/themes/dimens.dart';
 import 'package:brasil_cripto/ui/home/view_models/home_view_model.dart';
-import 'package:brasil_cripto/ui/home/widgets/coins_card.dart';
+import 'package:brasil_cripto/ui/home/widgets/spark_line_chart.dart';
+import 'package:brasil_cripto/ui/home/widgets/tab_coins.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -28,81 +28,33 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          context.l10n.brazilCripto,
-          // style: TextStyle(color: Colors.white),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            context.l10n.brazilCripto,
+            // style: TextStyle(color: Colors.white),
+          ),
+          bottom: const TabBar.secondary(
+            tabs: [
+              Tab(icon: Icon(Icons.currency_bitcoin)),
+              Tab(icon: Icon(Icons.star_outline)),
+            ],
+          ),
         ),
-      ),
-      body: Padding(
-        padding: context.dimens.edgeInsetsScreenSymmetric,
-        child: Column(
-          spacing: 32,
+        body: TabBarView(
           children: [
-            TextField(
-              controller: searchController,
-              // autofocus: true,
-              decoration: InputDecoration(
-                labelText: context.l10n.search,
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    searchController.clear();
-                  },
-                ),
-              ),
-              onSubmitted: (value) {
-                _search();
-              },
+            TabCoins(
+              viewModel: viewModel,
             ),
-            Expanded(
-              child: ListenableBuilder(
-                listenable: viewModel,
-                builder: (context, child) {
-                  if (viewModel.fetchCoinsMarkets.running) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (viewModel.fetchCoinsMarkets.error) {
-                    return Center(
-                      child: Text(
-                        context.l10n.errorLoadingData,
-                        style: const TextStyle(color: Colors.red),
-                      ),
-                    );
-                  }
-
-                  if (viewModel.coinsMarkets.isEmpty) {
-                    return Center(
-                      child: Text(
-                        context.l10n.noCryptocurrencyFound,
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                    );
-                  }
-
-                  return ListView.builder(
-                    itemCount: viewModel.coinsMarkets.length,
-                    itemBuilder: (context, index) {
-                      final coin = viewModel.coinsMarkets[index];
-                      return CoinsCard(
-                        coinsMarkets: coin,
-                        locale: locale,
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
+            SparkLineChart(),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _search,
-        child: const Icon(Icons.refresh),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _search,
+          child: const Icon(Icons.refresh),
+        ),
       ),
     );
   }

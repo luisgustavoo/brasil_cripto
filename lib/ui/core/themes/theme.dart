@@ -1,8 +1,8 @@
+import 'package:brasil_cripto/ui/core/themes/colors.dart';
 import 'package:flutter/material.dart';
-import 'colors.dart';
 
 abstract final class AppTheme {
-  static final _textTheme = TextTheme(
+  static const _textTheme = TextTheme(
     headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.w500),
     headlineSmall: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
     bodyLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
@@ -17,7 +17,7 @@ abstract final class AppTheme {
     colorScheme: AppColors.lightColorScheme,
     scaffoldBackgroundColor: AppColors.lightBackground,
     cardColor: AppColors.lightCard,
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.lightHighlight,
       foregroundColor: Colors.white,
     ),
@@ -25,7 +25,7 @@ abstract final class AppTheme {
       bodyColor: AppColors.lightTextPrimary,
       displayColor: AppColors.lightTextPrimary,
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: AppColors.lightHighlight,
       foregroundColor: Colors.white,
     ),
@@ -42,7 +42,7 @@ abstract final class AppTheme {
     colorScheme: AppColors.darkColorScheme,
     scaffoldBackgroundColor: AppColors.darkBackground,
     cardColor: AppColors.darkCard,
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.darkHighlight,
       foregroundColor: Colors.white,
     ),
@@ -50,7 +50,7 @@ abstract final class AppTheme {
       bodyColor: AppColors.darkTextPrimary,
       displayColor: AppColors.darkTextPrimary,
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: AppColors.darkHighlight,
       foregroundColor: Colors.white,
     ),
@@ -62,25 +62,3 @@ abstract final class AppTheme {
     ),
   );
 }
-
-
-
-
-
-  // // Light Theme
-  // static final _elevatedButtonLightTheme = ElevatedButtonThemeData(
-  //   style: ElevatedButton.styleFrom(
-  //     backgroundColor: AppColors.lightColorScheme.primary, // cor do botão
-  //     foregroundColor: AppColors.lightColorScheme.onPrimary, // cor do texto
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-  //   ),
-  // );
-
-  // // Dark Theme
-  // static final _elevatedButtonDarkTheme = ElevatedButtonThemeData(
-  //   style: ElevatedButton.styleFrom(
-  //     backgroundColor: AppColors.darkColorScheme.primary,
-  //     foregroundColor: AppColors.darkColorScheme.onPrimary,
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-  //   ),
-  // );
