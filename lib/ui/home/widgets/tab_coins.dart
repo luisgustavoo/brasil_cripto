@@ -1,5 +1,4 @@
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
-import 'package:brasil_cripto/ui/core/themes/dimens.dart';
 import 'package:brasil_cripto/ui/home/view_models/home_view_model.dart';
 import 'package:brasil_cripto/ui/home/widgets/coins_card.dart';
 import 'package:flutter/material.dart';
@@ -82,16 +81,7 @@ class _TabCoinsState extends State<TabCoins> {
                   );
                 }
 
-                return ListView.builder(
-                  itemCount: widget.viewModel.coinsMarkets.length,
-                  itemBuilder: (context, index) {
-                    final coin = widget.viewModel.coinsMarkets[index];
-                    return CoinsCard(
-                      coinsMarkets: coin,
-                      locale: locale,
-                    );
-                  },
-                );
+                return _buildList(viewModel, locale);
               },
             ),
           ),
@@ -100,23 +90,23 @@ class _TabCoinsState extends State<TabCoins> {
     );
   }
 
-  // Widget _buildList(HomeViewModel viewModel, Locale locale) {
-  //   return StreamBuilder(
-  //     stream: stream,
-  //     builder: (context, snapshot) {
-  //       return ListView.builder(
-  //         itemCount: widget.viewModel.coinsMarkets.length,
-  //         itemBuilder: (context, index) {
-  //           final coin = widget.viewModel.coinsMarkets[index];
-  //           return CoinsCard(
-  //             coinsMarkets: coin,
-  //             locale: locale,
-  //           );
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
+  Widget _buildList(HomeViewModel viewModel, Locale locale) {
+    return StreamBuilder(
+      stream: viewModel.coinsMarketsStream,
+      builder: (context, snapshot) {
+        return ListView.builder(
+          itemCount: widget.viewModel.coinsMarkets.length,
+          itemBuilder: (context, index) {
+            final coin = widget.viewModel.coinsMarkets[index];
+            return CoinsCard(
+              coinsMarkets: coin,
+              locale: locale,
+            );
+          },
+        );
+      },
+    );
+  }
 
   void _search() {
     final locale = Localizations.localeOf(context);

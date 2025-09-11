@@ -20,6 +20,7 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
   final _coinsMarketsController =
       StreamController<List<CoinsMarkets>>.broadcast();
 
+  @override
   Stream<List<CoinsMarkets>> get coinsMarketsStream =>
       _coinsMarketsController.stream;
 

@@ -5,7 +5,6 @@ import 'dart:isolate';
 import 'package:brasil_cripto/data/services/api/models/coins_markets_model.dart';
 import 'package:brasil_cripto/data/services/http/http_client.dart';
 import 'package:brasil_cripto/utils/result.dart';
-import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton()
@@ -86,15 +85,6 @@ class CoinsMarketsBackgroundService {
               error: result.error,
             );
         }
-        // if (response.data?.isNotEmpty ?? false) {
-        //   final data = response.data!;
-        //   final coinsMarketsList = List<Map<String, dynamic>>.from(data);
-        //   final coinsMarkets = coinsMarketsList
-        //       .map(CoinsMarketsModel.fromJson)
-        //       .toList();
-
-        //   sendPort.send(coinsMarkets);
-        // }
       } on Exception catch (e, s) {
         log(
           'Erro ao buscar dados em background',

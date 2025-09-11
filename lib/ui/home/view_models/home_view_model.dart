@@ -17,6 +17,9 @@ class HomeViewModel extends ChangeNotifier {
 
   List<CoinsMarkets> coinsMarkets = [];
 
+  Stream<List<CoinsMarkets>> get coinsMarketsStream =>
+      _coinsMarketsRepository.coinsMarketsStream;
+
   late final Command1<void, ({String names, String vsCurrency})>
   fetchCoinsMarkets;
 
