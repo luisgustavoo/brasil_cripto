@@ -1,4 +1,3 @@
-import 'package:brasil_cripto/config/env.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/home/view_models/home_view_model.dart';
 import 'package:flutter/material.dart';
@@ -23,14 +22,23 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text(
           context.l10n.brazilCripto,
-          style: TextStyle(color: Colors.white),
+          // style: TextStyle(color: Colors.white),
         ),
       ),
-      body: Container(
-        child: Text(Env.coingeckoApiKey),
+      body: ListenableBuilder(
+        listenable: viewModel,
+        builder: (context, child) {
+          if (viewModel.fetchCoinsMarkets.running) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return const SizedBox.shrink();
+        },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          viewModel.fetchCoinsMarkets.execute();
+        },
         child: const Icon(Icons.refresh),
       ),
     );

@@ -16,7 +16,14 @@ class HttpClientInterceptor extends Interceptor {
     if (authRequired) {
       options.headers['x-cg-demo-api-key'] = Env.coingeckoApiKey;
     }
-
+    if (!kReleaseMode) {
+      log('########### Request LOG ###########');
+      log('url: ${options.uri}');
+      log('method: ${options.method}');
+      log('data: ${options.data}');
+      log('headers: ${options.headers}');
+      log('########### Request LOG ###########');
+    }
     handler.next(options);
   }
 
