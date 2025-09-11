@@ -36,6 +36,7 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
           final coinsMarketsList = result.value
               .map(CoinsMarkets.fromApi)
               .toList();
+          _coinsMarketsController.add(coinsMarketsList);
           await _addListener(names, vsCurrency);
           return Result.ok(coinsMarketsList);
         case Error():

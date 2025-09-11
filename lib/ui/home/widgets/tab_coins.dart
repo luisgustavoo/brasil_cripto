@@ -94,16 +94,20 @@ class _TabCoinsState extends State<TabCoins> {
     return StreamBuilder(
       stream: viewModel.coinsMarketsStream,
       builder: (context, snapshot) {
-        return ListView.builder(
-          itemCount: widget.viewModel.coinsMarkets.length,
-          itemBuilder: (context, index) {
-            final coin = widget.viewModel.coinsMarkets[index];
-            return CoinsCard(
-              coinsMarkets: coin,
-              locale: locale,
-            );
-          },
-        );
+        if (snapshot.hasData) {
+          return ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              final coin = snapshot.data![index];
+              return CoinsCard(
+                coinsMarkets: coin,
+                locale: locale,
+              );
+            },
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
       },
     );
   }
