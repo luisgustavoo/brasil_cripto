@@ -32,7 +32,7 @@ class CoinsMarketsModel {
     this.atlDate,
     this.roi,
     this.lastUpdated,
-    this.sparklineIn7d,
+    this.sparkLineIn7d,
     this.priceChangePercentage1hInCurrency,
     this.priceChangePercentage24hInCurrency,
     this.priceChangePercentage7dInCurrency,
@@ -50,11 +50,17 @@ class CoinsMarketsModel {
   final int marketCapRank;
   final double? fullyDilutedValuation;
   final double? totalVolume;
+  @JsonKey(name: 'high_24h')
   final double? high24h;
+  @JsonKey(name: 'low_24h')
   final double? low24h;
+  @JsonKey(name: 'price_change_24h')
   final double? priceChange24h;
+  @JsonKey(name: 'price_change_percentage_24h')
   final double? priceChangePercentage24h;
+  @JsonKey(name: 'market_cap_change_24h')
   final double? marketCapChange24h;
+  @JsonKey(name: 'market_cap_change_percentage_24h')
   final double? marketCapChangePercentage24h;
   final double? circulatingSupply;
   final double? totalSupply;
@@ -67,9 +73,13 @@ class CoinsMarketsModel {
   final String? atlDate;
   final dynamic roi;
   final String? lastUpdated;
-  final SparkLine? sparklineIn7d;
+  @JsonKey(name: 'sparkline_in_7d')
+  final SparkLine? sparkLineIn7d;
+  @JsonKey(name: 'price_change_percentage_1h_in_currency')
   final double? priceChangePercentage1hInCurrency;
+  @JsonKey(name: 'price_change_percentage_24h_in_currency')
   final double? priceChangePercentage24hInCurrency;
+  @JsonKey(name: 'price_change_percentage_7d_in_currency')
   final double? priceChangePercentage7dInCurrency;
 
   Map<String, dynamic> toJson() => _$CoinsMarketsModelToJson(this);

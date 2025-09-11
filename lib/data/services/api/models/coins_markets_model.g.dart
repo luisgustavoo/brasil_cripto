@@ -18,8 +18,8 @@ CoinsMarketsModel _$CoinsMarketsModelFromJson(Map<String, dynamic> json) =>
       fullyDilutedValuation: (json['fully_diluted_valuation'] as num?)
           ?.toDouble(),
       totalVolume: (json['total_volume'] as num?)?.toDouble(),
-      high24h: (json['high24h'] as num?)?.toDouble(),
-      low24h: (json['low24h'] as num?)?.toDouble(),
+      high24h: (json['high_24h'] as num?)?.toDouble(),
+      low24h: (json['low_24h'] as num?)?.toDouble(),
       priceChange24h: (json['price_change24h'] as num?)?.toDouble(),
       priceChangePercentage24h: (json['price_change_percentage24h'] as num?)
           ?.toDouble(),
@@ -37,9 +37,9 @@ CoinsMarketsModel _$CoinsMarketsModelFromJson(Map<String, dynamic> json) =>
       atlDate: json['atl_date'] as String?,
       roi: json['roi'],
       lastUpdated: json['last_updated'] as String?,
-      sparklineIn7d: json['sparkline_in7d'] == null
+      sparkLineIn7d: json['spark_line_in7d'] == null
           ? null
-          : SparkLine.fromJson(json['sparkline_in7d'] as Map<String, dynamic>),
+          : SparkLine.fromJson(json['spark_line_in7d'] as Map<String, dynamic>),
       priceChangePercentage1hInCurrency:
           (json['price_change_percentage1h_in_currency'] as num?)?.toDouble(),
       priceChangePercentage24hInCurrency:
@@ -59,8 +59,8 @@ Map<String, dynamic> _$CoinsMarketsModelToJson(CoinsMarketsModel instance) =>
       'market_cap_rank': instance.marketCapRank,
       'fully_diluted_valuation': instance.fullyDilutedValuation,
       'total_volume': instance.totalVolume,
-      'high24h': instance.high24h,
-      'low24h': instance.low24h,
+      'high_24h': instance.high24h,
+      'low_24h': instance.low24h,
       'price_change24h': instance.priceChange24h,
       'price_change_percentage24h': instance.priceChangePercentage24h,
       'market_cap_change24h': instance.marketCapChange24h,
@@ -76,7 +76,7 @@ Map<String, dynamic> _$CoinsMarketsModelToJson(CoinsMarketsModel instance) =>
       'atl_date': instance.atlDate,
       'roi': instance.roi,
       'last_updated': instance.lastUpdated,
-      'sparkline_in7d': instance.sparklineIn7d,
+      'spark_line_in7d': instance.sparkLineIn7d,
       'price_change_percentage1h_in_currency':
           instance.priceChangePercentage1hInCurrency,
       'price_change_percentage24h_in_currency':
