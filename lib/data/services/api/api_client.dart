@@ -8,7 +8,7 @@ class ApiClient {
   ApiClient({required HttpClient httpClient}) : _httpClient = httpClient;
   final HttpClient _httpClient;
 
-  Future<Result<List<CoinsMarketsModel>>> fetchData() async {
+  Future<Result<List<CoinsMarketsModel>>> fetchCoinsMarkets() async {
     try {
       final result = await _httpClient.get<List<Map<String, dynamic>>>(
         '/coins/markets',
@@ -18,8 +18,8 @@ class ApiClient {
         case Ok():
           final data = result.value.data;
           if (data?.isNotEmpty ?? false) {
-            final criptos = data!.map(CoinsMarketsModel.fromJson).toList();
-            return Result.ok(criptos);
+            final coinsMarkets = data!.map(CoinsMarketsModel.fromJson).toList();
+            return Result.ok(coinsMarkets);
           } else {
             return const Result.ok(<CoinsMarketsModel>[]);
           }

@@ -1,3 +1,4 @@
+import 'package:brasil_cripto/config/dependencies.dart';
 import 'package:brasil_cripto/routing/routes.dart';
 import 'package:brasil_cripto/ui/home/widgets/home_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +10,9 @@ GoRouter router() => GoRouter(
     GoRoute(
       path: Routes.home,
       builder: (context, state) {
-        return const HomeScreen();
+        return HomeScreen(
+          viewModel: getIt(),
+        );
       },
     ),
   ],
