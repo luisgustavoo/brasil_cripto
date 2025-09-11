@@ -2,7 +2,7 @@ import 'package:brasil_cripto/config/dependencies.dart';
 import 'package:brasil_cripto/routing/router.dart';
 import 'package:brasil_cripto/ui/core/l10n/app_localizations.dart';
 import 'package:brasil_cripto/ui/core/themes/theme.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Router;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +19,7 @@ class MainApp extends StatelessWidget {
       title: 'Brasil Criptos',
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      routerConfig: router(),
+      routerConfig: Router.router,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
     );

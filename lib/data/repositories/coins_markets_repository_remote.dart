@@ -65,4 +65,10 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
       },
     );
   }
+
+  @override
+  Future<Result<void>> closeBackgroundService() async {
+    _coinsMarketsBackgroundService.stop();
+    return const Result.ok(null);
+  }
 }

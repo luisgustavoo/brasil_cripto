@@ -12,6 +12,7 @@ class HomeViewModel extends ChangeNotifier {
   HomeViewModel({required CoinsMarketsRepository coinsMarketsRepository})
     : _coinsMarketsRepository = coinsMarketsRepository {
     fetchCoinsMarkets = Command1(_fetchCoinsMarkets);
+    closeBackgroundService = Command0(_closeBackgroundService);
   }
   final CoinsMarketsRepository _coinsMarketsRepository;
 
@@ -20,6 +21,7 @@ class HomeViewModel extends ChangeNotifier {
 
   late final Command1<void, ({String names, String vsCurrency})>
   fetchCoinsMarkets;
+  late final Command0<void> closeBackgroundService;
 
   Future<Result<void>> _fetchCoinsMarkets(
     ({String names, String vsCurrency}) queryParameters,
@@ -39,5 +41,9 @@ class HomeViewModel extends ChangeNotifier {
         notifyListeners();
         return Result.error(result.error);
     }
+  }
+
+  Future<Result<void>> _closeBackgroundService() async {
+    return _coinsMarketsRepository.closeBackgroundService();
   }
 }

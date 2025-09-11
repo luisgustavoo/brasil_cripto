@@ -12,15 +12,18 @@ class CoinsMarketsBackgroundService {
   CoinsMarketsBackgroundService({required HttpClient httpClient})
     : _httpClient = httpClient;
   Isolate? _isolate;
-  final _controller = StreamController<List<CoinsMarketsModel>>.broadcast();
+  StreamController<List<CoinsMarketsModel>> _controller =
+      StreamController<List<CoinsMarketsModel>>.broadcast();
   Stream<List<CoinsMarketsModel>> get coinsMarketsStream => _controller.stream;
   final HttpClient _httpClient;
 
   Future<void> start(
     ({String? names, String vsCurrency}) queryParameters,
   ) async {
-    if (_isolate != null) {
-      return;
+    stop();
+    log('Background service start');
+    if (_controller.isClosed) {
+      _controller = StreamController<List<CoinsMarketsModel>>.broadcast();
     }
     final (names: names, vsCurrency: vsCurrency) = queryParameters;
     final receivePort = ReceivePort();
@@ -51,6 +54,7 @@ class CoinsMarketsBackgroundService {
   }
 
   void stop() {
+    log('Background service stop');
     _isolate?.kill(priority: Isolate.immediate);
     _isolate = null;
     _controller.close();

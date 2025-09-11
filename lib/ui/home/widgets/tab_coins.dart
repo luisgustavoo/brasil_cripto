@@ -15,7 +15,8 @@ class TabCoins extends StatefulWidget {
   State<TabCoins> createState() => _TabCoinsState();
 }
 
-class _TabCoinsState extends State<TabCoins> {
+class _TabCoinsState extends State<TabCoins>
+    with AutomaticKeepAliveClientMixin {
   HomeViewModel get viewModel => widget.viewModel;
   late final TextEditingController searchController;
 
@@ -33,6 +34,7 @@ class _TabCoinsState extends State<TabCoins> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final locale = Localizations.localeOf(context);
     return Scaffold(
       body: Column(
@@ -119,4 +121,7 @@ class _TabCoinsState extends State<TabCoins> {
       vsCurrency: vsCurrency,
     ));
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -71,7 +71,7 @@ class CoinsCard extends StatelessWidget {
                 _formatarValor(coinsMarkets.currentPrice),
               ),
               SizedBox(
-                width: 50,
+                width: 100,
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     return SizedBox(

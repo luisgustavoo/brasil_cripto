@@ -7,4 +7,6 @@ abstract class CoinsMarketsRepository {
     String? names,
     String vsCurrency,
   );
+
+  Future<Result<void>> closeBackgroundService();
 }
