@@ -11,9 +11,9 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
 
   final ApiClient _apiClient;
   @override
-  Future<Result<List<CoinsMarkets>>> fetchCoinsMarkets() async {
+  Future<Result<List<CoinsMarkets>>> fetchCoinsMarkets(String names) async {
     try {
-      final result = await _apiClient.fetchCoinsMarkets();
+      final result = await _apiClient.fetchCoinsMarkets(names);
       switch (result) {
         case Ok():
           final coinsMarketsList = result.value

@@ -103,6 +103,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Brazil Cripto'**
   String get brazilCripto;
+
+  /// Error loading data
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading data'**
+  String get errorLoadingData;
+
+  /// Bitcoin, Ethereum, etc
+  ///
+  /// In en, this message translates to:
+  /// **'Bitcoin, Ethereum, etc'**
+  String get search;
+
+  /// No cryptocurrency found
+  ///
+  /// In en, this message translates to:
+  /// **'No cryptocurrency found'**
+  String get noCryptocurrencyFound;
 }
 
 class _AppLocalizationsDelegate

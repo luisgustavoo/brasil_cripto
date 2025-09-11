@@ -3,5 +3,17 @@
   "brazilCripto": "Brazil Cripto",
   "@brazilCripto": {
     "description": "App name"
+  },
+  "errorLoadingData": "Error loading data",
+  "@errorLoadingData": {
+    "description": "Error loading data"
+  },
+  "search": "Bitcoin, Ethereum, etc",
+  "@search": {
+    "description": "Bitcoin, Ethereum, etc"
+  },
+  "noCryptocurrencyFound": "No cryptocurrency found",
+  "@noCryptocurrencyFound": {
+    "description": "No cryptocurrency found"
   }
 }

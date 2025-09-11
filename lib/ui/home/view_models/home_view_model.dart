@@ -11,17 +11,17 @@ import 'package:injectable/injectable.dart';
 class HomeViewModel extends ChangeNotifier {
   HomeViewModel({required CoinsMarketsRepository coinsMarketsRepository})
     : _coinsMarketsRepository = coinsMarketsRepository {
-    fetchCoinsMarkets = Command0(_fetchCoinsMarkets)..execute();
+    fetchCoinsMarkets = Command1(_fetchCoinsMarkets);
   }
   final CoinsMarketsRepository _coinsMarketsRepository;
 
   List<CoinsMarkets> coinsMarkets = [];
 
-  late final Command0<void> fetchCoinsMarkets;
+  late final Command1<void, String> fetchCoinsMarkets;
 
-  Future<Result<void>> _fetchCoinsMarkets() async {
+  Future<Result<void>> _fetchCoinsMarkets(String names) async {
     notifyListeners();
-    final result = await _coinsMarketsRepository.fetchCoinsMarkets();
+    final result = await _coinsMarketsRepository.fetchCoinsMarkets(names);
     switch (result) {
       case Ok():
         coinsMarkets = result.value;

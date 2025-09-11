@@ -10,4 +10,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get brazilCripto => 'Brazil Cripto';
+
+  @override
+  String get errorLoadingData => 'Error loading data';
+
+  @override
+  String get search => 'Bitcoin, Ethereum, etc';
+
+  @override
+  String get noCryptocurrencyFound => 'No cryptocurrency found';
 }
