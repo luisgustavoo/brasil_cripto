@@ -1,15 +1,28 @@
+import 'dart:async';
+
 import 'package:brasil_cripto/data/repositories/coins_markets_repository.dart';
 import 'package:brasil_cripto/data/services/api/api_client.dart';
+import 'package:brasil_cripto/data/services/background/coins_markets_background_service.dart';
 import 'package:brasil_cripto/domain/models/coins_markets.dart';
 import 'package:brasil_cripto/utils/result.dart';
 import 'package:injectable/injectable.dart';
 
 @Injectable(as: CoinsMarketsRepository)
 class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
-  const CoinsMarketsRepositoryRemote({required ApiClient apiClient})
-    : _apiClient = apiClient;
+  CoinsMarketsRepositoryRemote({
+    required ApiClient apiClient,
+    required CoinsMarketsBackgroundService coinsMarketsBackgroundService,
+  }) : _apiClient = apiClient,
+       _coinsMarketsBackgroundService = coinsMarketsBackgroundService;
 
   final ApiClient _apiClient;
+  final CoinsMarketsBackgroundService _coinsMarketsBackgroundService;
+  final _coinsMarketsController =
+      StreamController<List<CoinsMarkets>>.broadcast();
+
+  Stream<List<CoinsMarkets>> get coinsMarketsStream =>
+      _coinsMarketsController.stream;
+
   @override
   Future<Result<List<CoinsMarkets>>> fetchCoinsMarkets(
     String? names,
@@ -22,6 +35,7 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
           final coinsMarketsList = result.value
               .map(CoinsMarkets.fromApi)
               .toList();
+          await _addListener(names, vsCurrency);
           return Result.ok(coinsMarketsList);
         case Error():
           return Result.error(result.error);
@@ -29,5 +43,24 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
     } on Exception catch (e) {
       return Result.error(e);
     }
+  }
+
+  Future<void> _addListener(
+    String? names,
+    String vsCurrency,
+  ) async {
+    await _coinsMarketsBackgroundService.start(
+      (
+        names: names,
+        vsCurrency: vsCurrency,
+      ),
+    );
+
+    _coinsMarketsBackgroundService.coinsMarketsStream.listen(
+      (event) {
+        final coinsMarketsList = event.map(CoinsMarkets.fromApi).toList();
+        _coinsMarketsController.add(coinsMarketsList);
+      },
+    );
   }
 }

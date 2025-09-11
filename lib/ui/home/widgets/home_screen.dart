@@ -1,6 +1,6 @@
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
+import 'package:brasil_cripto/ui/core/themes/dimens.dart';
 import 'package:brasil_cripto/ui/home/view_models/home_view_model.dart';
-import 'package:brasil_cripto/ui/home/widgets/spark_line_chart.dart';
 import 'package:brasil_cripto/ui/home/widgets/tab_coins.dart';
 import 'package:flutter/material.dart';
 
@@ -38,18 +38,21 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           bottom: const TabBar.secondary(
             tabs: [
-              Tab(icon: Icon(Icons.currency_bitcoin)),
+              Tab(icon: Icon(Icons.monitor_heart_outlined)),
               Tab(icon: Icon(Icons.star_outline)),
             ],
           ),
         ),
-        body: TabBarView(
-          children: [
-            TabCoins(
-              viewModel: viewModel,
-            ),
-            SparkLineChart(),
-          ],
+        body: Padding(
+          padding: context.dimens.edgeInsetsScreenSymmetric,
+          child: TabBarView(
+            children: [
+              TabCoins(
+                viewModel: viewModel,
+              ),
+              const Icon(Icons.favorite),
+            ],
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: _search,

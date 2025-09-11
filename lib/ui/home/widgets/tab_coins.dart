@@ -36,72 +36,87 @@ class _TabCoinsState extends State<TabCoins> {
   Widget build(BuildContext context) {
     final locale = Localizations.localeOf(context);
     return Scaffold(
-      body: Padding(
-        padding: context.dimens.edgeInsetsScreenSymmetric,
-        child: Column(
-          spacing: 32,
-          children: [
-            TextField(
-              controller: searchController,
-              // autofocus: true,
-              decoration: InputDecoration(
-                labelText: context.l10n.search,
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.clear),
-                  onPressed: () {
-                    searchController.clear();
-                  },
-                ),
-              ),
-              onSubmitted: (value) {
-                _search();
-              },
-            ),
-            Expanded(
-              child: ListenableBuilder(
-                listenable: widget.viewModel,
-                builder: (context, child) {
-                  if (widget.viewModel.fetchCoinsMarkets.running) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (widget.viewModel.fetchCoinsMarkets.error) {
-                    return Center(
-                      child: Text(
-                        context.l10n.errorLoadingData,
-                        style: const TextStyle(color: Colors.red),
-                      ),
-                    );
-                  }
-
-                  if (widget.viewModel.coinsMarkets.isEmpty) {
-                    return Center(
-                      child: Text(
-                        context.l10n.noCryptocurrencyFound,
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                    );
-                  }
-
-                  return ListView.builder(
-                    itemCount: widget.viewModel.coinsMarkets.length,
-                    itemBuilder: (context, index) {
-                      final coin = widget.viewModel.coinsMarkets[index];
-                      return CoinsCard(
-                        coinsMarkets: coin,
-                        locale: locale,
-                      );
-                    },
-                  );
+      body: Column(
+        spacing: 32,
+        children: [
+          TextField(
+            controller: searchController,
+            // autofocus: true,
+            decoration: InputDecoration(
+              labelText: context.l10n.search,
+              border: const OutlineInputBorder(),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: () {
+                  searchController.clear();
                 },
               ),
             ),
-          ],
-        ),
+            onSubmitted: (value) {
+              _search();
+            },
+          ),
+          Expanded(
+            child: ListenableBuilder(
+              listenable: widget.viewModel,
+              builder: (context, child) {
+                if (widget.viewModel.fetchCoinsMarkets.running) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (widget.viewModel.fetchCoinsMarkets.error) {
+                  return Center(
+                    child: Text(
+                      context.l10n.errorLoadingData,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  );
+                }
+
+                if (widget.viewModel.coinsMarkets.isEmpty) {
+                  return Center(
+                    child: Text(
+                      context.l10n.noCryptocurrencyFound,
+                      style: const TextStyle(color: Colors.grey),
+                    ),
+                  );
+                }
+
+                return ListView.builder(
+                  itemCount: widget.viewModel.coinsMarkets.length,
+                  itemBuilder: (context, index) {
+                    final coin = widget.viewModel.coinsMarkets[index];
+                    return CoinsCard(
+                      coinsMarkets: coin,
+                      locale: locale,
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
+
+  // Widget _buildList(HomeViewModel viewModel, Locale locale) {
+  //   return StreamBuilder(
+  //     stream: stream,
+  //     builder: (context, snapshot) {
+  //       return ListView.builder(
+  //         itemCount: widget.viewModel.coinsMarkets.length,
+  //         itemBuilder: (context, index) {
+  //           final coin = widget.viewModel.coinsMarkets[index];
+  //           return CoinsCard(
+  //             coinsMarkets: coin,
+  //             locale: locale,
+  //           );
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
 
   void _search() {
     final locale = Localizations.localeOf(context);
