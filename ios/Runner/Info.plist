@@ -47,5 +47,21 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>NSAppTransportSecurity</key>
+		<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>coin-images.coingecko.com</key>
+			<dict>
+			<key>NSIncludesSubdomains</key>
+			<true/>
+			<key>NSExceptionAllowsInsecureHTTPLoads</key>
+			<true/>
+			<key>NSExceptionRequiresForwardSecrecy</key>
+			<false/>
+			</dict>
+		</dict>
+		</dict>
+
 	</dict>
 </plist>

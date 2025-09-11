@@ -17,11 +17,18 @@ class HomeViewModel extends ChangeNotifier {
 
   List<CoinsMarkets> coinsMarkets = [];
 
-  late final Command1<void, String> fetchCoinsMarkets;
+  late final Command1<void, ({String names, String vsCurrency})>
+  fetchCoinsMarkets;
 
-  Future<Result<void>> _fetchCoinsMarkets(String names) async {
+  Future<Result<void>> _fetchCoinsMarkets(
+    ({String names, String vsCurrency}) queryParameters,
+  ) async {
+    final (names: names, vsCurrency: vsCurrency) = queryParameters;
     notifyListeners();
-    final result = await _coinsMarketsRepository.fetchCoinsMarkets(names);
+    final result = await _coinsMarketsRepository.fetchCoinsMarkets(
+      names,
+      vsCurrency,
+    );
     switch (result) {
       case Ok():
         coinsMarkets = result.value;

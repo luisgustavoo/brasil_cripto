@@ -9,18 +9,19 @@ class ApiClient {
   final HttpClient _httpClient;
 
   Future<Result<List<CoinsMarketsModel>>> fetchCoinsMarkets(
-    String names,
+    String? names,
+    String vsCurrency,
   ) async {
     try {
       final result = await _httpClient.auth().get<List<dynamic>>(
         '/coins/markets',
         queryParameters: {
-          'vs_currency': 'brl',
+          'vs_currency': vsCurrency,
           'order': 'market_cap_desc',
-          // 'per_page': '100',
-          // 'page': '1',
           'sparkline': true,
           'price_change_percentage': '1h,24h,7d',
+          if (names?.isEmpty ?? true) 'per_page': 10,
+          if (names?.isEmpty ?? true) 'page': 1,
           'names': names,
           // 'names': 'bitcoin,ethereum,binancecoin,ripple,cardano,dogecoin,polkadot,solana,tron,litecoin,uniswap,chainlink,wrapped-bitcoin,stellar,bitcoin-cash,vechain,filecoin,theta-network,eos,monero,aave,tezos,cosmos,iota,fantom,kusama,elrond-erd-2,nem,zcash,decred,celo,harmony,maker,sushi,compound-governance-token,enjincoin,basic-attention-token',
         },

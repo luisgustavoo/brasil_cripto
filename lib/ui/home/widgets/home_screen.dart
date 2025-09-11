@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -89,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       final coin = viewModel.coinsMarkets[index];
                       return CoinsCard(
                         coinsMarkets: coin,
+                        locale: locale,
                       );
                     },
                   );
@@ -106,8 +108,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _search() {
-    if (searchController.text.isNotEmpty) {
-      viewModel.fetchCoinsMarkets.execute(searchController.text);
-    }
+    final locale = Localizations.localeOf(context);
+    final vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
+    viewModel.fetchCoinsMarkets.execute((
+      names: searchController.text.toLowerCase(),
+      vsCurrency: vsCurrency,
+    ));
   }
 }
