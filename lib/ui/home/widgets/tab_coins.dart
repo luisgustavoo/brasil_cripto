@@ -59,28 +59,6 @@ class _TabCoinsState extends State<TabCoins> {
             child: ListenableBuilder(
               listenable: widget.viewModel,
               builder: (context, child) {
-                if (widget.viewModel.fetchCoinsMarkets.running) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
-                if (widget.viewModel.fetchCoinsMarkets.error) {
-                  return Center(
-                    child: Text(
-                      context.l10n.errorLoadingData,
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                  );
-                }
-
-                if (widget.viewModel.coinsMarkets.isEmpty) {
-                  return Center(
-                    child: Text(
-                      context.l10n.noCryptocurrencyFound,
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-                  );
-                }
-
                 return _buildList(viewModel, locale);
               },
             ),
@@ -94,6 +72,27 @@ class _TabCoinsState extends State<TabCoins> {
     return StreamBuilder(
       stream: viewModel.coinsMarketsStream,
       builder: (context, snapshot) {
+        if (widget.viewModel.fetchCoinsMarkets.running) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (widget.viewModel.fetchCoinsMarkets.error) {
+          return Center(
+            child: Text(
+              context.l10n.errorLoadingData,
+              style: const TextStyle(color: Colors.red),
+            ),
+          );
+        }
+        if (!snapshot.hasData) {
+          return Center(
+            child: Text(
+              context.l10n.noCryptocurrencyFound,
+              style: const TextStyle(color: Colors.grey),
+            ),
+          );
+        }
+
         if (snapshot.hasData) {
           return ListView.builder(
             itemCount: snapshot.data!.length,

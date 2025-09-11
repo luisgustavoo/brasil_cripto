@@ -15,8 +15,6 @@ class HomeViewModel extends ChangeNotifier {
   }
   final CoinsMarketsRepository _coinsMarketsRepository;
 
-  List<CoinsMarkets> coinsMarkets = [];
-
   Stream<List<CoinsMarkets>> get coinsMarketsStream =>
       _coinsMarketsRepository.coinsMarketsStream;
 
@@ -34,7 +32,6 @@ class HomeViewModel extends ChangeNotifier {
     );
     switch (result) {
       case Ok():
-        coinsMarkets = result.value;
         notifyListeners();
         return const Result.ok(null);
       case Error():

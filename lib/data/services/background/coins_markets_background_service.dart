@@ -2,11 +2,9 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:isolate';
 
-import 'package:brasil_cripto/config/env.dart';
 import 'package:brasil_cripto/data/services/api/models/coins_markets_model.dart';
 import 'package:brasil_cripto/data/services/http/http_client.dart';
 import 'package:brasil_cripto/utils/result.dart';
-import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton()
@@ -14,7 +12,6 @@ class CoinsMarketsBackgroundService {
   CoinsMarketsBackgroundService({required HttpClient httpClient})
     : _httpClient = httpClient;
   Isolate? _isolate;
-  SendPort? _sendPort;
   final _controller = StreamController<List<CoinsMarketsModel>>.broadcast();
   Stream<List<CoinsMarketsModel>> get coinsMarketsStream => _controller.stream;
   final HttpClient _httpClient;
@@ -40,9 +37,7 @@ class CoinsMarketsBackgroundService {
         );
 
     receivePort.listen((message) {
-      if (message is SendPort) {
-        _sendPort = message;
-      } else if (message is List<dynamic>) {
+      if (message is List<dynamic>) {
         final coinsMarketsList = List<Map<String, dynamic>>.from(
           message,
         );
@@ -66,19 +61,12 @@ class CoinsMarketsBackgroundService {
   ) async {
     final (sendPort: sendPort, names: names, vsCurrency: vsCurrency) =
         parameters;
-    final port = ReceivePort();
-    sendPort?.send(port.sendPort);
 
     Timer.periodic(const Duration(seconds: 30), (_) async {
       try {
         final topTen = names?.isEmpty ?? true;
-        final result = await Dio().get<List<dynamic>>(
-          options: Options(
-            headers: {
-              'x-cg-demo-api-key': Env.coingeckoApiKey,
-            },
-          ),
-          '${Env.baseUrl}/coins/markets',
+        final result = await _httpClient.get<List<dynamic>>(
+          '/coins/markets',
           queryParameters: {
             'vs_currency': vsCurrency,
             'order': 'market_cap_desc',
@@ -90,26 +78,16 @@ class CoinsMarketsBackgroundService {
           },
         );
 
-        if (result.data != null) {
-          sendPort?.send(result.data);
+        switch (result) {
+          case Ok():
+            final response = result.value;
+            sendPort?.send(response.data);
+          case Error():
+            log(
+              'Erro ao buscar dados em background',
+              error: result.error,
+            );
         }
-
-        // switch (result) {
-        //   case Ok():
-        //     final response = result.value;
-        //     final coinsMarketsList = List<Map<String, dynamic>>.from(
-        //       response.data!,
-        //     );
-        //     final coinsMarkets = coinsMarketsList
-        //         .map(CoinsMarketsModel.fromJson)
-        //         .toList();
-        //     sendPort?.send(coinsMarkets);
-        //   case Error():
-        //     log(
-        //       'Erro ao buscar dados em background',
-        //       error: result.error,
-        //     );
-        // }
       } on Exception catch (e, s) {
         log(
           'Erro ao buscar dados em background',
