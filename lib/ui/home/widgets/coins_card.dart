@@ -19,70 +19,71 @@ class CoinsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(
-        vertical: 16,
-      ),
+      margin: const EdgeInsets.symmetric(vertical: 16),
       padding: context.dimens.edgeInsetsScreenSymmetric16dp,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         color: AppColors.darkCard,
       ),
-      width: MediaQuery.sizeOf(context).width,
+      width: MediaQuery.sizeOf(context).width, // Largura total da tela
       child: Row(
-        spacing: 16,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween, // Distribui espaço
         children: [
-          Icon(
+          // Ícone à esquerda
+          const Icon(
             Icons.star,
             color: Colors.yellow,
           ),
-          Column(
-            children: [
-              Row(
-                spacing: 8,
-                children: [
-                  CachedNetworkImage(
-                    fit: BoxFit.cover,
-                    height: 30,
-                    width: 30,
-                    imageUrl: coinsMarkets.image,
-                    placeholder: (context, url) => const SizedBox(
+          // Conteúdo principal
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  spacing: 8,
+                  children: [
+                    CachedNetworkImage(
+                      fit: BoxFit.cover,
                       height: 30,
                       width: 30,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 0.5,
+                      imageUrl: coinsMarkets.image,
+                      placeholder: (context, url) => const SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 0.5,
+                        ),
+                      ),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    ),
+                    Expanded(
+                      child: Text(
+                        coinsMarkets.name,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
-                  ),
-
-                  Text(
-                    coinsMarkets.name,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-
-                  Text(
-                    '(${coinsMarkets.symbol.toUpperCase()})',
-                    style: const TextStyle(color: Colors.grey),
-                  ),
-                ],
-              ),
-              Text(
-                _formatarValor(coinsMarkets.currentPrice),
-              ),
-              SizedBox(
-                width: 100,
-                child: LayoutBuilder(
+                    Text(
+                      '(${coinsMarkets.symbol.toUpperCase()})',
+                      style: const TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
+                Text(
+                  _formatarValor(coinsMarkets.currentPrice),
+                ),
+                // Gráfico com largura dinâmica
+                LayoutBuilder(
                   builder: (context, constraints) {
                     return SizedBox(
-                      height: 75,
-                      width: constraints.maxWidth,
+                      height: 100,
+                      width: constraints.maxWidth, // Usa a largura disponível
                       child: SparkLineChart(coinsMarkets: coinsMarkets),
                     );
                   },
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -90,11 +91,8 @@ class CoinsCard extends StatelessWidget {
   }
 
   String _formatarValor(double valor) {
-    // final symbol = locale.languageCode == 'pt' ? r'R$' : r'US$';
     return NumberFormat.currency(
       locale: locale.languageCode,
-      // symbol: symbol,
-      // Se preferir deixar que o Intl escolha o símbolo padrão, pode omitir `symbol`
     ).format(valor);
   }
 }
