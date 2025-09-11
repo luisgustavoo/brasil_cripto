@@ -114,7 +114,6 @@ class CoinsMarketSummary extends StatelessWidget {
 
   TextStyle get _titleStyle {
     return const TextStyle(
-      color: AppColors.darkTextSecondary,
       fontWeight: FontWeight.bold,
       fontSize: 12,
     );
