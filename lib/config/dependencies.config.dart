@@ -23,6 +23,8 @@ import 'package:brasil_cripto/data/services/local/local_data_service.dart'
     as _i751;
 import 'package:brasil_cripto/data/services/shared_preferences_service.dart'
     as _i1038;
+import 'package:brasil_cripto/ui/coins_details/view_models/coins_details_view_model.dart'
+    as _i1013;
 import 'package:brasil_cripto/ui/coins_markets/view_models/coins_markets_view_model.dart'
     as _i606;
 import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart'
@@ -64,6 +66,11 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i606.CoinsMarketViewModel>(
       () => _i606.CoinsMarketViewModel(
+        coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i1013.CoinsDetailsViewModel>(
+      () => _i1013.CoinsDetailsViewModel(
         coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),
       ),
     );

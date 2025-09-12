@@ -114,11 +114,9 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
                     getIt<FavoriteViewModel>().toggleFavorite.execute(coin);
                   },
                   onTap: (coin) {
-                    context.pushNamed(
-                      'details',
-                      pathParameters: {
-                        'id': coin.id,
-                      },
+                    context.push(
+                      Routes.coinsDetails,
+                      extra: coin,
                     );
                   },
                 );

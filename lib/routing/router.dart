@@ -1,3 +1,5 @@
+import 'package:brasil_cripto/config/dependencies.dart';
+import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/routing/routes.dart';
 import 'package:brasil_cripto/ui/coins_details/widgets/coins_details_screen.dart';
 import 'package:brasil_cripto/ui/home/widgets/home_screen.dart';
@@ -19,8 +21,10 @@ class Router {
         path: Routes.coinsDetails,
         name: 'details',
         builder: (context, state) {
+          final coin = state.extra! as Coin;
           return CoinsDetailsScreen(
-            id: state.pathParameters['id']!,
+            coin: coin,
+            viewModel: getIt(),
           );
         },
       ),

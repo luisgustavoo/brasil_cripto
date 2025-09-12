@@ -1,5 +1,5 @@
-import 'package:brasil_cripto/data/services/api/models/price_api_model.dart';
 import 'package:json_annotation/json_annotation.dart';
+
 part 'market_api_model.g.dart';
 
 @JsonSerializable()
@@ -14,13 +14,13 @@ class MarketApiModel {
       _$MarketApiModelFromJson(json);
 
   @JsonKey(name: 'prices')
-  final List<PriceApiModel> prices;
+  final List<List<double>> prices;
 
   @JsonKey(name: 'market_caps')
-  final List<PriceApiModel> marketCaps;
+  final List<List<double>> marketCaps;
 
   @JsonKey(name: 'total_volumes')
-  final List<PriceApiModel> totalVolumes;
+  final List<List<double>> totalVolumes;
 
   Map<String, dynamic> toJson() => _$MarketApiModelToJson(this);
 }

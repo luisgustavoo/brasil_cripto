@@ -1,5 +1,5 @@
-import 'package:brasil_cripto/data/services/api/models/market_api_model.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
+import 'package:brasil_cripto/domain/models/market.dart';
 import 'package:brasil_cripto/utils/result.dart';
 
 abstract class CoinsMarketsRepository {
@@ -8,7 +8,7 @@ abstract class CoinsMarketsRepository {
     String? names,
     String vsCurrency,
   );
-  Future<Result<MarketApiModel>> fetchCoinsMarketsDetails(
+  Future<Result<Market>> fetchCoinsMarketsDetails(
     String id,
     String vsCurrency,
     int days,

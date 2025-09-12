@@ -1,17 +1,53 @@
+import 'package:brasil_cripto/domain/models/coin.dart';
+import 'package:brasil_cripto/ui/coins_details/view_models/coins_details_view_model.dart';
+import 'package:brasil_cripto/ui/coins_details/widgets/spark_line_details_chart.dart';
 import 'package:flutter/material.dart';
 
-class CoinsDetailsScreen extends StatelessWidget {
-  const CoinsDetailsScreen({required this.id, super.key});
+class CoinsDetailsScreen extends StatefulWidget {
+  const CoinsDetailsScreen({
+    required this.coin,
+    required this.viewModel,
+    super.key,
+  });
 
-  final String id;
+  final Coin coin;
+  final CoinsDetailsViewModel viewModel;
+
+  @override
+  State<CoinsDetailsScreen> createState() => _CoinsDetailsScreenState();
+}
+
+class _CoinsDetailsScreenState extends State<CoinsDetailsScreen> {
+  CoinsDetailsViewModel get viewModel => widget.viewModel;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final locale = Localizations.localeOf(context);
+      final vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
+      viewModel.fetchCoinsMarketsDetails.execute(
+        (
+          id: widget.coin.id,
+          vsCurrency: vsCurrency,
+        ),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('$id'),
+        title: Text(''),
       ),
-      body: Container(),
+      body: ListenableBuilder(
+        listenable: viewModel,
+        builder: (context, child) {
+          return SparkLineDetailsChart(
+            coin: widget.coin,
+          );
+        },
+      ),
     );
   }
 }
