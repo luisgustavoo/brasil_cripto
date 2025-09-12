@@ -58,7 +58,7 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
   }
 
   @override
-  Future<Result<void>> closeBackgroundService() async {
+  Future<Result<void>> stopBackGroundFetchCoinsMarkets() async {
     _apiClient.stopBackGroundFetchCoinsMarkets();
     return const Result.ok(null);
   }
