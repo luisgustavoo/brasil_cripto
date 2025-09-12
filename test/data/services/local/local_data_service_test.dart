@@ -76,15 +76,10 @@ void main() {
     test(
       'should add and retrieve favorites',
       () async {
-        // Add the favorite coin
         final addResult = await localDataService.addFavorite(coinsToMap(kCoin));
         expect(addResult, isA<Ok<void>>());
-
-        // Retrieve favorites
         final result = await localDataService.getFavorites();
         expect(result, isA<Ok<List<Coin>>>());
-
-        // Verify the added coin is present
         final favorites = result.asOk.value;
         expect(favorites.isNotEmpty, true);
         expect(favorites.first.id, 'bitcoin');

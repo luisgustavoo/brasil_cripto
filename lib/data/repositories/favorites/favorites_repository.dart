@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:brasil_cripto/data/services/local/local_data_service.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
+import 'package:brasil_cripto/domain/models/sparkline.dart';
 import 'package:brasil_cripto/utils/result.dart';
 import 'package:collection/collection.dart';
 import 'package:injectable/injectable.dart';
@@ -85,7 +86,7 @@ class FavoritesRepository {
           'market_cap_rank': coin.marketCapRank,
           'fully_diluted_valuation': coin.fullyDilutedValuation,
           'total_volume': coin.totalVolume,
-          'sparkline_in_7d': coin.sparkLineIn7d,
+          'sparkline_in_7d': sparklineToMap(coin.sparkLineIn7d),
           'price_change_percentage_1h_in_currency':
               coin.priceChangePercentage1hInCurrency,
           'price_change_percentage_24h_in_currency':
@@ -95,5 +96,11 @@ class FavoritesRepository {
         };
       },
     ).toList();
+  }
+
+  Map<String, dynamic> sparklineToMap(Sparkline model) {
+    return {
+      'price': model.price,
+    };
   }
 }

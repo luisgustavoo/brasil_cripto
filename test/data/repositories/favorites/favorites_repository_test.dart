@@ -6,6 +6,7 @@ import 'package:brasil_cripto/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../testing/fakes/services/fake_shared_preferences_service.dart';
+import '../../../../testing/utils/result.dart';
 
 void main() {
   late FavoritesRepository favoritesRepository;
@@ -33,10 +34,29 @@ void main() {
     );
   });
 
-  group('favorites repository ...', () {
-    test('1', () {
-      final result = favoritesRepository.toggleFavorite(kCoin);
+  group('FavoritesRepository', () {
+    test('should emit updated favorites when a coin is toggled', () async {
+      // Lista para capturar valores emitidos pela stream
+      final emittedFavorites = <Coin>[];
+      final subscription = favoritesRepository.favoritesStream.listen(
+        emittedFavorites.addAll,
+      );
+      final result = await favoritesRepository.toggleFavorite(kCoin);
+      // Dá tempo da stream emitir o valor
+      await Future<void>.delayed(Duration.zero);
       expect(result, isA<Ok<void>>());
+      expect(emittedFavorites.length, 1);
+      expect(emittedFavorites.first.id, 'bitcoin');
+      await subscription.cancel();
+    });
+    test('should add coin to favorites and retrieve it', () async {
+      final toggleResult = await favoritesRepository.toggleFavorite(kCoin);
+      expect(toggleResult, isA<Ok<void>>());
+      final result = await favoritesRepository.getFavorites();
+      expect(result, isA<Ok<List<Coin>>>());
+      final favorites = result.asOk.value;
+      expect(favorites.isNotEmpty, true);
+      expect(favorites.first.id, 'bitcoin');
     });
   });
 }
