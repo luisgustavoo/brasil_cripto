@@ -6,8 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 final getIt = GetIt.instance;
 
 @InjectableInit()
-Future<void> configureDependencies() => getIt.init();
+Future<void> configureDependencies({String? environment}) => getIt.init();
 
+@prod
 @module
 abstract class RegisterModule {
   @preResolve

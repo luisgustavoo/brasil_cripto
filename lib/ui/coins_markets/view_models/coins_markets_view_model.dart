@@ -21,7 +21,6 @@ class CoinsMarketViewModel extends ChangeNotifier {
 
   late final Command1<void, ({String names, String vsCurrency})>
   fetchCoinsMarkets;
-  late final Command0<void> closeBackgroundService;
   late final Command1<void, Coin> toggleFavorite;
 
   Future<Result<void>> _fetchCoinsMarkets(

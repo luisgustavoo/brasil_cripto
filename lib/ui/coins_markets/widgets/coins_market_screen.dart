@@ -30,7 +30,6 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
   @override
   void dispose() {
     searchController.dispose();
-    viewModel.closeBackgroundService.execute();
     super.dispose();
   }
 

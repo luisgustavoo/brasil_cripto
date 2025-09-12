@@ -1,7 +1,10 @@
 import 'package:brasil_cripto/data/services/http/http_client.dart';
 import 'package:brasil_cripto/data/services/http/http_client_exception.dart';
 import 'package:brasil_cripto/data/services/http/http_client_response.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
+
+class MockGoRouter extends Mock implements GoRouter {}
 
 class MockHttpClient extends Mock implements HttpClient {
   MockHttpClient() {
