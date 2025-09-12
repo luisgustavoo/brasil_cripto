@@ -53,7 +53,9 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i1038.SharedPreferencesService(gh<_i460.SharedPreferences>()),
     );
     gh.factory<_i751.LocalDataService>(
-      () => _i751.LocalDataService(gh<_i1038.SharedPreferencesService>()),
+      () => _i751.LocalDataService(
+        sharedPreferences: gh<_i1038.SharedPreferencesService>(),
+      ),
     );
     gh.factory<_i11.CoinsMarketsRepository>(
       () =>

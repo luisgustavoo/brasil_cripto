@@ -91,7 +91,7 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
             ),
           );
         }
-        if (!snapshot.hasData) {
+        if ((!snapshot.hasData) || (snapshot.data?.isEmpty ?? true)) {
           return Center(
             child: Text(
               context.l10n.noCryptocurrencyFound,

@@ -60,7 +60,9 @@ void main() {
   }
 
   setUp(() {
-    localDataService = LocalDataService(fakeSharedPreferencesService);
+    localDataService = LocalDataService(
+      sharedPreferences: fakeSharedPreferencesService,
+    );
   });
 
   group('LocalDataService', () {

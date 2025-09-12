@@ -9,7 +9,7 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class LocalDataService {
-  LocalDataService(SharedPreferencesService sharedPreferences)
+  LocalDataService({required SharedPreferencesService sharedPreferences})
     : _sharedPreferences = sharedPreferences;
 
   final SharedPreferencesService _sharedPreferences;

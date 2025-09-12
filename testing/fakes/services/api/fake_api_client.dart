@@ -11,12 +11,12 @@ import '../../../fixture/fixture_reader.dart';
 class FakeApiClient implements ApiClient {
   FakeApiClient() {
     final jsonCoinsMarketsData = FixtureReader.getJsonData(
-      '/fakes/services/fixture/coins_markets_response.json.json',
+      'fakes/services/fixture/coins_markets_response.json',
     );
     jsonCoinsMarketsResponse =
         jsonDecode(jsonCoinsMarketsData) as List<dynamic>;
     final jsonCoinsMarketsDetailsData = FixtureReader.getJsonData(
-      '/fakes/services/fixture/coins_markets_details_response.json.json',
+      'fakes/services/fixture/coins_markets_details_response.json',
     );
     jsonCoinsMarketsResponse =
         jsonDecode(jsonCoinsMarketsData) as List<dynamic>;
