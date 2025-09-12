@@ -41,7 +41,7 @@ class _CoinsDetailsScreenState extends State<CoinsDetailsScreen> {
     final locale = Localizations.localeOf(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: Text(widget.coin.name),
       ),
       body: Padding(
         padding: context.dimens.edgeInsetsScreenSymmetric,
@@ -62,7 +62,7 @@ class _CoinsDetailsScreenState extends State<CoinsDetailsScreen> {
             }
 
             if (viewModel.market == null) {
-              const SizedBox.shrink();
+              return const SizedBox.shrink();
             }
 
             return SparkLineDetailsChart(
