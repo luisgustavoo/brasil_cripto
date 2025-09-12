@@ -1,4 +1,5 @@
 import 'package:brasil_cripto/data/services/http/http_client.dart';
+import 'package:brasil_cripto/data/services/http/http_client_exception.dart';
 import 'package:brasil_cripto/data/services/http/http_client_response.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -24,45 +25,74 @@ class MockHttpClientResponse<T> extends Mock implements HttpClientResponse<T> {
   final String? statusMessage;
 }
 
+class MockHttpClientException extends Mock implements HttpClientException {
+  MockHttpClientException({
+    required this.error,
+    this.message,
+    this.statusCode,
+    this.response,
+  });
+
+  @override
+  final String? message;
+  @override
+  final int? statusCode;
+  @override
+  final dynamic error;
+  @override
+  final HttpClientResponse<dynamic>? response;
+}
+
 extension HttpMethodMocks on HttpClient {
-  void mockGet<T>(String path, T object) {
-    when(
-      () => get<T>(
-        path,
-        queryParameters: any(named: 'queryParameters'),
-      ),
-    ).thenAnswer((invocation) {
-      return Future.value(MockHttpClientResponse(data: object));
-    });
+  void mockGet<T>(String path, {T? object, bool? showError = false}) {
+    if (!showError!) {
+      when(
+        () => get<T>(
+          path,
+          queryParameters: any(named: 'queryParameters'),
+        ),
+      ).thenAnswer((invocation) {
+        return Future.value(MockHttpClientResponse(data: object));
+      });
+    }
+
+    if (showError) {
+      when(
+        () => get<T>(
+          path,
+          queryParameters: any(named: 'queryParameters'),
+        ),
+      ).thenThrow(MockHttpClientException(error: 'Error'));
+    }
   }
 
-  void mockPost<T>(String path, Object object) {
-    when(
-      () => post<T>(
-        path,
-        data: any(),
-        headers: any(),
-        options: any(),
-        queryParameters: any(),
-      ),
-    ).thenAnswer((invocation) {
-      final response = MockHttpClientResponse<T>();
-      return Future.value(response);
-    });
-  }
+  // void mockPost<T>(String path, Object object) {
+  //   when(
+  //     () => post<T>(
+  //       path,
+  //       data: any(),
+  //       headers: any(),
+  //       options: any(),
+  //       queryParameters: any(),
+  //     ),
+  //   ).thenAnswer((invocation) {
+  //     final response = MockHttpClientResponse<T>();
+  //     return Future.value(response);
+  //   });
+  // }
 
-  void mockDelete<T>(String path) {
-    when(
-      () => delete<T>(
-        path,
-        data: any(),
-        headers: any(),
-        options: any(),
-        queryParameters: any(),
-      ),
-    ).thenAnswer((invocation) {
-      final response = MockHttpClientResponse<T>();
-      return Future.value(response);
-    });
-  }
+  // void mockDelete<T>(String path) {
+  //   when(
+  //     () => delete<T>(
+  //       path,
+  //       data: any(),
+  //       headers: any(),
+  //       options: any(),
+  //       queryParameters: any(),
+  //     ),
+  //   ).thenAnswer((invocation) {
+  //     final response = MockHttpClientResponse<T>();
+  //     return Future.value(response);
+  //   });
+  // }
 }
