@@ -1,5 +1,5 @@
-import 'package:brasil_cripto/data/services/api/models/coins_markets_model.dart';
-import 'package:brasil_cripto/data/services/api/models/spark_line.dart';
+import 'package:brasil_cripto/data/services/api/models/coins_markets_api_model.dart';
+import 'package:brasil_cripto/data/services/api/models/spark_line_api_model.dart';
 import 'package:flutter/foundation.dart';
 
 @immutable
@@ -20,7 +20,7 @@ class Coin {
     required this.priceChangePercentage7dInCurrency,
   });
 
-  factory Coin.fromApi(CoinsMarketsModel model) {
+  factory Coin.fromApi(CoinsMarketsApiModel model) {
     return Coin(
       id: model.id,
       symbol: model.symbol,
@@ -31,7 +31,7 @@ class Coin {
       marketCapRank: model.marketCapRank,
       fullyDilutedValuation: model.fullyDilutedValuation ?? 0,
       totalVolume: model.totalVolume ?? 0,
-      sparkLineIn7d: model.sparkLineIn7d ?? SparkLine(price: []),
+      sparkLineIn7d: model.sparkLineIn7d ?? SparkLineApiModel(price: []),
       priceChangePercentage1hInCurrency:
           model.priceChangePercentage1hInCurrency ?? 0,
       priceChangePercentage24hInCurrency:
@@ -50,7 +50,7 @@ class Coin {
   final int marketCapRank;
   final double fullyDilutedValuation;
   final double totalVolume;
-  final SparkLine sparkLineIn7d;
+  final SparkLineApiModel sparkLineIn7d;
   final double priceChangePercentage1hInCurrency;
   final double priceChangePercentage24hInCurrency;
   final double priceChangePercentage7dInCurrency;

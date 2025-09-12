@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository.dart';
 import 'package:brasil_cripto/data/services/api/api_client.dart';
+import 'package:brasil_cripto/data/services/api/models/market_api_model.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/utils/result.dart';
 import 'package:injectable/injectable.dart';
@@ -30,6 +31,29 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
           _coinsMarketsController.add(coinsMarketsList);
           await _addListener(names, vsCurrency);
           return Result.ok(coinsMarketsList);
+        case Error():
+          return Result.error(result.error);
+      }
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
+  }
+
+  @override
+  Future<Result<MarketApiModel>> fetchCoinsMarketsDetails(
+    String id,
+    String vsCurrency,
+    int days,
+  ) async {
+    try {
+      final result = await _apiClient.fetchCoinsMarketsDetails(
+        id,
+        vsCurrency,
+        days,
+      );
+      switch (result) {
+        case Ok():
+          return Result.ok(result.value);
         case Error():
           return Result.error(result.error);
       }

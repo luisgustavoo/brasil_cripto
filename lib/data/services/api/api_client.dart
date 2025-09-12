@@ -3,7 +3,8 @@ import 'dart:developer';
 import 'dart:isolate';
 
 import 'package:brasil_cripto/config/env.dart';
-import 'package:brasil_cripto/data/services/api/models/coins_markets_model.dart';
+import 'package:brasil_cripto/data/services/api/models/coins_markets_api_model.dart';
+import 'package:brasil_cripto/data/services/api/models/market_api_model.dart';
 import 'package:brasil_cripto/data/services/http/http_client.dart';
 import 'package:brasil_cripto/utils/result.dart';
 import 'package:dio/dio.dart';
@@ -14,11 +15,12 @@ class ApiClient {
   ApiClient({required HttpClient httpClient}) : _httpClient = httpClient;
   final HttpClient _httpClient;
   Isolate? _isolate;
-  StreamController<List<CoinsMarketsModel>> _controller =
-      StreamController<List<CoinsMarketsModel>>.broadcast();
-  Stream<List<CoinsMarketsModel>> get coinsMarketsStream => _controller.stream;
+  StreamController<List<CoinsMarketsApiModel>> _controller =
+      StreamController<List<CoinsMarketsApiModel>>.broadcast();
+  Stream<List<CoinsMarketsApiModel>> get coinsMarketsStream =>
+      _controller.stream;
 
-  Future<Result<List<CoinsMarketsModel>>> fetchCoinsMarkets(
+  Future<Result<List<CoinsMarketsApiModel>>> fetchCoinsMarkets(
     String? names,
     String vsCurrency,
   ) async {
@@ -33,7 +35,6 @@ class ApiClient {
           if (names?.isEmpty ?? true) 'per_page': 10,
           if (names?.isEmpty ?? true) 'page': 1,
           'names': names,
-          // 'names': 'bitcoin,ethereum,binancecoin,ripple,cardano,dogecoin,polkadot,solana,tron,litecoin,uniswap,chainlink,wrapped-bitcoin,stellar,bitcoin-cash,vechain,filecoin,theta-network,eos,monero,aave,tezos,cosmos,iota,fantom,kusama,elrond-erd-2,nem,zcash,decred,celo,harmony,maker,sushi,compound-governance-token,enjincoin,basic-attention-token',
         },
       );
 
@@ -43,11 +44,41 @@ class ApiClient {
           if (data?.isNotEmpty ?? false) {
             final coinsMarketsList = List<Map<String, dynamic>>.from(data!);
             final coinsMarkets = coinsMarketsList
-                .map(CoinsMarketsModel.fromJson)
+                .map(CoinsMarketsApiModel.fromJson)
                 .toList();
             return Result.ok(coinsMarkets);
           } else {
-            return const Result.ok(<CoinsMarketsModel>[]);
+            return const Result.ok(<CoinsMarketsApiModel>[]);
+          }
+        case Error():
+          return Result.error(result.error);
+      }
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
+  }
+
+  Future<Result<MarketApiModel>> fetchCoinsMarketsDetails(
+    String id,
+    String vsCurrency,
+    int days,
+  ) async {
+    try {
+      final result = await _httpClient.auth().get<Map<String, dynamic>>(
+        '/coins/$id/market_chart',
+        queryParameters: {
+          'vs_currency': vsCurrency,
+          'days': days,
+        },
+      );
+
+      switch (result) {
+        case Ok():
+          final data = result.value.data;
+          if (data?.isNotEmpty ?? false) {
+            return Result.ok(MarketApiModel.fromJson(data!));
+          } else {
+            return Result.error(Exception('Dados não encontrados'));
           }
         case Error():
           return Result.error(result.error);
@@ -63,7 +94,7 @@ class ApiClient {
     stopBackGroundFetchCoinsMarkets();
     log('Background service start');
     if (_controller.isClosed) {
-      _controller = StreamController<List<CoinsMarketsModel>>.broadcast();
+      _controller = StreamController<List<CoinsMarketsApiModel>>.broadcast();
     }
     final (names: names, vsCurrency: vsCurrency) = queryParameters;
     final receivePort = ReceivePort();
@@ -74,11 +105,6 @@ class ApiClient {
         names: names,
         vsCurrency: vsCurrency,
       ),
-      // (
-      //   sendPort: receivePort.sendPort,
-      //   names: names,
-      //   vsCurrency: vsCurrency,
-      // ),
     );
 
     receivePort.listen((message) {
@@ -88,7 +114,7 @@ class ApiClient {
         );
 
         final coinsMarkets = coinsMarketsList
-            .map(CoinsMarketsModel.fromJson)
+            .map(CoinsMarketsApiModel.fromJson)
             .toList();
         _controller.add(coinsMarkets);
       }

@@ -1,11 +1,11 @@
-import 'package:brasil_cripto/data/services/api/models/spark_line.dart';
+import 'package:brasil_cripto/data/services/api/models/spark_line_api_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'coins_markets_model.g.dart';
+part 'coins_markets_api_model.g.dart';
 
 @JsonSerializable()
-class CoinsMarketsModel {
-  CoinsMarketsModel({
+class CoinsMarketsApiModel {
+  CoinsMarketsApiModel({
     required this.id,
     required this.symbol,
     required this.name,
@@ -38,8 +38,8 @@ class CoinsMarketsModel {
     this.priceChangePercentage7dInCurrency,
   });
 
-  factory CoinsMarketsModel.fromJson(Map<String, dynamic> json) =>
-      _$CoinsMarketsModelFromJson(json);
+  factory CoinsMarketsApiModel.fromJson(Map<String, dynamic> json) =>
+      _$CoinsMarketsApiModelFromJson(json);
 
   final String id;
   final String symbol;
@@ -74,7 +74,7 @@ class CoinsMarketsModel {
   final dynamic roi;
   final String? lastUpdated;
   @JsonKey(name: 'sparkline_in_7d')
-  final SparkLine? sparkLineIn7d;
+  final SparkLineApiModel? sparkLineIn7d;
   @JsonKey(name: 'price_change_percentage_1h_in_currency')
   final double? priceChangePercentage1hInCurrency;
   @JsonKey(name: 'price_change_percentage_24h_in_currency')
@@ -82,5 +82,5 @@ class CoinsMarketsModel {
   @JsonKey(name: 'price_change_percentage_7d_in_currency')
   final double? priceChangePercentage7dInCurrency;
 
-  Map<String, dynamic> toJson() => _$CoinsMarketsModelToJson(this);
+  Map<String, dynamic> toJson() => _$CoinsMarketsApiModelToJson(this);
 }

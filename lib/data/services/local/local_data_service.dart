@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:brasil_cripto/data/services/api/models/spark_line.dart';
+import 'package:brasil_cripto/data/services/api/models/spark_line_api_model.dart';
 import 'package:brasil_cripto/data/services/shared_preferences_service.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/utils/result.dart';
@@ -64,7 +64,7 @@ class LocalDataService {
       fullyDilutedValuation:
           (map['fully_diluted_valuation'] as num?)?.toDouble() ?? 0,
       totalVolume: (map['total_volume'] as num?)?.toDouble() ?? 0,
-      sparkLineIn7d: SparkLine.fromJson(
+      sparkLineIn7d: SparkLineApiModel.fromJson(
         map['sparkline_in_7d'] as Map<String, dynamic>,
       ),
       priceChangePercentage1hInCurrency:
