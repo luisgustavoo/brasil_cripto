@@ -1,9 +1,11 @@
 import 'package:brasil_cripto/config/dependencies.dart';
+import 'package:brasil_cripto/routing/routes.dart';
 import 'package:brasil_cripto/ui/coins_markets/view_models/coins_markets_view_model.dart';
 import 'package:brasil_cripto/ui/coins_markets/widgets/coins_card.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CoinsMarketScreen extends StatefulWidget {
   const CoinsMarketScreen({required this.viewModel, super.key});
@@ -59,7 +61,10 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
           ),
           Expanded(
             child: ListenableBuilder(
-              listenable: widget.viewModel,
+              listenable: Listenable.merge([
+                widget.viewModel,
+                getIt<FavoriteViewModel>().toggleFavorite,
+              ]),
               builder: (context, child) {
                 return _buildList(viewModel, locale);
               },
@@ -96,18 +101,29 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
         }
 
         if (snapshot.hasData) {
-          return ListView.builder(
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              final coin = snapshot.data![index];
-              return CoinsCard(
-                coin: coin,
-                locale: locale,
-                toggleFavorite: (coin) {
-                  getIt<FavoriteViewModel>().toggleFavorite.execute(coin);
-                },
-              );
-            },
+          return RefreshIndicator(
+            onRefresh: _search,
+            child: ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                final coin = snapshot.data![index];
+                return CoinsCard(
+                  coin: coin,
+                  locale: locale,
+                  toggleFavorite: (coin) {
+                    getIt<FavoriteViewModel>().toggleFavorite.execute(coin);
+                  },
+                  onTap: (coin) {
+                    context.pushNamed(
+                      'details',
+                      pathParameters: {
+                        'id': coin.id,
+                      },
+                    );
+                  },
+                );
+              },
+            ),
           );
         } else {
           return const SizedBox.shrink();
@@ -116,10 +132,10 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
     );
   }
 
-  void _search() {
+  Future<void> _search() async {
     final locale = Localizations.localeOf(context);
     final vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
-    viewModel.fetchCoinsMarkets.execute((
+    await viewModel.fetchCoinsMarkets.execute((
       names: searchController.text.toLowerCase(),
       vsCurrency: vsCurrency,
     ));

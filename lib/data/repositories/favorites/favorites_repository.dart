@@ -16,7 +16,7 @@ class FavoritesRepository {
   final LocalDataService _localDataService;
 
   late final _favoriteStreamController = StreamController<List<Coin>>();
-  final _favoritesCoins = <Coin>[];
+  final favoritesCoins = <Coin>[];
 
   Stream<List<Coin>> get favoritesStream => _favoriteStreamController.stream;
 
@@ -26,7 +26,7 @@ class FavoritesRepository {
     switch (result) {
       case Ok():
         _favoriteStreamController.add(result.value);
-        _favoritesCoins.addAll(result.value);
+        favoritesCoins.addAll(result.value);
       case Error():
         log('Erro ao inicializar favoritos', error: result.error);
         _favoriteStreamController.add(const []);
@@ -34,7 +34,7 @@ class FavoritesRepository {
   }
 
   Future<Result<void>> toggleFavorite(Coin coin) async {
-    final coinFound = _favoritesCoins.firstWhereOrNull(
+    final coinFound = favoritesCoins.firstWhereOrNull(
       (element) => element.id == coin.id,
     );
     if (coinFound != null) {
@@ -42,7 +42,7 @@ class FavoritesRepository {
     } else {
       _addFavorites(coin);
     }
-    return _localDataService.addFavorite(coinsToMap(_favoritesCoins));
+    return _localDataService.addFavorite(coinsToMap(favoritesCoins));
   }
 
   Future<Result<List<Coin>>> getFavorites() async {
@@ -51,7 +51,7 @@ class FavoritesRepository {
     switch (result) {
       case Ok():
         _favoriteStreamController.add(result.value);
-        _favoritesCoins.addAll(result.value);
+        favoritesCoins.addAll(result.value);
         return Result.ok(result.value);
       case Error():
         log('Erro ao inicializar favoritos', error: result.error);
@@ -61,15 +61,15 @@ class FavoritesRepository {
   }
 
   void _addFavorites(Coin coin) {
-    _favoritesCoins.add(coin);
-    _favoriteStreamController.add(_favoritesCoins);
+    favoritesCoins.add(coin);
+    _favoriteStreamController.add(favoritesCoins);
   }
 
   void _removeFavorites(Coin coin) {
-    _favoritesCoins.removeWhere(
+    favoritesCoins.removeWhere(
       (element) => element.id == coin.id,
     );
-    _favoriteStreamController.add(_favoritesCoins);
+    _favoriteStreamController.add(favoritesCoins);
   }
 
   List<Map<String, dynamic>> coinsToMap(List<Coin> coins) {

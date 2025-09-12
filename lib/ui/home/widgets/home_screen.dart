@@ -27,8 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           bottom: const TabBar.secondary(
             tabs: [
-              Tab(icon: Icon(Icons.monitor_heart_outlined)),
               Tab(icon: Icon(Icons.star_outline)),
+              Tab(icon: Icon(Icons.monitor_heart_outlined)),
             ],
           ),
         ),
@@ -36,10 +36,10 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: context.dimens.edgeInsetsScreenSymmetric,
           child: TabBarView(
             children: [
-              CoinsMarketScreen(
+              FavoriteScreen(
                 viewModel: getIt(),
               ),
-              FavoriteScreen(
+              CoinsMarketScreen(
                 viewModel: getIt(),
               ),
             ],

@@ -146,7 +146,7 @@ void _coinsMarketsBackground(_IsolateParams params) {
         log('Background data ${response.data}');
         params.sendPort.send(response.data);
       }
-    } catch (e, s) {
+    } on Exception catch (e, s) {
       log('Erro no isolate', error: e, stackTrace: s);
     }
   });

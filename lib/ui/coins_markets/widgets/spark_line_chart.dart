@@ -69,7 +69,7 @@ class _SparkLineChartState extends State<SparkLineChart> {
               //   color: Colors.lightBlueAccent.withAlpha(100),
               // ),
               // Cria uma lógica para mostra ou não os pontos entre as linhas
-              dotData: FlDotData(
+              dotData: const FlDotData(
                 show: false,
                 // checkToShowDot: (spot, barData) {
                 //   return false;
