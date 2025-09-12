@@ -12,7 +12,9 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class ApiClient {
-  ApiClient({required HttpClient httpClient}) : _httpClient = httpClient;
+  ApiClient({
+    required HttpClient httpClient,
+  }) : _httpClient = httpClient;
   final HttpClient _httpClient;
   Isolate? _isolate;
   StreamController<List<CoinsMarketsApiModel>> _controller =
@@ -25,7 +27,7 @@ class ApiClient {
     String vsCurrency,
   ) async {
     try {
-      final result = await _httpClient.auth().get<List<dynamic>>(
+      final response = await _httpClient.auth().get<List<dynamic>>(
         '/coins/markets',
         queryParameters: {
           'vs_currency': vsCurrency,
@@ -38,20 +40,16 @@ class ApiClient {
         },
       );
 
-      switch (result) {
-        case Ok():
-          final data = result.value.data;
-          if (data?.isNotEmpty ?? false) {
-            final coinsMarketsList = List<Map<String, dynamic>>.from(data!);
-            final coinsMarkets = coinsMarketsList
-                .map(CoinsMarketsApiModel.fromJson)
-                .toList();
-            return Result.ok(coinsMarkets);
-          } else {
-            return const Result.ok(<CoinsMarketsApiModel>[]);
-          }
-        case Error():
-          return Result.error(result.error);
+      if (response.data?.isNotEmpty ?? false) {
+        final coinsMarketsList = List<Map<String, dynamic>>.from(
+          response.data!,
+        );
+        final coinsMarkets = coinsMarketsList
+            .map(CoinsMarketsApiModel.fromJson)
+            .toList();
+        return Result.ok(coinsMarkets);
+      } else {
+        return const Result.ok(<CoinsMarketsApiModel>[]);
       }
     } on Exception catch (e) {
       return Result.error(e);
@@ -64,7 +62,7 @@ class ApiClient {
     int days,
   ) async {
     try {
-      final result = await _httpClient.auth().get<Map<String, dynamic>>(
+      final response = await _httpClient.auth().get<Map<String, dynamic>>(
         '/coins/$id/market_chart',
         queryParameters: {
           'vs_currency': vsCurrency,
@@ -72,16 +70,10 @@ class ApiClient {
         },
       );
 
-      switch (result) {
-        case Ok():
-          final data = result.value.data;
-          if (data?.isNotEmpty ?? false) {
-            return Result.ok(MarketApiModel.fromJson(data!));
-          } else {
-            return Result.error(Exception('Dados não encontrados'));
-          }
-        case Error():
-          return Result.error(result.error);
+      if (response.data?.isNotEmpty ?? false) {
+        return Result.ok(MarketApiModel.fromJson(response.data!));
+      } else {
+        return Result.error(Exception('Dados não encontrados'));
       }
     } on Exception catch (e) {
       return Result.error(e);
