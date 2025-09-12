@@ -8,5 +8,5 @@ class FixtureReader {
       File('testing/$path').readAsStringSync();
 
   static T getData<T>(String path) =>
-      jsonDecode(File('test/$path').readAsStringSync()) as T;
+      jsonDecode(File('testing/$path').readAsStringSync()) as T;
 }

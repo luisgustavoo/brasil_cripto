@@ -24,13 +24,13 @@ class SparkLineDetailsChart extends StatefulWidget {
 }
 
 class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
-  List<(DateTime, double)>? _priceHistory = [];
+  final _priceHistory = <(DateTime, double)>[];
 
   Future<void> _reloadData() async {
     for (final item in widget.market.prices) {
       final timestamp = item[0].toInt();
       final price = item[1];
-      _priceHistory!.add((
+      _priceHistory.add((
         DateTime.fromMillisecondsSinceEpoch(timestamp),
         price,
       ));
@@ -124,7 +124,7 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
                       reservedSize: 38,
                       maxIncluded: false,
                       getTitlesWidget: (value, meta) {
-                        final date = _priceHistory![value.toInt()].$1;
+                        final date = _priceHistory[value.toInt()].$1;
                         return SideTitleWidget(
                           meta: meta,
                           child: Transform.rotate(
@@ -177,7 +177,7 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
                     getTooltipItems: (touchedBarSpots) {
                       return touchedBarSpots.map((barSpot) {
                         final price = barSpot.y;
-                        final date = _priceHistory![barSpot.x.toInt()].$1;
+                        final date = _priceHistory[barSpot.x.toInt()].$1;
                         return LineTooltipItem(
                           '',
                           const TextStyle(
@@ -235,14 +235,12 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
                     dotData: const FlDotData(
                       show: false,
                     ),
-                    spots:
-                        _priceHistory?.asMap().entries.map((e) {
-                          final index = e.key;
-                          final item = e.value;
-                          final value = item.$2;
-                          return FlSpot(index.toDouble(), value);
-                        }).toList() ??
-                        [],
+                    spots: _priceHistory.asMap().entries.map((e) {
+                      final index = e.key;
+                      final item = e.value;
+                      final value = item.$2;
+                      return FlSpot(index.toDouble(), value);
+                    }).toList(),
                   ),
                 ],
               ),

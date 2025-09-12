@@ -8,23 +8,23 @@ import '../../../../testing/mocks.dart';
 import '../../../../testing/utils/result.dart';
 
 void main() {
-  group('api client ...', () async {
+  group('ApiClient fetchCoinsMarkets', () {
     late MockHttpClient mockHttpClient;
     late ApiClient apiClient;
     late List<dynamic> jsonCoinsMarketsResponse;
+    final jsonCoinsMarketsData = FixtureReader.getJsonData(
+      'fakes/services/fixture/coins_markets_response.json',
+    );
+    jsonCoinsMarketsResponse =
+        jsonDecode(jsonCoinsMarketsData) as List<dynamic>;
 
     setUp(() {
       mockHttpClient = MockHttpClient();
       apiClient = ApiClient(httpClient: mockHttpClient);
-      final jsonCoinsMarketsData = FixtureReader.getJsonData(
-        '/fakes/services/fixture/coins_markets_response.json.json',
-      );
-      jsonCoinsMarketsResponse =
-          jsonDecode(jsonCoinsMarketsData) as List<dynamic>;
     });
 
     test(
-      'fadfafds',
+      'should return a non-empty list when coins markets API returns data',
       () async {
         mockHttpClient.mockGet<List<dynamic>>(
           '/coins/markets',
