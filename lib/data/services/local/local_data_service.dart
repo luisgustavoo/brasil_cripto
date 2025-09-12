@@ -9,14 +9,14 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class LocalDataService {
-  LocalDataService({required SharedPreferencesService sharedPreferences})
-    : _sharedPreferences = sharedPreferences;
+  LocalDataService({required SharedPreferencesService sharedPreferencesService})
+    : _sharedPreferencesService = sharedPreferencesService;
 
-  final SharedPreferencesService _sharedPreferences;
+  final SharedPreferencesService _sharedPreferencesService;
 
   Future<Result<void>> addFavorite(List<Map<String, dynamic>> coins) async {
     try {
-      final result = await _sharedPreferences.setData(jsonEncode(coins));
+      final result = await _sharedPreferencesService.setData(jsonEncode(coins));
 
       switch (result) {
         case Ok<void>():
@@ -32,7 +32,7 @@ class LocalDataService {
 
   Future<Result<List<Coin>>> getFavorites() async {
     try {
-      final result = await _sharedPreferences.getData();
+      final result = await _sharedPreferencesService.getData();
       switch (result) {
         case Ok<String?>():
           final value = result.value;

@@ -29,7 +29,7 @@ void main() {
   setUp(() {
     favoritesRepository = FavoritesRepository(
       localDataService: LocalDataService(
-        sharedPreferences: FakeSharedPreferencesService(),
+        sharedPreferencesService: FakeSharedPreferencesService(),
       ),
     );
   });

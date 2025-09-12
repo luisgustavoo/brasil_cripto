@@ -7,6 +7,8 @@ import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart'
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+const String searchEditKey = 'search-edit';
+
 class CoinsMarketScreen extends StatefulWidget {
   const CoinsMarketScreen({required this.viewModel, super.key});
 
@@ -42,6 +44,7 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
         spacing: 32,
         children: [
           TextField(
+            key: const Key(searchEditKey),
             controller: searchController,
             // autofocus: true,
             decoration: InputDecoration(

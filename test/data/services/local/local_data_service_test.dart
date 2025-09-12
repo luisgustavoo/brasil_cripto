@@ -61,7 +61,7 @@ void main() {
 
   setUp(() {
     localDataService = LocalDataService(
-      sharedPreferences: fakeSharedPreferencesService,
+      sharedPreferencesService: fakeSharedPreferencesService,
     );
   });
 
