@@ -10,17 +10,23 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:brasil_cripto/config/dependencies.dart' as _i126;
-import 'package:brasil_cripto/data/repositories/coins_markets_repository.dart'
-    as _i778;
-import 'package:brasil_cripto/data/repositories/coins_markets_repository_remote.dart'
-    as _i134;
+import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository.dart'
+    as _i11;
+import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository_remote.dart'
+    as _i423;
+import 'package:brasil_cripto/data/repositories/favorites/favorites_repository.dart'
+    as _i568;
 import 'package:brasil_cripto/data/services/api/api_client.dart' as _i653;
-import 'package:brasil_cripto/data/services/background/coins_markets_background_service.dart'
-    as _i507;
 import 'package:brasil_cripto/data/services/http/dio_http_client.dart' as _i450;
 import 'package:brasil_cripto/data/services/http/http_client.dart' as _i260;
-import 'package:brasil_cripto/ui/home/view_models/home_view_model.dart'
-    as _i582;
+import 'package:brasil_cripto/data/services/local/local_data_service.dart'
+    as _i751;
+import 'package:brasil_cripto/data/services/shared_preferences_service.dart'
+    as _i1038;
+import 'package:brasil_cripto/ui/coins_markets/view_models/coins_markets_view_model.dart'
+    as _i606;
+import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart'
+    as _i657;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
@@ -38,24 +44,32 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.factory<_i260.HttpClient>(() => _i450.DioHttpClient());
-    gh.lazySingleton<_i507.CoinsMarketsBackgroundService>(
-      () => _i507.CoinsMarketsBackgroundService(
-        httpClient: gh<_i260.HttpClient>(),
-      ),
-    );
     gh.factory<_i653.ApiClient>(
       () => _i653.ApiClient(httpClient: gh<_i260.HttpClient>()),
     );
-    gh.factory<_i778.CoinsMarketsRepository>(
-      () => _i134.CoinsMarketsRepositoryRemote(
-        apiClient: gh<_i653.ApiClient>(),
-        coinsMarketsBackgroundService:
-            gh<_i507.CoinsMarketsBackgroundService>(),
+    gh.factory<_i1038.SharedPreferencesService>(
+      () => _i1038.SharedPreferencesService(gh<_i460.SharedPreferences>()),
+    );
+    gh.factory<_i751.LocalDataService>(
+      () => _i751.LocalDataService(gh<_i1038.SharedPreferencesService>()),
+    );
+    gh.factory<_i11.CoinsMarketsRepository>(
+      () =>
+          _i423.CoinsMarketsRepositoryRemote(apiClient: gh<_i653.ApiClient>()),
+    );
+    gh.factory<_i568.FavoritesRepository>(
+      () => _i568.FavoritesRepository(
+        localDataService: gh<_i751.LocalDataService>(),
       ),
     );
-    gh.lazySingleton<_i582.HomeViewModel>(
-      () => _i582.HomeViewModel(
-        coinsMarketsRepository: gh<_i778.CoinsMarketsRepository>(),
+    gh.lazySingleton<_i606.CoinsMarketViewModel>(
+      () => _i606.CoinsMarketViewModel(
+        coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i657.FavoriteViewModel>(
+      () => _i657.FavoriteViewModel(
+        favoritesRepository: gh<_i568.FavoritesRepository>(),
       ),
     );
     return this;

@@ -1,6 +1,8 @@
+import 'package:brasil_cripto/config/dependencies.dart';
 import 'package:brasil_cripto/ui/coins_markets/view_models/coins_markets_view_model.dart';
 import 'package:brasil_cripto/ui/coins_markets/widgets/coins_card.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
+import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart';
 import 'package:flutter/material.dart';
 
 class CoinsMarketScreen extends StatefulWidget {
@@ -72,11 +74,11 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
     return StreamBuilder(
       stream: viewModel.coinsMarketsStream,
       builder: (context, snapshot) {
-        if (widget.viewModel.fetchCoinsMarkets.running) {
+        if (viewModel.fetchCoinsMarkets.running) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (widget.viewModel.fetchCoinsMarkets.error) {
+        if (viewModel.fetchCoinsMarkets.error) {
           return Center(
             child: Text(
               context.l10n.errorLoadingData,
@@ -99,8 +101,11 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
             itemBuilder: (context, index) {
               final coin = snapshot.data![index];
               return CoinsCard(
-                coinsMarkets: coin,
+                coin: coin,
                 locale: locale,
+                toggleFavorite: (coin) {
+                  getIt<FavoriteViewModel>().toggleFavorite.execute(coin);
+                },
               );
             },
           );

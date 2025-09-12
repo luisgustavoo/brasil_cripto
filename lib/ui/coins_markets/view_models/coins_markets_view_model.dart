@@ -7,10 +7,11 @@ import 'package:brasil_cripto/utils/result.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
-@LazySingleton()
+@lazySingleton
 class CoinsMarketViewModel extends ChangeNotifier {
-  CoinsMarketViewModel({required CoinsMarketsRepository coinsMarketsRepository})
-    : _coinsMarketsRepository = coinsMarketsRepository {
+  CoinsMarketViewModel({
+    required CoinsMarketsRepository coinsMarketsRepository,
+  }) : _coinsMarketsRepository = coinsMarketsRepository {
     fetchCoinsMarkets = Command1(_fetchCoinsMarkets);
   }
   final CoinsMarketsRepository _coinsMarketsRepository;
@@ -21,6 +22,7 @@ class CoinsMarketViewModel extends ChangeNotifier {
   late final Command1<void, ({String names, String vsCurrency})>
   fetchCoinsMarkets;
   late final Command0<void> closeBackgroundService;
+  late final Command1<void, Coin> toggleFavorite;
 
   Future<Result<void>> _fetchCoinsMarkets(
     ({String names, String vsCurrency}) queryParameters,

@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:isolate';
 
+import 'package:brasil_cripto/config/env.dart';
 import 'package:brasil_cripto/data/services/api/models/coins_markets_model.dart';
 import 'package:brasil_cripto/data/services/http/http_client.dart';
 import 'package:brasil_cripto/utils/result.dart';
+import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
@@ -65,17 +67,19 @@ class ApiClient {
     }
     final (names: names, vsCurrency: vsCurrency) = queryParameters;
     final receivePort = ReceivePort();
-    _isolate =
-        await Isolate.spawn<
-          ({SendPort? sendPort, String? names, String vsCurrency})
-        >(
-          _coinsMarketsBackground,
-          (
-            sendPort: receivePort.sendPort,
-            names: names,
-            vsCurrency: vsCurrency,
-          ),
-        );
+    _isolate = await Isolate.spawn<_IsolateParams>(
+      _coinsMarketsBackground,
+      _IsolateParams(
+        sendPort: receivePort.sendPort,
+        names: names,
+        vsCurrency: vsCurrency,
+      ),
+      // (
+      //   sendPort: receivePort.sendPort,
+      //   names: names,
+      //   vsCurrency: vsCurrency,
+      // ),
+    );
 
     receivePort.listen((message) {
       if (message is List<dynamic>) {
@@ -97,46 +101,53 @@ class ApiClient {
     _isolate = null;
     _controller.close();
   }
+}
 
-  Future<void> _coinsMarketsBackground(
-    ({SendPort? sendPort, String? names, String vsCurrency}) parameters,
-  ) async {
-    final (sendPort: sendPort, names: names, vsCurrency: vsCurrency) =
-        parameters;
+class _IsolateParams {
+  _IsolateParams({
+    required this.sendPort,
+    required this.names,
+    required this.vsCurrency,
+  });
 
-    Timer.periodic(const Duration(seconds: 30), (_) async {
-      try {
-        final topTen = names?.isEmpty ?? true;
-        final result = await _httpClient.get<List<dynamic>>(
-          '/coins/markets',
-          queryParameters: {
-            'vs_currency': vsCurrency,
-            'order': 'market_cap_desc',
-            'sparkline': true,
-            'price_change_percentage': '1h,24h,7d',
-            if (topTen) 'per_page': 10,
-            if (topTen) 'page': 1,
-            'names': names,
-          },
-        );
+  final SendPort sendPort;
+  final String? names;
+  final String vsCurrency;
+}
 
-        switch (result) {
-          case Ok():
-            final response = result.value;
-            sendPort?.send(response.data);
-          case Error():
-            log(
-              'Erro ao buscar dados em background',
-              error: result.error,
-            );
-        }
-      } on Exception catch (e, s) {
-        log(
-          'Erro ao buscar dados em background',
-          error: e,
-          stackTrace: s,
-        );
+void _coinsMarketsBackground(_IsolateParams params) {
+  final dio = Dio(
+    BaseOptions(
+      baseUrl: Env.baseUrl,
+      headers: {
+        'x-cg-demo-api-key': Env.coingeckoApiKey,
+      },
+    ),
+  );
+
+  Timer.periodic(const Duration(seconds: 30), (_) async {
+    try {
+      final topTen = params.names?.isEmpty ?? true;
+
+      final response = await dio.get<List<dynamic>>(
+        '/coins/markets',
+        queryParameters: {
+          'vs_currency': params.vsCurrency,
+          'order': 'market_cap_desc',
+          'sparkline': true,
+          'price_change_percentage': '1h,24h,7d',
+          if (topTen) 'per_page': 10,
+          if (topTen) 'page': 1,
+          'names': params.names?.toLowerCase(),
+        },
+      );
+
+      if (response.data != null) {
+        log('Background data ${response.data}');
+        params.sendPort.send(response.data);
       }
-    });
-  }
+    } catch (e, s) {
+      log('Erro no isolate', error: e, stackTrace: s);
+    }
+  });
 }

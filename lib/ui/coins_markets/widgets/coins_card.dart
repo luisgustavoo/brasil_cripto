@@ -1,19 +1,21 @@
 import 'package:brasil_cripto/domain/models/coin.dart';
-import 'package:brasil_cripto/ui/core/themes/dimens.dart';
 import 'package:brasil_cripto/ui/coins_markets/widgets/coins_market_summary.dart';
 import 'package:brasil_cripto/ui/coins_markets/widgets/spark_line_chart.dart';
+import 'package:brasil_cripto/ui/core/themes/dimens.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class CoinsCard extends StatelessWidget {
   const CoinsCard({
-    required this.coinsMarkets,
+    required this.coin,
     required this.locale,
+    this.toggleFavorite,
     super.key,
   });
 
-  final Coin coinsMarkets;
+  final Coin coin;
   final Locale locale;
+  final void Function(Coin coin)? toggleFavorite;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,9 @@ class CoinsCard extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.star_border),
               // color: Colors.yellow,
-              onPressed: () {},
+              onPressed: () {
+                toggleFavorite?.call(coin);
+              },
             ),
 
             Expanded(
@@ -43,7 +47,7 @@ class CoinsCard extends StatelessWidget {
                         fit: BoxFit.cover,
                         height: 30,
                         width: 30,
-                        imageUrl: coinsMarkets.image,
+                        imageUrl: coin.image,
                         placeholder: (context, url) => const SizedBox(
                           height: 30,
                           width: 30,
@@ -56,26 +60,26 @@ class CoinsCard extends StatelessWidget {
                       ),
                       Expanded(
                         child: Text(
-                          coinsMarkets.name,
+                          coin.name,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       Text(
-                        '(${coinsMarkets.symbol.toUpperCase()})',
+                        '(${coin.symbol.toUpperCase()})',
                         style: const TextStyle(color: Colors.grey),
                       ),
                     ],
                   ),
                   CoinsMarketSummary(
-                    coinsMarkets: coinsMarkets,
+                    coinsMarkets: coin,
                     locale: locale,
                   ),
                   LayoutBuilder(
                     builder: (context, constraints) {
                       return SizedBox(
                         height: 100,
-                        width: constraints.maxWidth, // Usa a largura disponível
-                        child: SparkLineChart(coinsMarkets: coinsMarkets),
+                        width: constraints.maxWidth,
+                        child: SparkLineChart(coinsMarkets: coin),
                       );
                     },
                   ),

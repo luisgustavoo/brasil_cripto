@@ -22,7 +22,7 @@ class _SparkLineChartState extends State<SparkLineChart> {
       aspectRatio: 2,
       child: LineChart(
         LineChartData(
-          titlesData: FlTitlesData(
+          titlesData: const FlTitlesData(
             show: false,
             // bottomTitles: AxisTitles(axisNameWidget: Text('teste')),
           ),
@@ -34,7 +34,7 @@ class _SparkLineChartState extends State<SparkLineChart> {
           ),
           // Não mostra as informações ao clicar na linha
           lineTouchData: const LineTouchData(enabled: false),
-          gridData: FlGridData(
+          gridData: const FlGridData(
             show: false,
           ),
           lineBarsData: [
