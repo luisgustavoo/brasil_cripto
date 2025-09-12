@@ -1,23 +1,20 @@
+import 'package:brasil_cripto/ui/coins_markets/view_models/coins_markets_view_model.dart';
+import 'package:brasil_cripto/ui/coins_markets/widgets/coins_card.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
-import 'package:brasil_cripto/ui/home/view_models/home_view_model.dart';
-import 'package:brasil_cripto/ui/home/widgets/coins_card.dart';
 import 'package:flutter/material.dart';
 
-class TabCoins extends StatefulWidget {
-  const TabCoins({
-    required this.viewModel,
-    super.key,
-  });
+class CoinsMarketScreen extends StatefulWidget {
+  const CoinsMarketScreen({required this.viewModel, super.key});
 
-  final HomeViewModel viewModel;
+  final CoinsMarketViewModel viewModel;
 
   @override
-  State<TabCoins> createState() => _TabCoinsState();
+  State<CoinsMarketScreen> createState() => _CoinsMarketScreenState();
 }
 
-class _TabCoinsState extends State<TabCoins>
+class _CoinsMarketScreenState extends State<CoinsMarketScreen>
     with AutomaticKeepAliveClientMixin {
-  HomeViewModel get viewModel => widget.viewModel;
+  CoinsMarketViewModel get viewModel => widget.viewModel;
   late final TextEditingController searchController;
 
   @override
@@ -29,6 +26,7 @@ class _TabCoinsState extends State<TabCoins>
   @override
   void dispose() {
     searchController.dispose();
+    viewModel.closeBackgroundService.execute();
     super.dispose();
   }
 
@@ -70,7 +68,7 @@ class _TabCoinsState extends State<TabCoins>
     );
   }
 
-  Widget _buildList(HomeViewModel viewModel, Locale locale) {
+  Widget _buildList(CoinsMarketViewModel viewModel, Locale locale) {
     return StreamBuilder(
       stream: viewModel.coinsMarketsStream,
       builder: (context, snapshot) {

@@ -1,7 +1,7 @@
-import 'package:brasil_cripto/domain/models/coins_markets.dart';
+import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/ui/core/themes/dimens.dart';
-import 'package:brasil_cripto/ui/home/widgets/coins_market_summary.dart';
-import 'package:brasil_cripto/ui/home/widgets/spark_line_chart.dart';
+import 'package:brasil_cripto/ui/coins_markets/widgets/coins_market_summary.dart';
+import 'package:brasil_cripto/ui/coins_markets/widgets/spark_line_chart.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +12,7 @@ class CoinsCard extends StatelessWidget {
     super.key,
   });
 
-  final CoinsMarkets coinsMarkets;
+  final Coin coinsMarkets;
   final Locale locale;
 
   @override

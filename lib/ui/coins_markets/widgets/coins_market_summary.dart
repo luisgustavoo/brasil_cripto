@@ -1,4 +1,4 @@
-import 'package:brasil_cripto/domain/models/coins_markets.dart';
+import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/core/themes/colors.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ class CoinsMarketSummary extends StatelessWidget {
     super.key,
   });
 
-  final CoinsMarkets coinsMarkets;
+  final Coin coinsMarkets;
   final Locale locale;
 
   @override

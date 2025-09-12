@@ -1,22 +1,21 @@
 import 'dart:developer';
 
-import 'package:brasil_cripto/data/repositories/coins_markets_repository.dart';
-import 'package:brasil_cripto/domain/models/coins_markets.dart';
+import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository.dart';
+import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/utils/command.dart';
 import 'package:brasil_cripto/utils/result.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton()
-class HomeViewModel extends ChangeNotifier {
-  HomeViewModel({required CoinsMarketsRepository coinsMarketsRepository})
+class CoinsMarketViewModel extends ChangeNotifier {
+  CoinsMarketViewModel({required CoinsMarketsRepository coinsMarketsRepository})
     : _coinsMarketsRepository = coinsMarketsRepository {
     fetchCoinsMarkets = Command1(_fetchCoinsMarkets);
-    closeBackgroundService = Command0(_closeBackgroundService);
   }
   final CoinsMarketsRepository _coinsMarketsRepository;
 
-  Stream<List<CoinsMarkets>> get coinsMarketsStream =>
+  Stream<List<Coin>> get coinsMarketsStream =>
       _coinsMarketsRepository.coinsMarketsStream;
 
   late final Command1<void, ({String names, String vsCurrency})>
@@ -41,9 +40,5 @@ class HomeViewModel extends ChangeNotifier {
         notifyListeners();
         return Result.error(result.error);
     }
-  }
-
-  Future<Result<void>> _closeBackgroundService() async {
-    return _coinsMarketsRepository.closeBackgroundService();
   }
 }

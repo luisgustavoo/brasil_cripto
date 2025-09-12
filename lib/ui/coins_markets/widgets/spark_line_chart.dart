@@ -1,4 +1,4 @@
-import 'package:brasil_cripto/domain/models/coins_markets.dart';
+import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/ui/core/themes/colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ class SparkLineChart extends StatefulWidget {
     super.key,
   });
 
-  final CoinsMarkets coinsMarkets;
+  final Coin coinsMarkets;
 
   @override
   State<SparkLineChart> createState() => _SparkLineChartState();

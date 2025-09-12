@@ -1,8 +1,8 @@
 import 'package:brasil_cripto/data/services/api/models/coins_markets_model.dart';
 import 'package:brasil_cripto/data/services/api/models/spark_line.dart';
 
-class CoinsMarkets {
-  CoinsMarkets({
+class Coin {
+  Coin({
     required this.id,
     required this.symbol,
     required this.name,
@@ -18,8 +18,8 @@ class CoinsMarkets {
     required this.priceChangePercentage7dInCurrency,
   });
 
-  factory CoinsMarkets.fromApi(CoinsMarketsModel model) {
-    return CoinsMarkets(
+  factory Coin.fromApi(CoinsMarketsModel model) {
+    return Coin(
       id: model.id,
       symbol: model.symbol,
       name: model.name,

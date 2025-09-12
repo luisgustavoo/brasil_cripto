@@ -1,37 +1,20 @@
+import 'package:brasil_cripto/config/dependencies.dart';
+import 'package:brasil_cripto/ui/coins_markets/widgets/coins_market_screen.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/core/themes/dimens.dart';
-import 'package:brasil_cripto/ui/home/view_models/home_view_model.dart';
-import 'package:brasil_cripto/ui/home/widgets/tab_coins.dart';
+
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
-    required this.viewModel,
     super.key,
   });
-
-  final HomeViewModel viewModel;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  HomeViewModel get viewModel => widget.viewModel;
-  late final TextEditingController searchController;
-
-  @override
-  void initState() {
-    super.initState();
-    searchController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    viewModel.closeBackgroundService.execute();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -40,7 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           title: Text(
             context.l10n.brazilCripto,
-            // style: TextStyle(color: Colors.white),
           ),
           bottom: const TabBar.secondary(
             tabs: [
@@ -53,27 +35,14 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: context.dimens.edgeInsetsScreenSymmetric,
           child: TabBarView(
             children: [
-              TabCoins(
-                viewModel: viewModel,
+              CoinsMarketScreen(
+                viewModel: getIt(),
               ),
               const Icon(Icons.favorite),
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _search,
-          child: const Icon(Icons.refresh),
-        ),
       ),
     );
-  }
-
-  void _search() {
-    final locale = Localizations.localeOf(context);
-    final vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
-    viewModel.fetchCoinsMarkets.execute((
-      names: searchController.text.toLowerCase(),
-      vsCurrency: vsCurrency,
-    ));
   }
 }
