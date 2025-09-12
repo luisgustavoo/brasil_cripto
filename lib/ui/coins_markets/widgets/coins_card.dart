@@ -43,7 +43,6 @@ class CoinsCard extends StatelessWidget {
                         color: Colors.yellow,
                       )
                     : const Icon(Icons.star_border),
-
                 onPressed: () {
                   toggleFavorite?.call(coin);
                 },
@@ -85,7 +84,7 @@ class CoinsCard extends StatelessWidget {
                       ],
                     ),
                     CoinsMarketSummary(
-                      coinsMarkets: coin,
+                      coin: coin,
                       locale: locale,
                     ),
                     LayoutBuilder(

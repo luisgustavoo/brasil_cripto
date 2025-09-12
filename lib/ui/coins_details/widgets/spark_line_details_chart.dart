@@ -24,22 +24,37 @@ class SparkLineDetailsChart extends StatefulWidget {
 }
 
 class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
-  List<(DateTime, double)>? _priceHistory;
+  List<(DateTime, double)>? _priceHistory = [];
 
   Future<void> _reloadData() async {
-    setState(() {
-      _priceHistory = widget.market.prices.map((item) {
-        final timestamp = item[0].toInt();
-        final price = item[1];
-        return (DateTime.fromMillisecondsSinceEpoch(timestamp), price);
-      }).toList();
-    });
+    for (final item in widget.market.prices) {
+      final timestamp = item[0].toInt();
+      final price = item[1];
+      _priceHistory!.add((
+        DateTime.fromMillisecondsSinceEpoch(timestamp),
+        price,
+      ));
+      setState(() {});
+    }
+    // setState(() {
+    //   _priceHistory = widget.market.prices.map((item) {
+    //     final timestamp = item[0].toInt();
+    //     final price = item[1];
+    //     return (DateTime.fromMillisecondsSinceEpoch(timestamp), price);
+    //   }).toList();
+    // });
   }
 
   @override
   void initState() {
     super.initState();
-    _reloadData();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) async {
+        await Future<void>.delayed(
+          const Duration(milliseconds: 500),
+        ).whenComplete(_reloadData);
+      },
+    );
   }
 
   @override
@@ -83,13 +98,14 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
           ],
         ),
         CoinsMarketSummary(
-          coinsMarkets: widget.coin,
+          coin: widget.coin,
           locale: locale,
         ),
         Expanded(
           child: AspectRatio(
             aspectRatio: 16 / 9,
             child: LineChart(
+              duration: const Duration(milliseconds: 250),
               LineChartData(
                 titlesData: FlTitlesData(
                   rightTitles: const AxisTitles(),
@@ -235,18 +251,6 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
         ),
       ],
     );
-  }
-
-  static String getFormattedCurrency(
-    BuildContext context,
-    double value, {
-    bool noDecimals = true,
-  }) {
-    final germanFormat = NumberFormat.currency(
-      symbol: '€',
-      decimalDigits: noDecimals && value % 1 == 0 ? 0 : 2,
-    );
-    return germanFormat.format(value);
   }
 
   String _formatarValor(double valor) {

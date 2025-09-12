@@ -4,15 +4,32 @@ import 'package:brasil_cripto/ui/core/themes/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class CoinsMarketSummary extends StatelessWidget {
+class CoinsMarketSummary extends StatefulWidget {
   const CoinsMarketSummary({
-    required this.coinsMarkets,
+    required this.coin,
     required this.locale,
     super.key,
   });
 
-  final Coin coinsMarkets;
+  final Coin coin;
   final Locale locale;
+
+  @override
+  State<CoinsMarketSummary> createState() => _CoinsMarketSummaryState();
+}
+
+class _CoinsMarketSummaryState extends State<CoinsMarketSummary> {
+  double _currentPrice = 0;
+  double _totalVolume = 0;
+  double _marketCap = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentPrice = widget.coin.currentPrice;
+    _totalVolume = widget.coin.totalVolume;
+    _marketCap = widget.coin.marketCap;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +45,16 @@ class CoinsMarketSummary extends StatelessWidget {
               style: _titleStyle,
               overflow: TextOverflow.ellipsis,
             ),
-            Text(_formatarValor(coinsMarkets.currentPrice)),
+            TweenAnimationBuilder<double>(
+              tween: Tween<double>(
+                begin: _currentPrice,
+                end: widget.coin.currentPrice,
+              ),
+              duration: const Duration(seconds: 1),
+              builder: (context, value, child) {
+                return Text(_formatarValor(value));
+              },
+            ),
           ],
         ),
         Column(
@@ -39,7 +65,17 @@ class CoinsMarketSummary extends StatelessWidget {
               style: _titleStyle,
               overflow: TextOverflow.ellipsis,
             ),
-            Text(_formatarValor(coinsMarkets.totalVolume)),
+
+            TweenAnimationBuilder<double>(
+              tween: Tween<double>(
+                begin: _totalVolume,
+                end: widget.coin.totalVolume,
+              ),
+              duration: const Duration(seconds: 1),
+              builder: (context, value, child) {
+                return Text(_formatarValor(value));
+              },
+            ),
           ],
         ),
         Column(
@@ -50,7 +86,16 @@ class CoinsMarketSummary extends StatelessWidget {
               style: _titleStyle,
               overflow: TextOverflow.ellipsis,
             ),
-            Text(_formatarValor(coinsMarkets.totalVolume)),
+            TweenAnimationBuilder<double>(
+              tween: Tween<double>(
+                begin: _marketCap,
+                end: widget.coin.marketCap,
+              ),
+              duration: const Duration(seconds: 1),
+              builder: (context, value, child) {
+                return Text(_formatarValor(value));
+              },
+            ),
           ],
         ),
         Row(
@@ -64,8 +109,12 @@ class CoinsMarketSummary extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    _iconArrow(coinsMarkets.priceChangePercentage1hInCurrency),
-                    _getValue(coinsMarkets.priceChangePercentage1hInCurrency),
+                    _iconArrow(
+                      widget.coin.priceChangePercentage1hInCurrency,
+                    ),
+                    _getValue(
+                      widget.coin.priceChangePercentage1hInCurrency,
+                    ),
                   ],
                 ),
               ],
@@ -78,8 +127,12 @@ class CoinsMarketSummary extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    _iconArrow(coinsMarkets.priceChangePercentage24hInCurrency),
-                    _getValue(coinsMarkets.priceChangePercentage24hInCurrency),
+                    _iconArrow(
+                      widget.coin.priceChangePercentage24hInCurrency,
+                    ),
+                    _getValue(
+                      widget.coin.priceChangePercentage24hInCurrency,
+                    ),
                   ],
                 ),
               ],
@@ -92,8 +145,12 @@ class CoinsMarketSummary extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    _iconArrow(coinsMarkets.priceChangePercentage7dInCurrency),
-                    _getValue(coinsMarkets.priceChangePercentage7dInCurrency),
+                    _iconArrow(
+                      widget.coin.priceChangePercentage7dInCurrency,
+                    ),
+                    _getValue(
+                      widget.coin.priceChangePercentage7dInCurrency,
+                    ),
                   ],
                 ),
               ],
@@ -105,9 +162,9 @@ class CoinsMarketSummary extends StatelessWidget {
   }
 
   String _formatarValor(double valor) {
-    final symbol = locale.languageCode == 'pt' ? r'R$' : r'US$';
+    final symbol = widget.locale.languageCode == 'pt' ? r'R$' : r'US$';
     return NumberFormat.currency(
-      locale: locale.languageCode,
+      locale: widget.locale.languageCode,
       symbol: symbol,
     ).format(valor);
   }

@@ -1,7 +1,9 @@
+import 'package:brasil_cripto/routing/routes.dart';
 import 'package:brasil_cripto/ui/coins_markets/widgets/coins_card.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({
@@ -67,6 +69,12 @@ class _FavoriteScreenState extends State<FavoriteScreen>
                 locale: locale,
                 toggleFavorite: (coin) {
                   viewModel.toggleFavorite.execute(coin);
+                },
+                onTap: (coin) {
+                  context.push(
+                    Routes.coinsDetails,
+                    extra: coin,
+                  );
                 },
               );
             },
