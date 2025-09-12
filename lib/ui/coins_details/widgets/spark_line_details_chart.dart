@@ -45,21 +45,66 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
     final color = widget.coin.priceChangePercentage7dInCurrency.isNegative
         ? AppColors.darkNegative
         : AppColors.lightPositive;
+    const leftReservedSize = 52.0;
     return AspectRatio(
       aspectRatio: 16 / 9,
       child: LineChart(
         LineChartData(
-          titlesData: const FlTitlesData(
-            show: false,
+          titlesData: FlTitlesData(
+            rightTitles: const AxisTitles(
+              sideTitles: const SideTitles(showTitles: false),
+            ),
+            topTitles: const AxisTitles(
+              sideTitles: SideTitles(showTitles: false),
+            ),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: leftReservedSize,
+                maxIncluded: false,
+                minIncluded: false,
+                // getTitlesWidget: (value, meta) {
+                //   // final price = _priceHistory![value.toInt()].$2;
+
+                //   return Text(value.toString());
+                //   // return SideTitleWidget(
+                //   //   meta: meta,
+                //   //   child: Text(_formatarValor(value)),
+                //   // );
+                // },
+              ),
+            ),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 38,
+                maxIncluded: false,
+                getTitlesWidget: (value, meta) {
+                  final date = _priceHistory![value.toInt()].$1;
+                  return SideTitleWidget(
+                    meta: meta,
+                    child: Transform.rotate(
+                      angle: -45 * 3.14 / 180,
+                      child: Text(
+                        '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}',
+                        style: TextStyle(
+                          color: color,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
           borderData: FlBorderData(
             show: false,
           ),
-
           gridData: const FlGridData(
             show: false,
           ),
-
           lineTouchData: LineTouchData(
             touchSpotThreshold: 5,
             getTouchLineStart: (_, __) => -double.infinity,
@@ -67,8 +112,8 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
             getTouchedSpotIndicator: (barData, spotIndexes) {
               return spotIndexes.map((spotIndex) {
                 return TouchedSpotIndicatorData(
-                  const FlLine(
-                    color: AppColors.darkNegative,
+                  FlLine(
+                    color: color,
                     strokeWidth: 1.5,
                     dashArray: [8, 2],
                   ),
@@ -77,7 +122,6 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
                       return FlDotCirclePainter(
                         radius: 6,
                         color: color,
-
                         strokeColor: color,
                       );
                     },
@@ -98,7 +142,8 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
                     ),
                     children: [
                       TextSpan(
-                        text: '${date.day}/${date.month}/${date.year}',
+                        text:
+                            '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}',
                         style: TextStyle(
                           color: color,
                           // AppColors.contentColorGreen.darken(20),
@@ -159,6 +204,18 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
         ),
       ),
     );
+  }
+
+  static String getFormattedCurrency(
+    BuildContext context,
+    double value, {
+    bool noDecimals = true,
+  }) {
+    final germanFormat = NumberFormat.currency(
+      symbol: '€',
+      decimalDigits: noDecimals && value % 1 == 0 ? 0 : 2,
+    );
+    return germanFormat.format(value);
   }
 
   String _formatarValor(double valor) {
