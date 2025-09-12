@@ -1,6 +1,8 @@
 import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/ui/coins_details/view_models/coins_details_view_model.dart';
 import 'package:brasil_cripto/ui/coins_details/widgets/spark_line_details_chart.dart';
+import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
+import 'package:brasil_cripto/ui/core/themes/dimens.dart';
 import 'package:flutter/material.dart';
 
 class CoinsDetailsScreen extends StatefulWidget {
@@ -36,17 +38,40 @@ class _CoinsDetailsScreenState extends State<CoinsDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(''),
       ),
-      body: ListenableBuilder(
-        listenable: viewModel,
-        builder: (context, child) {
-          return SparkLineDetailsChart(
-            coin: widget.coin,
-          );
-        },
+      body: Padding(
+        padding: context.dimens.edgeInsetsScreenSymmetric,
+        child: ListenableBuilder(
+          listenable: viewModel,
+          builder: (context, child) {
+            if (viewModel.fetchCoinsMarketsDetails.running) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (viewModel.fetchCoinsMarketsDetails.error) {
+              return Center(
+                child: Text(
+                  context.l10n.errorLoadingData,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              );
+            }
+
+            if (viewModel.market == null) {
+              const SizedBox.shrink();
+            }
+
+            return SparkLineDetailsChart(
+              coin: widget.coin,
+              market: viewModel.market!,
+              locale: locale,
+            );
+          },
+        ),
       ),
     );
   }
