@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:brasil_cripto/data/services/api/models/spark_line_api_model.dart';
 import 'package:brasil_cripto/data/services/shared_preferences_service.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
+import 'package:brasil_cripto/domain/models/sparkline.dart';
 import 'package:brasil_cripto/utils/result.dart';
 import 'package:injectable/injectable.dart';
 
@@ -42,17 +42,18 @@ class LocalDataService {
 
           final coinsJson = jsonDecode(value!) as List<dynamic>;
           final coinsMap = List<Map<String, dynamic>>.from(coinsJson);
-          final coins = coinsMap.map(fromMap).toList();
+          final coins = coinsMap.map(coinFromMap).toList();
           return Result.ok(coins);
         case Error():
           return Result.error(result.error);
       }
     } on Exception catch (e) {
+      log('Erro ao buscar favoritos', error: e);
       return Result.error(e);
     }
   }
 
-  Coin fromMap(Map<String, dynamic> map) {
+  Coin coinFromMap(Map<String, dynamic> map) {
     return Coin(
       id: map['id'] as String,
       symbol: map['symbol'] as String,
@@ -64,7 +65,7 @@ class LocalDataService {
       fullyDilutedValuation:
           (map['fully_diluted_valuation'] as num?)?.toDouble() ?? 0,
       totalVolume: (map['total_volume'] as num?)?.toDouble() ?? 0,
-      sparkLineIn7d: SparkLineApiModel.fromJson(
+      sparkLineIn7d: sparkLineFromMap(
         map['sparkline_in_7d'] as Map<String, dynamic>,
       ),
       priceChangePercentage1hInCurrency:
@@ -78,5 +79,10 @@ class LocalDataService {
           (map['price_change_percentage_7d_in_currency'] as num?)?.toDouble() ??
           0,
     );
+  }
+
+  Sparkline sparkLineFromMap(Map<String, dynamic> map) {
+    final listDouble = List<double>.from(map['price'] as List<dynamic>);
+    return Sparkline(price: listDouble);
   }
 }

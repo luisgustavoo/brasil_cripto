@@ -1,5 +1,5 @@
 import 'package:brasil_cripto/data/services/api/models/coins_markets_api_model.dart';
-import 'package:brasil_cripto/data/services/api/models/spark_line_api_model.dart';
+import 'package:brasil_cripto/domain/models/sparkline.dart';
 import 'package:flutter/foundation.dart';
 
 @immutable
@@ -31,7 +31,9 @@ class Coin {
       marketCapRank: model.marketCapRank,
       fullyDilutedValuation: model.fullyDilutedValuation ?? 0,
       totalVolume: model.totalVolume ?? 0,
-      sparkLineIn7d: model.sparkLineIn7d ?? SparkLineApiModel(price: []),
+      sparkLineIn7d: model.sparkLineIn7d != null
+          ? Sparkline.fromApi(model.sparkLineIn7d!)
+          : Sparkline(price: []),
       priceChangePercentage1hInCurrency:
           model.priceChangePercentage1hInCurrency ?? 0,
       priceChangePercentage24hInCurrency:
@@ -50,7 +52,7 @@ class Coin {
   final int marketCapRank;
   final double fullyDilutedValuation;
   final double totalVolume;
-  final SparkLineApiModel sparkLineIn7d;
+  final Sparkline sparkLineIn7d;
   final double priceChangePercentage1hInCurrency;
   final double priceChangePercentage24hInCurrency;
   final double priceChangePercentage7dInCurrency;

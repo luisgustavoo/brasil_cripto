@@ -6,7 +6,7 @@ import 'package:brasil_cripto/data/services/api/models/coins_markets_api_model.d
 import 'package:brasil_cripto/data/services/api/models/market_api_model.dart';
 import 'package:brasil_cripto/utils/result.dart';
 
-import '../../fixture/fixture_reader.dart';
+import '../../../fixture/fixture_reader.dart';
 
 class FakeApiClient implements ApiClient {
   FakeApiClient() {

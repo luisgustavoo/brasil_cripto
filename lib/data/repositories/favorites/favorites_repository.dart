@@ -85,7 +85,7 @@ class FavoritesRepository {
           'market_cap_rank': coin.marketCapRank,
           'fully_diluted_valuation': coin.fullyDilutedValuation,
           'total_volume': coin.totalVolume,
-          'sparkline_in_7d': coin.sparkLineIn7d.toJson(),
+          'sparkline_in_7d': coin.sparkLineIn7d,
           'price_change_percentage_1h_in_currency':
               coin.priceChangePercentage1hInCurrency,
           'price_change_percentage_24h_in_currency':
