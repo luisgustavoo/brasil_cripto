@@ -4,7 +4,7 @@ Aplicativo de consulta de cotações de criptomoedas desenvolvido como **teste t
 O app segue a arquitetura **MVVM**, utilizando **GetIt** com **Injectable** para injeção de dependências, conforme recomendado na documentação oficial do Flutter: [App Architecture Guide](https://docs.flutter.dev/app-architecture).
 
 
-[Veja o vídeo do app](docs/video.gif)
+![Veja o vídeo do app](docs/video.gif)
 
 ---
 
