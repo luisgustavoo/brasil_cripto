@@ -51,6 +51,17 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
     super.dispose();
   }
 
+  Future<void> _search() async {
+    final locale = Localizations.localeOf(context);
+    final vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
+    await viewModel.fetchCoinsMarkets.execute(
+      (
+        names: searchController.text.toLowerCase(),
+        vsCurrency: vsCurrency,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -99,17 +110,6 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
           },
         );
       },
-    );
-  }
-
-  Future<void> _search() async {
-    final locale = Localizations.localeOf(context);
-    final vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
-    await viewModel.fetchCoinsMarkets.execute(
-      (
-        names: searchController.text.toLowerCase(),
-        vsCurrency: vsCurrency,
-      ),
     );
   }
 
