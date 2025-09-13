@@ -1,7 +1,7 @@
 # Brasil Cripto
 
 Aplicativo de consulta de cotações de criptomoedas desenvolvido como **teste técnico para a Brasil Card**.  
-O app segue a arquitetura **MVVM**, utilizando **GetIt** com **Injectable** para injeção de dependências, conforme recomendado na documentação oficial do Flutter: [App Architecture Guide](https://docs.flutter.dev/app-architecture).
+O app segue a arquitetura **MVVM**, seguindo recomendado na documentação oficial do Flutter: [App Architecture Guide](https://docs.flutter.dev/app-architecture).
 
 
 ![Veja o vídeo do app](docs/video.gif)
@@ -10,13 +10,12 @@ O app segue a arquitetura **MVVM**, utilizando **GetIt** com **Injectable** para
 
 ## 🚀 Funcionalidades
 
-- Consulta de cotações de criptomoedas em tempo real.
-- Pesquisa por nome ou símbolo da moeda.
-- Exibição de gráficos de preços históricos (SparkLine).
+- Consulta de cotações de criptomoedas.
+- Pesquisa por nome da moeda.
+- Exibição de gráficos de preços históricos.
 - Favoritar moedas para acesso rápido.
-- Feedback visual de carregamento e tratamento de erros.
 - Atualização dos dados em **tempo real**, refletindo mudanças nos preços das criptomoedas.
-- Internacionalização.
+- Internacionalização(l10n).
 - Testes unitários e de widget com Flutter Test.
 
 ---
