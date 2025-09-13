@@ -44,7 +44,9 @@ class FakeApiClient implements ApiClient {
     final coinsMarkets = coinsMarketsList
         .map(CoinsMarketsApiModel.fromJson)
         .toList();
-    _controller.add(coinsMarkets);
+    _controller
+      ..add(coinsMarkets)
+      ..close();
     return Future.value(Result.ok(coinsMarkets));
   }
 

@@ -4,7 +4,27 @@ import 'package:brasil_cripto/data/services/http/http_client_response.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockGoRouter extends Mock implements GoRouter {}
+class FakeObject extends Fake {}
+
+class MockGoRouter extends Mock implements GoRouter {
+  // @override
+  // Future<T?> push<T extends Object?>(String location, {Object? extra}) {
+  //   return Future.value();
+  // }
+
+  // @override
+  // Future<T?> pushNamed<T extends Object?>(
+  //   String name, {
+  //   Map<String, String> pathParameters = const <String, String>{},
+  //   Map<String, dynamic> queryParameters = const <String, dynamic>{},
+  //   Object? extra,
+  // }) {
+  //   return Future.value();
+  // }
+
+  // @override
+  // void pop<T>([T? result]) {}
+}
 
 class MockHttpClient extends Mock implements HttpClient {
   MockHttpClient() {

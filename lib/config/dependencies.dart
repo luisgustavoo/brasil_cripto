@@ -8,7 +8,6 @@ final getIt = GetIt.instance;
 @InjectableInit()
 Future<void> configureDependencies({String? environment}) => getIt.init();
 
-@prod
 @module
 abstract class RegisterModule {
   @preResolve
