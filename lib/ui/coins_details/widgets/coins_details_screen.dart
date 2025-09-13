@@ -37,25 +37,6 @@ class _CoinsDetailsScreenState extends State<CoinsDetailsScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.coin.name),
-      ),
-      body: SingleChildScrollView(
-        padding: context.dimens.edgeInsetsScreenSymmetric,
-        child: SizedBox(
-          height: MediaQuery.sizeOf(context).height,
-          child: ListenableBuilder(
-            listenable: viewModel,
-            builder: (context, child) => _buildContent(),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildContent() {
     if (viewModel.fetchCoinsMarketsDetails.running) {
       return const Center(child: CircularProgressIndicator());
@@ -75,6 +56,25 @@ class _CoinsDetailsScreenState extends State<CoinsDetailsScreen> {
     return SparkLineDetailsChart(
       coin: widget.coin,
       market: viewModel.market!,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.coin.name),
+      ),
+      body: SingleChildScrollView(
+        padding: context.dimens.edgeInsetsScreenSymmetric,
+        child: SizedBox(
+          height: MediaQuery.sizeOf(context).height,
+          child: ListenableBuilder(
+            listenable: viewModel,
+            builder: (context, child) => _buildContent(),
+          ),
+        ),
+      ),
     );
   }
 }
