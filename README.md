@@ -18,6 +18,8 @@ O app segue a arquitetura **MVVM**, seguindo recomendado na documentação ofici
 - Internacionalização(l10n).
 - Testes unitários e de widget com Flutter Test.
 
+![Teste de integração](docs/integration_test.gif)
+
 ---
 
 ## 🏗 Arquitetura
