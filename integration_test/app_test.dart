@@ -1,12 +1,13 @@
 import 'package:brasil_cripto/config/dependencies.dart';
 import 'package:brasil_cripto/routing/router.dart';
-import 'package:brasil_cripto/ui/coins_markets/widgets/coins_card.dart';
 import 'package:brasil_cripto/ui/core/l10n/app_localizations.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/core/themes/theme.dart';
+import 'package:brasil_cripto/ui/core/ui/coins_card.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +15,13 @@ void main() {
   configureDependencies();
 
   late AppLocalizations l10n;
+
+  Future<void> clearPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
+
+  setUpAll(clearPrefs);
 
   Future<void> loadHomeScreen(WidgetTester tester) async {
     await tester.pumpWidget(
@@ -72,23 +80,52 @@ void main() {
         await tester.pump(const Duration(milliseconds: 100));
         final starIcon = find.byIcon(Icons.star_border).at(0);
         await tester.tap(starIcon);
-        await tester.pump(const Duration(milliseconds: 100));
+        await tester.pumpAndSettle();
         expect(find.byIcon(Icons.star).at(0), findsOneWidget);
-        final marketTabButton = find.byKey(const Key('market-tab-button'));
-        await tester.tap(marketTabButton);
+        final favoriteTabButton = find.byKey(const Key('favorite-tab-button'));
+        await tester.tap(favoriteTabButton);
         await tester.pump();
         expect(find.text('(BTC)'), findsOneWidget);
       },
     );
+    // testWidgets(
+    //   '4',
+    //   (tester) async {
+    //     await loadHomeScreen(tester);
+    //     final marketTabButton = find.byKey(const Key('market-tab-button'));
+    //     await tester.tap(marketTabButton);
+    //     await tester.pumpAndSettle();
+    //     final searchField = find.byKey(const Key('search-edit'));
+    //     await tester.tap(searchField);
+    //     await tester.pumpAndSettle();
+    //     await tester.enterText(searchField, 'Bitcoin');
+    //     await tester.testTextInput.receiveAction(TextInputAction.done);
+    //     await tester.pump(const Duration(milliseconds: 100));
+    //     final starIcon = find.byIcon(Icons.star_border).at(0);
+    //     await tester.tap(starIcon);
+    //     await tester.pump(const Duration(milliseconds: 100));
+    //     expect(find.byIcon(Icons.star).at(0), findsOneWidget);
+    //     final favoriteTabButton = find.byKey(const Key('favorite-tab-button'));
+    //     await tester.tap(favoriteTabButton);
+    //     await tester.pump();
+    //     expect(find.text('(BTC)'), findsOneWidget);
+
+    //     await tester.tap(find.byIcon(Icons.star).at(0));
+    //     await tester.pumpAndSettle();
+    //     expect(find.text(l10n.confirmRemoveTitle), findsOneWidget);
+    //     await tester.tap(find.text(l10n.remove));
+    //     await tester.pumpAndSettle();
+    //     expect(find.text(l10n.noCryptocurrencyFound), findsOneWidget);
+    //   },
+    // );
     testWidgets(
       'should navigate to coin details when tapping on a coin card',
       (
         tester,
       ) async {
         await loadHomeScreen(tester);
-        await tester.pump();
-        final marketTabButtonKey = find.byKey(const Key('market-tab-button'));
-        await tester.tap(marketTabButtonKey);
+        final marketTabButton = find.byKey(const Key('market-tab-button'));
+        await tester.tap(marketTabButton);
         await tester.pumpAndSettle();
         final searchField = find.byKey(const Key('search-edit'));
         await tester.tap(searchField);

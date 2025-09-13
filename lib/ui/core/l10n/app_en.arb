@@ -10,34 +10,61 @@
   },
   "search": "Bitcoin, Ethereum, etc",
   "@search": {
-    "description": "Bitcoin, Ethereum, etc"
+    "description": "Search hint"
   },
   "noCryptocurrencyFound": "No cryptocurrency found",
   "@noCryptocurrencyFound": {
-    "description": "No cryptocurrency found"
+    "description": "Empty state"
   },
   "price": "Price",
   "@price": {
-    "description": "Price"
+    "description": "Price label"
   },
   "oneHour": "1h",
   "@oneHour": {
-    "description": "1h"
+    "description": "1 hour"
   },
   "oneDay": "24h",
   "@oneDay": {
-    "description": "24h"
+    "description": "24 hours"
   },
   "sevenDays": "7d",
   "@sevenDays": {
-    "description": "7d"
+    "description": "7 days"
   },
   "volumeDay": "24h Volume",
   "@volumeDay": {
-    "description": "24h Volume"
+    "description": "24h volume"
   },
   "marketCap": "Market Cap",
   "@marketCap": {
-    "description": "Market Cap"
+    "description": "Market capitalization"
+  },
+  "removeFromFavorites": "Remove from favorites",
+  "@removeFromFavorites": {
+    "description": "Remove from favorites label"
+  },
+  "confirmRemoveTitle": "Remove from favorites",
+  "@confirmRemoveTitle": {
+    "description": "Title for confirm remove dialog"
+  },
+  "confirmRemovePrefix": "Are you sure you want to remove",
+  "@confirmRemovePrefix": {
+    "description": "Prefix used: 'Are you sure you want to remove' — the coin name will be concatenated"
+  },
+  "remove": "Remove",
+  "@remove": {
+    "description": "Remove action button"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel action button"
+  },
+  "confirmRemoveMessage": "Are you sure you want to remove {coinName} from your favorites?",
+  "@confirmRemoveMessage": {
+    "description": "Full confirm message with placeholder for coin name",
+    "placeholders": {
+      "coinName": {}
+    }
   }
 }

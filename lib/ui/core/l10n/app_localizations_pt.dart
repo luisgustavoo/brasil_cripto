@@ -37,4 +37,24 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get marketCap => 'Valor de mercado';
+
+  @override
+  String get removeFromFavorites => 'Remover dos favoritos';
+
+  @override
+  String get confirmRemoveTitle => 'Remover dos favoritos';
+
+  @override
+  String get confirmRemovePrefix => 'Você tem certeza que deseja remover';
+
+  @override
+  String get remove => 'Remover';
+
+  @override
+  String get cancel => 'Cancelar';
+
+  @override
+  String confirmRemoveMessage(Object coinName) {
+    return 'Você tem certeza que deseja remover $coinName dos favoritos?';
+  }
 }

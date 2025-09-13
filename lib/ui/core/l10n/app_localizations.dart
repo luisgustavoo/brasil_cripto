@@ -110,53 +110,89 @@ abstract class AppLocalizations {
   /// **'Error loading data'**
   String get errorLoadingData;
 
-  /// Bitcoin, Ethereum, etc
+  /// Search hint
   ///
   /// In en, this message translates to:
   /// **'Bitcoin, Ethereum, etc'**
   String get search;
 
-  /// No cryptocurrency found
+  /// Empty state
   ///
   /// In en, this message translates to:
   /// **'No cryptocurrency found'**
   String get noCryptocurrencyFound;
 
-  /// Price
+  /// Price label
   ///
   /// In en, this message translates to:
   /// **'Price'**
   String get price;
 
-  /// 1h
+  /// 1 hour
   ///
   /// In en, this message translates to:
   /// **'1h'**
   String get oneHour;
 
-  /// 24h
+  /// 24 hours
   ///
   /// In en, this message translates to:
   /// **'24h'**
   String get oneDay;
 
-  /// 7d
+  /// 7 days
   ///
   /// In en, this message translates to:
   /// **'7d'**
   String get sevenDays;
 
-  /// 24h Volume
+  /// 24h volume
   ///
   /// In en, this message translates to:
   /// **'24h Volume'**
   String get volumeDay;
 
-  /// Market Cap
+  /// Market capitalization
   ///
   /// In en, this message translates to:
   /// **'Market Cap'**
   String get marketCap;
+
+  /// Remove from favorites label
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from favorites'**
+  String get removeFromFavorites;
+
+  /// Title for confirm remove dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from favorites'**
+  String get confirmRemoveTitle;
+
+  /// Prefix used: 'Are you sure you want to remove' — the coin name will be concatenated
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove'**
+  String get confirmRemovePrefix;
+
+  /// Remove action button
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get remove;
+
+  /// Cancel action button
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// Full confirm message with placeholder for coin name
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove {coinName} from your favorites?'**
+  String confirmRemoveMessage(Object coinName);
 }
 
 class _AppLocalizationsDelegate
