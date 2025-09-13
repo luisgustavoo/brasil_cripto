@@ -15,8 +15,8 @@ class CoinTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      spacing: 8,
       children: [
-        // Imagem da moeda
         CachedNetworkImage(
           imageUrl: coin.image,
           height: imageSize,
@@ -34,8 +34,6 @@ class CoinTitle extends StatelessWidget {
             size: imageSize,
           ),
         ),
-        const SizedBox(width: 8),
-        // Nome da moeda
         Expanded(
           child: Text(
             coin.name,
@@ -43,7 +41,6 @@ class CoinTitle extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyLarge,
           ),
         ),
-        // Símbolo da moeda
         Text(
           '(${coin.symbol.toUpperCase()})',
           style: Theme.of(
