@@ -1,5 +1,6 @@
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 Future<bool?> showConfirmRemoveFavoriteDialog({
   required BuildContext context,
@@ -38,27 +39,28 @@ class _ConfirmRemoveFavoriteDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final errorColor = Theme.of(context).colorScheme.error;
+    final colorScheme = Theme.of(context).colorScheme;
+    final errorColor = colorScheme.error;
     return AlertDialog(
       title: Row(
+        spacing: 12,
         children: [
           Icon(Icons.delete_outline, color: errorColor),
-          const SizedBox(width: 12),
           Expanded(child: Text(title)),
         ],
       ),
       content: Text(content),
       actions: [
         TextButton(
-          onPressed: () => Navigator.of(context).pop(false),
+          onPressed: () => context.pop(false),
           child: Text(cancelLabel),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: errorColor,
-            foregroundColor: Theme.of(context).colorScheme.onError,
+            foregroundColor: colorScheme.onError,
           ),
-          onPressed: () => Navigator.of(context).pop(true),
+          onPressed: () => context.pop(true),
           child: Text(confirmLabel),
         ),
       ],
