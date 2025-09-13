@@ -43,15 +43,6 @@ void main() {
   }
 
   group('end-to-end test', () {
-    // testWidgets(
-    //   'should display title and empty state',
-    //   (tester) async {
-    //     await loadHomeScreen(tester);
-    //     expect(find.text(l10n.brazilCripto), findsOneWidget);
-    //     expect(find.text(l10n.noCryptocurrencyFound), findsOneWidget);
-    //   },
-    //   skip: true,
-    // );
     testWidgets(
       'should navigate to coin details after search',
       (tester) async {
@@ -105,7 +96,6 @@ void main() {
         final starIcon = find.byIcon(Icons.star).at(0);
         expect(starIcon, findsOneWidget);
       },
-      skip: true,
     );
     testWidgets(
       'remove favorite',
@@ -124,17 +114,6 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.text(l10n.noCryptocurrencyFound), findsOneWidget);
       },
-      skip: true,
     );
-    // testWidgets(
-    //   'should navigate to coin details when tapping on a coin card',
-    //   (tester) async {
-    //     await loadHomeScreen(tester);
-    //     final bitcoinCard = find.byType(CoinsCard);
-    //     expect(bitcoinCard, findsOneWidget);
-    //     await tester.tap(bitcoinCard);
-    //     await tester.pumpAndSettle();
-    //   },
-    // );
   });
 }
