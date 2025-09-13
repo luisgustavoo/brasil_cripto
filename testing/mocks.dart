@@ -6,25 +6,7 @@ import 'package:mocktail/mocktail.dart';
 
 class FakeObject extends Fake {}
 
-class MockGoRouter extends Mock implements GoRouter {
-  // @override
-  // Future<T?> push<T extends Object?>(String location, {Object? extra}) {
-  //   return Future.value();
-  // }
-
-  // @override
-  // Future<T?> pushNamed<T extends Object?>(
-  //   String name, {
-  //   Map<String, String> pathParameters = const <String, String>{},
-  //   Map<String, dynamic> queryParameters = const <String, dynamic>{},
-  //   Object? extra,
-  // }) {
-  //   return Future.value();
-  // }
-
-  // @override
-  // void pop<T>([T? result]) {}
-}
+class MockGoRouter extends Mock implements GoRouter {}
 
 class MockHttpClient extends Mock implements HttpClient {
   MockHttpClient() {
@@ -88,34 +70,4 @@ extension HttpMethodMocks on HttpClient {
       ).thenThrow(MockHttpClientException(error: 'Error'));
     }
   }
-
-  // void mockPost<T>(String path, Object object) {
-  //   when(
-  //     () => post<T>(
-  //       path,
-  //       data: any(),
-  //       headers: any(),
-  //       options: any(),
-  //       queryParameters: any(),
-  //     ),
-  //   ).thenAnswer((invocation) {
-  //     final response = MockHttpClientResponse<T>();
-  //     return Future.value(response);
-  //   });
-  // }
-
-  // void mockDelete<T>(String path) {
-  //   when(
-  //     () => delete<T>(
-  //       path,
-  //       data: any(),
-  //       headers: any(),
-  //       options: any(),
-  //       queryParameters: any(),
-  //     ),
-  //   ).thenAnswer((invocation) {
-  //     final response = MockHttpClientResponse<T>();
-  //     return Future.value(response);
-  //   });
-  // }
 }

@@ -22,7 +22,7 @@ class _FavoriteScreenState extends State<FavoriteScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final locale = Localizations.localeOf(context);
+
     return Scaffold(
       body: ListenableBuilder(
         listenable: widget.viewModel,
@@ -55,7 +55,7 @@ class _FavoriteScreenState extends State<FavoriteScreen>
               final coin = widget.viewModel.favorites[index];
               return CoinsCard(
                 coin: coin,
-                locale: locale,
+
                 toggleFavorite: (coin) {
                   widget.viewModel.toggleFavorite.execute(coin);
                 },

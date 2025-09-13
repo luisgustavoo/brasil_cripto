@@ -1,4 +1,5 @@
 import 'package:brasil_cripto/config/dependencies.dart';
+import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/routing/routes.dart';
 import 'package:brasil_cripto/ui/coins_markets/view_models/coins_markets_view_model.dart';
 import 'package:brasil_cripto/ui/coins_markets/widgets/coins_card.dart';
@@ -23,111 +24,81 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
   CoinsMarketViewModel get viewModel => widget.viewModel;
   late final TextEditingController searchController;
 
+  bool _isLoading = false;
+  bool _hasError = false;
+
   @override
   void initState() {
     super.initState();
     searchController = TextEditingController();
+    viewModel.fetchCoinsMarkets.addListener(_commandListener);
+  }
+
+  void _commandListener() {
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _isLoading = viewModel.fetchCoinsMarkets.running;
+      _hasError = viewModel.fetchCoinsMarkets.error;
+    });
   }
 
   @override
   void dispose() {
     searchController.dispose();
+    viewModel.fetchCoinsMarkets.removeListener(_commandListener);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final locale = Localizations.localeOf(context);
+
     return Scaffold(
       body: Column(
         spacing: 32,
         children: [
-          TextField(
-            key: const Key(searchEditKey),
+          _SearchField(
             controller: searchController,
-            // autofocus: true,
-            decoration: InputDecoration(
-              labelText: context.l10n.search,
-              border: const OutlineInputBorder(),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.clear),
-                onPressed: () {
-                  searchController.clear();
-                },
-              ),
-            ),
             onSubmitted: (value) {
               _search();
             },
           ),
           Expanded(
-            child: ListenableBuilder(
-              listenable: Listenable.merge([
-                widget.viewModel,
-                getIt<FavoriteViewModel>().toggleFavorite,
-              ]),
-              builder: (context, child) {
-                return _buildList(viewModel, locale);
-              },
-            ),
+            child: _buildBody(),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildList(CoinsMarketViewModel viewModel, Locale locale) {
+  Widget _buildBody() {
     return StreamBuilder(
       stream: viewModel.coinsMarketsStream,
       builder: (context, snapshot) {
-        if (viewModel.fetchCoinsMarkets.running) {
-          return const Center(child: CircularProgressIndicator());
+        final coins = snapshot.data ?? [];
+        if (_isLoading) {
+          return const _LoadingState();
         }
 
-        if (viewModel.fetchCoinsMarkets.error) {
-          return Center(
-            child: Text(
-              context.l10n.errorLoadingData,
-              style: const TextStyle(color: Colors.red),
-            ),
-          );
+        if (_hasError) {
+          return _ErrorState(message: context.l10n.errorLoadingData);
         }
-        if ((!snapshot.hasData) || (snapshot.data?.isEmpty ?? true)) {
-          return Center(
-            child: Text(
-              context.l10n.noCryptocurrencyFound,
-              style: const TextStyle(color: Colors.grey),
-            ),
-          );
+        if (coins.isEmpty) {
+          return _EmptyState(message: context.l10n.noCryptocurrencyFound);
         }
 
-        if (snapshot.hasData) {
-          return RefreshIndicator(
-            onRefresh: _search,
-            child: ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                final coin = snapshot.data![index];
-                return CoinsCard(
-                  coin: coin,
-                  locale: locale,
-                  toggleFavorite: (coin) {
-                    getIt<FavoriteViewModel>().toggleFavorite.execute(coin);
-                  },
-                  onTap: (coin) {
-                    context.push(
-                      Routes.coinsDetails,
-                      extra: coin,
-                    );
-                  },
-                );
-              },
-            ),
-          );
-        } else {
-          return const SizedBox.shrink();
-        }
+        return _CoinsList(
+          coins: coins,
+
+          onTap: (coin) {
+            context.push(Routes.coinsDetails, extra: coin);
+          },
+          onToggleFavorite: (coin) {
+            getIt<FavoriteViewModel>().toggleFavorite.execute(coin);
+          },
+        );
       },
     );
   }
@@ -143,4 +114,99 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
 
   @override
   bool get wantKeepAlive => true;
+}
+
+class _LoadingState extends StatelessWidget {
+  const _LoadingState();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+}
+
+class _ErrorState extends StatelessWidget {
+  const _ErrorState({required this.message});
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        message,
+        style: const TextStyle(color: Colors.red),
+      ),
+    );
+  }
+}
+
+class _EmptyState extends StatelessWidget {
+  const _EmptyState({required this.message});
+  final String message;
+
+  @override
+  Widget build(BuildContext context) => Center(
+    child: Text(
+      message,
+      style: const TextStyle(color: Colors.grey),
+    ),
+  );
+}
+
+class _CoinsList extends StatelessWidget {
+  const _CoinsList({
+    required this.coins,
+    required this.onToggleFavorite,
+    required this.onTap,
+  });
+
+  final List<Coin> coins;
+
+  final void Function(Coin coin) onToggleFavorite;
+  final void Function(Coin coin) onTap;
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: () async {},
+      child: ListView.builder(
+        itemCount: coins.length,
+        itemBuilder: (context, index) {
+          final coin = coins[index];
+          return CoinsCard(
+            coin: coin,
+
+            toggleFavorite: onToggleFavorite,
+            onTap: onTap,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _SearchField extends StatelessWidget {
+  const _SearchField({
+    required this.controller,
+    required this.onSubmitted,
+  });
+
+  final TextEditingController controller;
+  final void Function(String) onSubmitted;
+
+  @override
+  Widget build(BuildContext context) => TextField(
+    key: const Key('search-edit'),
+    controller: controller,
+    decoration: InputDecoration(
+      labelText: context.l10n.search,
+      border: const OutlineInputBorder(),
+      suffixIcon: IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: controller.clear,
+      ),
+    ),
+    onSubmitted: onSubmitted,
+  );
 }

@@ -7,12 +7,10 @@ import 'package:intl/intl.dart';
 class CoinsMarketSummary extends StatefulWidget {
   const CoinsMarketSummary({
     required this.coin,
-    required this.locale,
     super.key,
   });
 
   final Coin coin;
-  final Locale locale;
 
   @override
   State<CoinsMarketSummary> createState() => _CoinsMarketSummaryState();
@@ -162,9 +160,10 @@ class _CoinsMarketSummaryState extends State<CoinsMarketSummary> {
   }
 
   String _formatarValor(double valor) {
-    final symbol = widget.locale.languageCode == 'pt' ? r'R$' : r'US$';
+    final locale = Localizations.localeOf(context);
+    final symbol = locale.languageCode == 'pt' ? r'R$' : r'US$';
     return NumberFormat.currency(
-      locale: widget.locale.languageCode,
+      locale: locale.languageCode,
       symbol: symbol,
     ).format(valor);
   }

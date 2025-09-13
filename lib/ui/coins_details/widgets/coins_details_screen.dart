@@ -38,7 +38,6 @@ class _CoinsDetailsScreenState extends State<CoinsDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.coin.name),
@@ -70,7 +69,6 @@ class _CoinsDetailsScreenState extends State<CoinsDetailsScreen> {
               return SparkLineDetailsChart(
                 coin: widget.coin,
                 market: viewModel.market!,
-                locale: locale,
               );
             },
           ),

@@ -11,14 +11,12 @@ import 'package:flutter/material.dart';
 class CoinsCard extends StatelessWidget {
   const CoinsCard({
     required this.coin,
-    required this.locale,
     this.toggleFavorite,
     this.onTap,
     super.key,
   });
 
   final Coin coin;
-  final Locale locale;
   final void Function(Coin coin)? toggleFavorite;
   final void Function(Coin coin)? onTap;
 
@@ -36,15 +34,20 @@ class CoinsCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
-                icon: isFavorite(coin)
-                    ? const Icon(
-                        Icons.star,
-                        color: Colors.yellow,
-                      )
-                    : const Icon(Icons.star_border),
-                onPressed: () {
-                  toggleFavorite?.call(coin);
+              ListenableBuilder(
+                listenable: getIt<FavoriteViewModel>().toggleFavorite,
+                builder: (context, child) {
+                  return IconButton(
+                    icon: isFavorite(coin)
+                        ? const Icon(
+                            Icons.star,
+                            color: Colors.yellow,
+                          )
+                        : const Icon(Icons.star_border),
+                    onPressed: () {
+                      toggleFavorite?.call(coin);
+                    },
+                  );
                 },
               ),
 
@@ -85,7 +88,6 @@ class CoinsCard extends StatelessWidget {
                     ),
                     CoinsMarketSummary(
                       coin: coin,
-                      locale: locale,
                     ),
                     LayoutBuilder(
                       builder: (context, constraints) {

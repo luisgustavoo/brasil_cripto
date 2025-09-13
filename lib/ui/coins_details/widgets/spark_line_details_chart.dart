@@ -11,13 +11,11 @@ class SparkLineDetailsChart extends StatefulWidget {
   const SparkLineDetailsChart({
     required this.coin,
     required this.market,
-    required this.locale,
     super.key,
   });
 
   final Coin coin;
   final Market market;
-  final Locale locale;
 
   @override
   State<SparkLineDetailsChart> createState() => _SparkLineDetailsChartState();
@@ -59,7 +57,6 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
 
   @override
   Widget build(BuildContext context) {
-    final locale = Localizations.localeOf(context);
     final color = widget.coin.priceChangePercentage7dInCurrency.isNegative
         ? AppColors.darkNegative
         : AppColors.lightPositive;
@@ -99,7 +96,6 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
         ),
         CoinsMarketSummary(
           coin: widget.coin,
-          locale: locale,
         ),
         Expanded(
           child: AspectRatio(
@@ -252,9 +248,10 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
   }
 
   String _formatarValor(double valor) {
-    final symbol = widget.locale.languageCode == 'pt' ? r'R$' : r'US$';
+    final locale = Localizations.localeOf(context);
+    final symbol = locale.languageCode == 'pt' ? r'R$' : r'US$';
     return NumberFormat.currency(
-      locale: widget.locale.languageCode,
+      locale: locale.languageCode,
       symbol: symbol,
     ).format(valor);
   }
