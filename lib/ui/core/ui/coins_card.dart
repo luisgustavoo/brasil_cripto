@@ -1,10 +1,9 @@
 import 'package:brasil_cripto/config/dependencies.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
-import 'package:brasil_cripto/ui/coins_markets/widgets/coins_market_summary.dart';
 import 'package:brasil_cripto/ui/coins_markets/widgets/spark_line_chart.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/core/themes/dimens.dart';
-
+import 'package:brasil_cripto/ui/core/ui/coins_market_summary.dart';
 import 'package:brasil_cripto/ui/core/ui/confirm_remove_favorite_dialog.dart';
 import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -41,6 +40,7 @@ class CoinsCard extends StatelessWidget {
                 listenable: getIt<FavoriteViewModel>().toggleFavorite,
                 builder: (context, child) {
                   return IconButton(
+                    key: Key('favorite-icon-${coin.id}'),
                     icon: isFavorite(coin)
                         ? const Icon(
                             Icons.star,

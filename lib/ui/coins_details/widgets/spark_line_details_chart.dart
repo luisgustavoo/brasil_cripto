@@ -1,7 +1,7 @@
 import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/domain/models/market.dart';
-import 'package:brasil_cripto/ui/coins_markets/widgets/coins_market_summary.dart';
 import 'package:brasil_cripto/ui/core/themes/colors.dart';
+import 'package:brasil_cripto/ui/core/ui/coins_market_summary.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -22,37 +22,22 @@ class SparkLineDetailsChart extends StatefulWidget {
 }
 
 class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
-  final _priceHistory = <(DateTime, double)>[];
+  List<(DateTime, double)> _priceHistory = [];
 
   Future<void> _reloadData() async {
-    for (final item in widget.market.prices) {
-      final timestamp = item[0].toInt();
-      final price = item[1];
-      _priceHistory.add((
-        DateTime.fromMillisecondsSinceEpoch(timestamp),
-        price,
-      ));
-      setState(() {});
-    }
-    // setState(() {
-    //   _priceHistory = widget.market.prices.map((item) {
-    //     final timestamp = item[0].toInt();
-    //     final price = item[1];
-    //     return (DateTime.fromMillisecondsSinceEpoch(timestamp), price);
-    //   }).toList();
-    // });
+    setState(() {
+      _priceHistory = widget.market.prices.map((item) {
+        final timestamp = item[0].toInt();
+        final price = item[1];
+        return (DateTime.fromMillisecondsSinceEpoch(timestamp), price);
+      }).toList();
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (timeStamp) async {
-        await Future<void>.delayed(
-          const Duration(milliseconds: 500),
-        ).whenComplete(_reloadData);
-      },
-    );
+    _reloadData();
   }
 
   @override

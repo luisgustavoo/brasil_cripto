@@ -91,7 +91,6 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
 
         return _CoinsList(
           coins: coins,
-
           onTap: (coin) {
             context.push(Routes.coinsDetails, extra: coin);
           },
@@ -197,7 +196,7 @@ class _SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => TextField(
-    key: const Key('search-edit'),
+    key: const Key(searchEditKey),
     controller: controller,
     decoration: InputDecoration(
       labelText: context.l10n.search,

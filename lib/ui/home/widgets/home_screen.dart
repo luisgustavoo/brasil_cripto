@@ -1,9 +1,8 @@
 import 'package:brasil_cripto/config/dependencies.dart';
+import 'package:brasil_cripto/ui/coins_markets/widgets/coins_market_screen.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/core/themes/dimens.dart';
-import 'package:brasil_cripto/ui/core/ui/coins_market_screen.dart';
 import 'package:brasil_cripto/ui/favorites/widgets/favorite_screen.dart';
-
 import 'package:flutter/material.dart';
 
 const String favoriteTabKey = 'favorite-tab-key';

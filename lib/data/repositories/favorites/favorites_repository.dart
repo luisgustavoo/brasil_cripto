@@ -40,7 +40,7 @@ class FavoritesRepository {
 
     switch (result) {
       case Ok():
-        favoritesCoins = result.value;
+        favoritesCoins = [...result.value];
         return Result.ok(result.value);
       case Error():
         log('Erro ao inicializar favoritos', error: result.error);
