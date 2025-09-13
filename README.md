@@ -16,7 +16,7 @@ O app segue a arquitetura **MVVM**, utilizando **GetIt** com **Injectable** para
 - Favoritar moedas para acesso rápido.
 - Feedback visual de carregamento e tratamento de erros.
 - Atualização dos dados em **tempo real**, refletindo mudanças nos preços das criptomoedas.
-- Localização em Português (pt-BR).
+- Internacionalização.
 - Testes unitários e de widget com Flutter Test.
 
 ---

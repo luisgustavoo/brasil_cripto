@@ -16,17 +16,11 @@ class FavoritesRepository {
   }
   final LocalDataService _localDataService;
 
-  final favoritesCoins = <Coin>[];
+  List<Coin> favoritesCoins = <Coin>[];
 
   Future<void> _init() async {
-    final result = await _localDataService.getFavorites();
-
-    switch (result) {
-      case Ok():
-        favoritesCoins.addAll(result.value);
-      case Error():
-        log('Erro ao inicializar favoritos', error: result.error);
-    }
+    favoritesCoins.clear();
+    await getFavorites();
   }
 
   Future<Result<void>> toggleFavorite(Coin coin) async {
@@ -46,7 +40,7 @@ class FavoritesRepository {
 
     switch (result) {
       case Ok():
-        favoritesCoins.addAll(result.value);
+        favoritesCoins = result.value;
         return Result.ok(result.value);
       case Error():
         log('Erro ao inicializar favoritos', error: result.error);
