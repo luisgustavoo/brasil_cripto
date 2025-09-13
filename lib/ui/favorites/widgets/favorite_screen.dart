@@ -22,7 +22,6 @@ class _FavoriteScreenState extends State<FavoriteScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
     return Scaffold(
       body: ListenableBuilder(
         listenable: widget.viewModel,

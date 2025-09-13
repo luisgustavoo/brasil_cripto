@@ -3,9 +3,9 @@ import 'package:brasil_cripto/domain/models/market.dart';
 import 'package:brasil_cripto/ui/core/themes/colors.dart';
 import 'package:brasil_cripto/ui/core/ui/coin_title.dart';
 import 'package:brasil_cripto/ui/core/ui/coins_market_summary.dart';
+import 'package:brasil_cripto/ui/core/ui/number_formatter.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class SparkLineDetailsChart extends StatefulWidget {
   const SparkLineDetailsChart({
@@ -84,6 +84,7 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
   }
 
   LineTouchTooltipData _touchTooltipData() {
+    final locale = Localizations.localeOf(context);
     return LineTouchTooltipData(
       getTooltipItems: (touchedBarSpots) {
         return touchedBarSpots.map((barSpot) {
@@ -107,7 +108,7 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
                 ),
               ),
               TextSpan(
-                text: '\n${_formatarValor(price)}',
+                text: '\n${formatCurrencyValue(price, locale)}',
                 style: TextStyle(
                   color: _lineColor,
                   fontWeight: FontWeight.bold,
@@ -176,15 +177,6 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
         return FlSpot(index.toDouble(), value);
       }).toList(),
     );
-  }
-
-  String _formatarValor(double valor) {
-    final locale = Localizations.localeOf(context);
-    final symbol = locale.languageCode == 'pt' ? r'R$' : r'US$';
-    return NumberFormat.currency(
-      locale: locale.languageCode,
-      symbol: symbol,
-    ).format(valor);
   }
 
   @override
