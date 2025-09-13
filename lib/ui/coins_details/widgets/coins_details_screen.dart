@@ -25,15 +25,16 @@ class _CoinsDetailsScreenState extends State<CoinsDetailsScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final locale = Localizations.localeOf(context);
-      final vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
-      viewModel.fetchCoinsMarketsDetails.execute(
-        (
-          id: widget.coin.id,
-          vsCurrency: vsCurrency,
-        ),
-      );
+      _fetchCoinDetails();
     });
+  }
+
+  void _fetchCoinDetails() {
+    final locale = Localizations.localeOf(context);
+    final vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
+    viewModel.fetchCoinsMarketsDetails.execute(
+      (id: widget.coin.id, vsCurrency: vsCurrency),
+    );
   }
 
   @override
@@ -43,37 +44,37 @@ class _CoinsDetailsScreenState extends State<CoinsDetailsScreen> {
         title: Text(widget.coin.name),
       ),
       body: SingleChildScrollView(
-        child: Container(
+        padding: context.dimens.edgeInsetsScreenSymmetric,
+        child: SizedBox(
           height: MediaQuery.sizeOf(context).height,
-          padding: context.dimens.edgeInsetsScreenSymmetric,
           child: ListenableBuilder(
             listenable: viewModel,
-            builder: (context, child) {
-              if (viewModel.fetchCoinsMarketsDetails.running) {
-                return const Center(child: CircularProgressIndicator());
-              }
-
-              if (viewModel.fetchCoinsMarketsDetails.error) {
-                return Center(
-                  child: Text(
-                    context.l10n.errorLoadingData,
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                );
-              }
-
-              if (viewModel.market == null) {
-                return const SizedBox.shrink();
-              }
-
-              return SparkLineDetailsChart(
-                coin: widget.coin,
-                market: viewModel.market!,
-              );
-            },
+            builder: (context, child) => _buildContent(),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildContent() {
+    if (viewModel.fetchCoinsMarketsDetails.running) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (viewModel.fetchCoinsMarketsDetails.error) {
+      return Center(
+        child: Text(
+          context.l10n.errorLoadingData,
+          style: const TextStyle(color: Colors.red),
+        ),
+      );
+    }
+    if (viewModel.market == null) {
+      return const SizedBox.shrink();
+    }
+
+    return SparkLineDetailsChart(
+      coin: widget.coin,
+      market: viewModel.market!,
     );
   }
 }

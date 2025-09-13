@@ -1,6 +1,7 @@
 import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/domain/models/market.dart';
 import 'package:brasil_cripto/ui/core/themes/colors.dart';
+import 'package:brasil_cripto/ui/core/ui/coin_title.dart';
 import 'package:brasil_cripto/ui/core/ui/coins_market_summary.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -22,63 +23,53 @@ class SparkLineDetailsChart extends StatefulWidget {
 }
 
 class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
-  List<(DateTime, double)> _priceHistory = [];
+  late final List<(DateTime, double)> _priceHistory = widget.market.prices
+      .map(
+        (item) =>
+            (DateTime.fromMillisecondsSinceEpoch(item[0].toInt()), item[1]),
+      )
+      .toList();
 
-  Future<void> _reloadData() async {
-    setState(() {
-      _priceHistory = widget.market.prices.map((item) {
-        final timestamp = item[0].toInt();
-        final price = item[1];
-        return (DateTime.fromMillisecondsSinceEpoch(timestamp), price);
-      }).toList();
-    });
-  }
+  Color get _lineColor =>
+      widget.coin.priceChangePercentage7dInCurrency.isNegative
+      ? AppColors.darkNegative
+      : AppColors.darkPositive;
 
-  @override
-  void initState() {
-    super.initState();
-    _reloadData();
+  // SideTitleWidget _buildBottomTitle(double value, TitleMeta meta) {
+  //   final date = _getDateSafe(value.toInt());
+  //   return SideTitleWidget(
+  //     meta: meta,
+  //     child: Transform.rotate(
+  //       angle: -45 * 3.1415 / 180,
+  //       child: Text(
+  //         '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}',
+  //         style: TextStyle(
+  //           color: _lineColor,
+  //           fontSize: 12,
+  //           fontWeight: FontWeight.bold,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  String _formatarValor(double valor) {
+    final locale = Localizations.localeOf(context);
+    final symbol = locale.languageCode == 'pt' ? r'R$' : r'US$';
+    return NumberFormat.currency(
+      locale: locale.languageCode,
+      symbol: symbol,
+    ).format(valor);
   }
 
   @override
   Widget build(BuildContext context) {
-    final color = widget.coin.priceChangePercentage7dInCurrency.isNegative
-        ? AppColors.darkNegative
-        : AppColors.darkPositive;
     const leftReservedSize = 52.0;
     return Column(
       spacing: 16,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          spacing: 8,
-          children: [
-            CachedNetworkImage(
-              fit: BoxFit.cover,
-              height: 30,
-              width: 30,
-              imageUrl: widget.coin.image,
-              placeholder: (context, url) => const SizedBox(
-                height: 30,
-                width: 30,
-                child: CircularProgressIndicator(
-                  strokeWidth: 0.5,
-                ),
-              ),
-              errorWidget: (context, url, error) => const Icon(Icons.error),
-            ),
-            Expanded(
-              child: Text(
-                widget.coin.name,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            Text(
-              '(${widget.coin.symbol.toUpperCase()})',
-              style: const TextStyle(color: Colors.grey),
-            ),
-          ],
-        ),
+        CoinTitle(coin: widget.coin),
         CoinsMarketSummary(
           coin: widget.coin,
         ),
@@ -113,7 +104,7 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
                             child: Text(
                               '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}',
                               style: TextStyle(
-                                color: color,
+                                color: _lineColor,
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -138,7 +129,7 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
                     return spotIndexes.map((spotIndex) {
                       return TouchedSpotIndicatorData(
                         FlLine(
-                          color: color,
+                          color: _lineColor,
                           strokeWidth: 1.5,
                           dashArray: [8, 2],
                         ),
@@ -146,8 +137,8 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
                           getDotPainter: (spot, percent, barData, index) {
                             return FlDotCirclePainter(
                               radius: 6,
-                              color: color,
-                              strokeColor: color,
+                              color: _lineColor,
+                              strokeColor: _lineColor,
                             );
                           },
                         ),
@@ -170,7 +161,7 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
                               text:
                                   '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}',
                               style: TextStyle(
-                                color: color,
+                                color: _lineColor,
                                 // AppColors.contentColorGreen.darken(20),
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12,
@@ -179,7 +170,7 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
                             TextSpan(
                               text: '\n${_formatarValor(price)}',
                               style: TextStyle(
-                                color: color,
+                                color: _lineColor,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
@@ -195,20 +186,20 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
                 lineBarsData: [
                   LineChartBarData(
                     shadow: Shadow(
-                      color: color,
+                      color: _lineColor,
                       blurRadius: 2,
                     ),
-                    color: color,
+                    color: _lineColor,
                     barWidth: 1,
                     belowBarData: BarAreaData(
                       show: true,
-                      color: color.withAlpha(100),
+                      color: _lineColor.withAlpha(100),
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          color.withValues(alpha: 0.2),
-                          color.withValues(alpha: 0),
+                          _lineColor.withValues(alpha: 0.2),
+                          _lineColor.withValues(alpha: 0),
                         ],
                         stops: const [0.5, 1.0],
                       ),
@@ -230,14 +221,5 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
         ),
       ],
     );
-  }
-
-  String _formatarValor(double valor) {
-    final locale = Localizations.localeOf(context);
-    final symbol = locale.languageCode == 'pt' ? r'R$' : r'US$';
-    return NumberFormat.currency(
-      locale: locale.languageCode,
-      symbol: symbol,
-    ).format(valor);
   }
 }
