@@ -27,7 +27,7 @@ class ApiClient {
     String vsCurrency,
   ) async {
     try {
-      final response = await _httpClient.get<List<dynamic>>(
+      final response = await _httpClient.auth().get<List<dynamic>>(
         '/coins/markets',
         queryParameters: {
           'vs_currency': vsCurrency,
