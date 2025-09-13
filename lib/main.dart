@@ -20,8 +20,20 @@ class MainApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       routerConfig: Router.router,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+      theme:
+          // ThemeData.from(
+          //   colorScheme: ColorScheme.fromSeed(
+          //     seedColor: Color(0XFFCFA550),
+          //   ),
+          // ),
+          AppTheme.lightTheme,
+      darkTheme:
+          // ThemeData.from(
+          //   colorScheme: ColorScheme.fromSeed(
+          //     seedColor: Color(0XFF171C2C),
+          //   ),
+          // ),
+          AppTheme.darkTheme,
     );
   }
 }

@@ -17,10 +17,6 @@ abstract final class AppTheme {
     colorScheme: AppColors.lightColorScheme,
     scaffoldBackgroundColor: AppColors.lightBackground,
     cardColor: AppColors.lightCard,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.lightHighlight,
-      foregroundColor: Colors.white,
-    ),
     textTheme: _textTheme.apply(
       bodyColor: AppColors.lightTextPrimary,
       displayColor: AppColors.lightTextPrimary,
@@ -42,13 +38,9 @@ abstract final class AppTheme {
     colorScheme: AppColors.darkColorScheme,
     scaffoldBackgroundColor: AppColors.darkBackground,
     cardColor: AppColors.darkCard,
-    appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.darkHighlight,
-      foregroundColor: Colors.white,
-    ),
     textTheme: _textTheme.apply(
       bodyColor: AppColors.darkTextPrimary,
-      displayColor: AppColors.darkTextPrimary,
+      displayColor: AppColors.darkTextSecondary,
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: AppColors.darkHighlight,
