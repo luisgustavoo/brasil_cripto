@@ -6,8 +6,8 @@ import 'package:brasil_cripto/ui/favorites/widgets/favorite_screen.dart';
 
 import 'package:flutter/material.dart';
 
-const String favoriteTabButtonKey = 'favorite-tab-button';
-const String marketTabButtonKey = 'market-tab-button';
+const String favoriteTabKey = 'favorite-tab-key';
+const String marketTabKey = 'market-tab-key';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -31,11 +31,11 @@ class _HomeScreenState extends State<HomeScreen> {
           bottom: const TabBar.secondary(
             tabs: [
               Tab(
-                key: Key(favoriteTabButtonKey),
+                key: Key(favoriteTabKey),
                 icon: Icon(Icons.star_outline),
               ),
               Tab(
-                key: Key(marketTabButtonKey),
+                key: Key(marketTabKey),
                 icon: Icon(Icons.monitor_heart_outlined),
               ),
             ],
