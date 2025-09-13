@@ -27,48 +27,37 @@ class _FavoriteScreenState extends State<FavoriteScreen>
       body: ListenableBuilder(
         listenable: widget.viewModel,
         builder: (context, child) {
-          return _buildList(widget.viewModel, locale);
-        },
-      ),
-    );
-  }
+          if (widget.viewModel.getFavorites.running) {
+            return const Center(child: CircularProgressIndicator());
+          }
 
-  Widget _buildList(FavoriteViewModel viewModel, Locale locale) {
-    return StreamBuilder(
-      stream: viewModel.favoritesStream,
-      builder: (context, snapshot) {
-        if (viewModel.getFavorites.running) {
-          return const Center(child: CircularProgressIndicator());
-        }
+          if (widget.viewModel.getFavorites.error) {
+            return Center(
+              child: Text(
+                context.l10n.errorLoadingData,
+                style: const TextStyle(color: Colors.red),
+              ),
+            );
+          }
 
-        if (viewModel.getFavorites.error) {
-          return Center(
-            child: Text(
-              context.l10n.errorLoadingData,
-              style: const TextStyle(color: Colors.red),
-            ),
-          );
-        }
+          if (widget.viewModel.favorites.isEmpty) {
+            return Center(
+              child: Text(
+                context.l10n.noCryptocurrencyFound,
+                style: const TextStyle(color: Colors.grey),
+              ),
+            );
+          }
 
-        if ((!snapshot.hasData) || (snapshot.data?.isEmpty ?? true)) {
-          return Center(
-            child: Text(
-              context.l10n.noCryptocurrencyFound,
-              style: const TextStyle(color: Colors.grey),
-            ),
-          );
-        }
-
-        if (snapshot.hasData) {
           return ListView.builder(
-            itemCount: snapshot.data!.length,
+            itemCount: widget.viewModel.favorites.length,
             itemBuilder: (context, index) {
-              final coin = snapshot.data![index];
+              final coin = widget.viewModel.favorites[index];
               return CoinsCard(
                 coin: coin,
                 locale: locale,
                 toggleFavorite: (coin) {
-                  viewModel.toggleFavorite.execute(coin);
+                  widget.viewModel.toggleFavorite.execute(coin);
                 },
                 onTap: (coin) {
                   context.push(
@@ -79,12 +68,63 @@ class _FavoriteScreenState extends State<FavoriteScreen>
               );
             },
           );
-        } else {
-          return const SizedBox.shrink();
-        }
-      },
+        },
+      ),
     );
   }
+
+  // Widget _buildList(FavoriteViewModel viewModel, Locale locale) {
+  //   return StreamBuilder(
+  //     stream: viewModel.favoritesStream,
+  //     builder: (context, snapshot) {
+  //       if (viewModel.getFavorites.running) {
+  //         return const Center(child: CircularProgressIndicator());
+  //       }
+
+  //       if (viewModel.getFavorites.error) {
+  //         return Center(
+  //           child: Text(
+  //             context.l10n.errorLoadingData,
+  //             style: const TextStyle(color: Colors.red),
+  //           ),
+  //         );
+  //       }
+
+  //       if ((!snapshot.hasData) || (snapshot.data?.isEmpty ?? true)) {
+  //         return Center(
+  //           child: Text(
+  //             context.l10n.noCryptocurrencyFound,
+  //             style: const TextStyle(color: Colors.grey),
+  //           ),
+  //         );
+  //       }
+
+  //       if (snapshot.hasData) {
+  //         return ListView.builder(
+  //           itemCount: snapshot.data!.length,
+  //           itemBuilder: (context, index) {
+  //             final coin = snapshot.data![index];
+  //             return CoinsCard(
+  //               coin: coin,
+  //               locale: locale,
+  //               toggleFavorite: (coin) {
+  //                 viewModel.toggleFavorite.execute(coin);
+  //               },
+  //               onTap: (coin) {
+  //                 context.push(
+  //                   Routes.coinsDetails,
+  //                   extra: coin,
+  //                 );
+  //               },
+  //             );
+  //           },
+  //         );
+  //       } else {
+  //         return const SizedBox.shrink();
+  //       }
+  //     },
+  //   );
+  // }
 
   @override
   bool get wantKeepAlive => true;

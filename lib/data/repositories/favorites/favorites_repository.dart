@@ -16,21 +16,16 @@ class FavoritesRepository {
   }
   final LocalDataService _localDataService;
 
-  late final _favoriteStreamController = StreamController<List<Coin>>();
   final favoritesCoins = <Coin>[];
-
-  Stream<List<Coin>> get favoritesStream => _favoriteStreamController.stream;
 
   Future<void> _init() async {
     final result = await _localDataService.getFavorites();
 
     switch (result) {
       case Ok():
-        _favoriteStreamController.add(result.value);
         favoritesCoins.addAll(result.value);
       case Error():
         log('Erro ao inicializar favoritos', error: result.error);
-        _favoriteStreamController.add(const []);
     }
   }
 
@@ -51,26 +46,22 @@ class FavoritesRepository {
 
     switch (result) {
       case Ok():
-        _favoriteStreamController.add(result.value);
         favoritesCoins.addAll(result.value);
         return Result.ok(result.value);
       case Error():
         log('Erro ao inicializar favoritos', error: result.error);
-        _favoriteStreamController.add(const []);
         return Result.error(result.error);
     }
   }
 
   void _addFavorites(Coin coin) {
     favoritesCoins.add(coin);
-    _favoriteStreamController.add(favoritesCoins);
   }
 
   void _removeFavorites(Coin coin) {
     favoritesCoins.removeWhere(
       (element) => element.id == coin.id,
     );
-    _favoriteStreamController.add(favoritesCoins);
   }
 
   List<Map<String, dynamic>> coinsToMap(List<Coin> coins) {

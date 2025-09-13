@@ -17,9 +17,6 @@ class FavoriteViewModel extends ChangeNotifier {
 
   final FavoritesRepository _favoritesRepository;
 
-  Stream<List<Coin>> get favoritesStream =>
-      _favoritesRepository.favoritesStream;
-
   List<Coin> get favorites => _favoritesRepository.favoritesCoins;
 
   late final Command1<void, Coin> toggleFavorite;

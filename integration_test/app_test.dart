@@ -1,3 +1,4 @@
+import 'package:brasil_cripto/config/dependencies.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/home/widgets/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,8 @@ import '../testing/app.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
+  configureDependencies();
+
   Future<void> loadHomeScreen(WidgetTester tester) async {
     await testApp(
       tester,
@@ -17,7 +20,7 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  group('HomeScreen / CoinsMarketScreen tests', () {
+  group('end-to-end test', () {
     testWidgets('should display title and empty state', (tester) async {
       final context = getContext(tester: tester, screen: HomeScreen);
       final l10n = context.l10n;

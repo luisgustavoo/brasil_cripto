@@ -26,20 +26,21 @@ class CoinsMarketViewModel extends ChangeNotifier {
   Future<Result<void>> _fetchCoinsMarkets(
     ({String names, String vsCurrency}) queryParameters,
   ) async {
-    final (names: names, vsCurrency: vsCurrency) = queryParameters;
-    notifyListeners();
-    final result = await _coinsMarketsRepository.fetchCoinsMarkets(
-      names,
-      vsCurrency,
-    );
-    switch (result) {
-      case Ok():
-        notifyListeners();
-        return const Result.ok(null);
-      case Error():
-        log('Error fetching coins markets: ${result.error}');
-        notifyListeners();
-        return Result.error(result.error);
+    try {
+      final (names: names, vsCurrency: vsCurrency) = queryParameters;
+      final result = await _coinsMarketsRepository.fetchCoinsMarkets(
+        names,
+        vsCurrency,
+      );
+      switch (result) {
+        case Ok():
+          return const Result.ok(null);
+        case Error():
+          log('Error fetching coins markets: ${result.error}');
+          return Result.error(result.error);
+      }
+    } finally {
+      notifyListeners();
     }
   }
 }

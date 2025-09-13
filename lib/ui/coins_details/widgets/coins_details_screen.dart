@@ -43,34 +43,37 @@ class _CoinsDetailsScreenState extends State<CoinsDetailsScreen> {
       appBar: AppBar(
         title: Text(widget.coin.name),
       ),
-      body: Padding(
-        padding: context.dimens.edgeInsetsScreenSymmetric,
-        child: ListenableBuilder(
-          listenable: viewModel,
-          builder: (context, child) {
-            if (viewModel.fetchCoinsMarketsDetails.running) {
-              return const Center(child: CircularProgressIndicator());
-            }
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.sizeOf(context).height,
+          padding: context.dimens.edgeInsetsScreenSymmetric,
+          child: ListenableBuilder(
+            listenable: viewModel,
+            builder: (context, child) {
+              if (viewModel.fetchCoinsMarketsDetails.running) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-            if (viewModel.fetchCoinsMarketsDetails.error) {
-              return Center(
-                child: Text(
-                  context.l10n.errorLoadingData,
-                  style: const TextStyle(color: Colors.red),
-                ),
+              if (viewModel.fetchCoinsMarketsDetails.error) {
+                return Center(
+                  child: Text(
+                    context.l10n.errorLoadingData,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                );
+              }
+
+              if (viewModel.market == null) {
+                return const SizedBox.shrink();
+              }
+
+              return SparkLineDetailsChart(
+                coin: widget.coin,
+                market: viewModel.market!,
+                locale: locale,
               );
-            }
-
-            if (viewModel.market == null) {
-              return const SizedBox.shrink();
-            }
-
-            return SparkLineDetailsChart(
-              coin: widget.coin,
-              market: viewModel.market!,
-              locale: locale,
-            );
-          },
+            },
+          ),
         ),
       ),
     );
