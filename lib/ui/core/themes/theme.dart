@@ -19,15 +19,15 @@ abstract final class AppTheme {
     cardColor: AppColors.lightCard,
     textTheme: _textTheme.apply(
       bodyColor: AppColors.lightTextPrimary,
-      displayColor: AppColors.lightTextPrimary,
+      displayColor: AppColors.lightTextSecondary,
     ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      backgroundColor: AppColors.lightHighlight,
+      backgroundColor: AppColors.darkHighlight,
       foregroundColor: Colors.white,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.lightHighlight,
+        backgroundColor: AppColors.darkHighlight,
         foregroundColor: Colors.white,
       ),
     ),

@@ -44,7 +44,7 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
   Widget build(BuildContext context) {
     final color = widget.coin.priceChangePercentage7dInCurrency.isNegative
         ? AppColors.darkNegative
-        : AppColors.lightPositive;
+        : AppColors.darkPositive;
     const leftReservedSize = 52.0;
     return Column(
       spacing: 16,

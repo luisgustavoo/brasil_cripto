@@ -45,7 +45,7 @@ class _SparkLineChartState extends State<SparkLineChart> {
                       .priceChangePercentage7dInCurrency
                       .isNegative
                   ? AppColors.darkNegative
-                  : AppColors.lightPositive,
+                  : AppColors.darkPositive,
               // Espessura do linha
               barWidth: 1,
               // Se a linha vai fazer curava
