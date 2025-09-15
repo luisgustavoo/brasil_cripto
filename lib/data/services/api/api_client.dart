@@ -143,7 +143,7 @@ void _coinsMarketsBackground(_IsolateParams params) {
     ),
   );
 
-  Timer.periodic(const Duration(seconds: 30), (_) async {
+  Timer.periodic(const Duration(minutes: 1), (_) async {
     try {
       final topTen = params.names?.isEmpty ?? true;
 
