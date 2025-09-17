@@ -11,8 +11,8 @@ import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart'
 import 'package:brasil_cripto/ui/home/widgets/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
-
 import '../../../../testing/app.dart';
 import '../../../../testing/fakes/repositories/fake_coins_markets_repository_remote.dart';
 import '../../../../testing/fakes/repositories/fake_favorites_repository_local.dart';
@@ -21,9 +21,11 @@ import '../../../../testing/mocks.dart';
 
 void main() {
   late MockGoRouter goRouter;
+  final getIt = GetIt.instance;
 
   void configureDependenciesTest() {
     getIt
+      ..reset()
       ..registerFactory<ApiClient>(
         FakeApiClient.new,
       )
@@ -58,7 +60,6 @@ void main() {
   }
 
   setUpAll(() async {
-    await getIt.reset();
     configureDependenciesTest();
     goRouter = MockGoRouter();
   });
