@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository.dart';
-import 'package:brasil_cripto/data/repositories/favorites/favorites_repository_local.dart';
+import 'package:brasil_cripto/data/repositories/favorites/favorites_repository.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/utils/result.dart';
 import 'package:injectable/injectable.dart';
@@ -9,16 +9,16 @@ import 'package:injectable/injectable.dart';
 @injectable
 class FavoriteGetUseCase {
   FavoriteGetUseCase({
-    required FavoritesRepositoryLocal favoritesRepositoryLocal,
-    required CoinsMarketsRepository coinsMarketsRepositoryRemote,
-  }) : _favoritesRepositoryLocal = favoritesRepositoryLocal,
-       _coinsMarketsRepositoryRemote = coinsMarketsRepositoryRemote;
+    required FavoritesRepository favoritesRepository,
+    required CoinsMarketsRepository coinsMarketsRepository,
+  }) : _favoritesRepository = favoritesRepository,
+       _coinsMarketsRepository = coinsMarketsRepository;
 
-  final FavoritesRepositoryLocal _favoritesRepositoryLocal;
-  final CoinsMarketsRepository _coinsMarketsRepositoryRemote;
+  final FavoritesRepository _favoritesRepository;
+  final CoinsMarketsRepository _coinsMarketsRepository;
 
   Future<Result<List<Coin>>> getFavorites(String vsCurrency) async {
-    final favoritesResult = await _favoritesRepositoryLocal.getFavorites();
+    final favoritesResult = await _favoritesRepository.getFavorites();
     switch (favoritesResult) {
       case Ok():
         if (favoritesResult.value.isEmpty) {
@@ -47,7 +47,7 @@ class FavoriteGetUseCase {
     List<String> namesList,
     String vsCurrency,
   ) async {
-    final result = await _coinsMarketsRepositoryRemote.fetchCoinsMarkets(
+    final result = await _coinsMarketsRepository.fetchCoinsMarkets(
       namesList.join(','),
       vsCurrency,
     );

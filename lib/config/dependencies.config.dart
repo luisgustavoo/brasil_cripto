@@ -14,6 +14,8 @@ import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repo
     as _i11;
 import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository_remote.dart'
     as _i423;
+import 'package:brasil_cripto/data/repositories/favorites/favorites_repository.dart'
+    as _i568;
 import 'package:brasil_cripto/data/repositories/favorites/favorites_repository_local.dart'
     as _i506;
 import 'package:brasil_cripto/data/services/api/api_client.dart' as _i653;
@@ -63,9 +65,15 @@ extension GetItInjectableX on _i174.GetIt {
       () =>
           _i423.CoinsMarketsRepositoryRemote(apiClient: gh<_i653.ApiClient>()),
     );
-    gh.lazySingleton<_i506.FavoritesRepositoryLocal>(
+    gh.lazySingleton<_i568.FavoritesRepository>(
       () => _i506.FavoritesRepositoryLocal(
         localDataService: gh<_i751.LocalDataService>(),
+      ),
+    );
+    gh.factory<_i561.FavoriteGetUseCase>(
+      () => _i561.FavoriteGetUseCase(
+        favoritesRepository: gh<_i568.FavoritesRepository>(),
+        coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),
       ),
     );
     gh.lazySingleton<_i1013.CoinsDetailsViewModel>(
@@ -78,16 +86,10 @@ extension GetItInjectableX on _i174.GetIt {
         coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),
       ),
     );
-    gh.factory<_i561.FavoriteGetUseCase>(
-      () => _i561.FavoriteGetUseCase(
-        favoritesRepositoryLocal: gh<_i506.FavoritesRepositoryLocal>(),
-        coinsMarketsRepositoryRemote: gh<_i11.CoinsMarketsRepository>(),
-      ),
-    );
     gh.singleton<_i657.FavoriteViewModel>(
       () => _i657.FavoriteViewModel(
         favoriteGetUseCase: gh<_i561.FavoriteGetUseCase>(),
-        favoritesRepositoryLocal: gh<_i506.FavoritesRepositoryLocal>(),
+        favoritesRepository: gh<_i568.FavoritesRepository>(),
       ),
     );
     return this;

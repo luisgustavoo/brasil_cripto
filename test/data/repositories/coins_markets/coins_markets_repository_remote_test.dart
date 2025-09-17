@@ -1,6 +1,5 @@
 import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository.dart';
 import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository_remote.dart';
-import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository_remote.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/domain/models/market.dart';
 import 'package:brasil_cripto/utils/result.dart';
@@ -19,8 +18,6 @@ void main() {
   });
   group('CoinsMarketsRepository remote', () {
     test('should fetch coin markets successfully', () async {
-      final emittedCoins = <List<Coin>>[];
-
       final result = await coinsMarketsRepository.fetchCoinsMarkets(
         'Bitcoin',
         'usd',
@@ -28,8 +25,6 @@ void main() {
       expect(result, isA<Ok<List<Coin>>>());
       expect(result.asOk.value.isNotEmpty, true);
       expect(result.asOk.value.first.id.toLowerCase(), 'bitcoin');
-      expect(emittedCoins.length, 1);
-      expect(emittedCoins.first.map((c) => c.id), ['bitcoin', 'ethereum']);
     });
     test('should fetch coin market details successfully', () async {
       final result = await coinsMarketsRepository.fetchCoinsMarketsChart(
@@ -38,7 +33,9 @@ void main() {
         1,
       );
       expect(result, isA<Ok<Market>>());
-      expect(result.asOk.value, isNotNull);
+      expect(result.asOk.value.prices, isNotNull);
+      expect(result.asOk.value.totalVolumes, isNotNull);
+      expect(result.asOk.value.marketCaps, isNotNull);
     });
   });
 }

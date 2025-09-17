@@ -1,5 +1,21 @@
 import 'package:brasil_cripto/data/services/api/models/market_api_model.dart';
+import 'package:brasil_cripto/domain/models/market.dart';
 
+final kMarket = Market(
+  prices: [
+    [1757561451560, 114140.19844887279],
+    [1757561740991, 114076.32605319703],
+  ],
+  marketCaps: [
+    [1757561451560, 2274033012412.781],
+    [1757561740991, 2273523734476.4385],
+  ],
+  totalVolumes: [
+    [1757561451560, 51326913475.23496],
+    [1757561740991, 51297708744.6216],
+    [1757562032052, 51193623755.097534],
+  ],
+);
 final kMarketApiModel = MarketApiModel(
   prices: [
     [1757561451560, 114140.19844887279],

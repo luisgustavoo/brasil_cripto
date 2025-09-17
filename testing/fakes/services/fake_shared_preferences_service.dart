@@ -1,6 +1,8 @@
 import 'package:brasil_cripto/data/services/shared_preferences_service.dart';
 import 'package:brasil_cripto/utils/result.dart';
+import 'package:injectable/injectable.dart';
 
+@Injectable(as: SharedPreferencesService, env: [Environment.test])
 class FakeSharedPreferencesService implements SharedPreferencesService {
   String value = '';
 

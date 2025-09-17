@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:brasil_cripto/data/repositories/favorites/favorites_repository.dart';
 import 'package:brasil_cripto/data/services/local/local_data_service.dart';
 import 'package:brasil_cripto/utils/result.dart';
 import 'package:injectable/injectable.dart';
 
-@lazySingleton
-class FavoritesRepositoryLocal {
+@LazySingleton(as: FavoritesRepository)
+class FavoritesRepositoryLocal implements FavoritesRepository {
   FavoritesRepositoryLocal({
     required LocalDataService localDataService,
   }) : _localDataService = localDataService;
@@ -14,6 +15,7 @@ class FavoritesRepositoryLocal {
   final LocalDataService _localDataService;
   late List<String> _names;
 
+  @override
   Future<Result<void>> toggleFavorite(String name) async {
     final result = await getFavorites();
     switch (result) {
@@ -30,6 +32,7 @@ class FavoritesRepositoryLocal {
     }
   }
 
+  @override
   Future<Result<List<String>>> getFavorites() async {
     final result = await _localDataService.getFavorites();
     switch (result) {
