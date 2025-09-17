@@ -43,6 +43,12 @@ void main() {
   }
 
   group('end-to-end test', () {
+    // testWidgets('should display title and empty state', (tester) async {
+    //   await loadHomeScreen(tester);
+    //   expect(find.text(l10n.brazilCripto), findsOneWidget);
+    //   expect(find.text(l10n.noCryptocurrencyFound), findsOneWidget);
+    // });
+
     testWidgets(
       'should navigate to coin details after search',
       (tester) async {

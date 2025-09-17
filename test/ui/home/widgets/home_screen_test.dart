@@ -1,7 +1,7 @@
-import 'package:brasil_cripto/config/dependencies.dart';
 import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository.dart';
 import 'package:brasil_cripto/data/repositories/favorites/favorites_repository.dart';
 import 'package:brasil_cripto/data/services/api/api_client.dart';
+import 'package:brasil_cripto/data/services/local/local_data_service.dart';
 import 'package:brasil_cripto/domain/use_cases/favorites/favorite_get_use_case.dart';
 import 'package:brasil_cripto/ui/coins_details/view_models/coins_details_view_model.dart';
 import 'package:brasil_cripto/ui/coins_markets/view_models/coins_markets_view_model.dart';
@@ -17,6 +17,7 @@ import '../../../../testing/app.dart';
 import '../../../../testing/fakes/repositories/fake_coins_markets_repository_remote.dart';
 import '../../../../testing/fakes/repositories/fake_favorites_repository_local.dart';
 import '../../../../testing/fakes/services/api/fake_api_client.dart';
+import '../../../../testing/fakes/services/fake_shared_preferences_service.dart';
 import '../../../../testing/mocks.dart';
 
 void main() {
@@ -25,9 +26,16 @@ void main() {
 
   void configureDependenciesTest() {
     getIt
-      ..reset()
       ..registerFactory<ApiClient>(
         FakeApiClient.new,
+      )
+      ..registerFactory(
+        FakeSharedPreferencesService.new,
+      )
+      ..registerFactory(
+        () => LocalDataService(
+          sharedPreferencesService: getIt(),
+        ),
       )
       ..registerFactory<CoinsMarketsRepository>(
         FakeCoinsMarketsRepositoryRemote.new,
@@ -65,7 +73,10 @@ void main() {
   });
 
   tearDown(
-    () async => getIt.reset(),
+    () async {
+      // getIt<CoinsMarketViewModel>().stopAutoRefresh();
+      await getIt.reset();
+    },
   );
 
   Future<void> loadHomeScreen(WidgetTester tester) async {

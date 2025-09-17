@@ -28,8 +28,13 @@ class _HomeScreenState extends State<HomeScreen> {
           title: Text(
             context.l10n.brazilCripto,
           ),
-          bottom: const TabBar(
-            tabs: [
+          bottom: TabBar(
+            onTap: (index) {
+              if (index == 0) {
+                FocusScope.of(context).unfocus();
+              }
+            },
+            tabs: const [
               Tab(
                 key: Key(favoriteTabKey),
                 icon: Icon(Icons.star_outline),

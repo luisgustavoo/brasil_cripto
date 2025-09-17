@@ -58,12 +58,12 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
         vsCurrency: vsCurrency,
       ),
     );
-    viewModel.startAutoRefresh(
-      (
-        names: searchController.text.toLowerCase(),
-        vsCurrency: vsCurrency,
-      ),
-    );
+    // viewModel.startAutoRefresh(
+    //   (
+    //     names: searchController.text.toLowerCase(),
+    //     vsCurrency: vsCurrency,
+    //   ),
+    // );
   }
 
   Future<void> _toggleFavorites(Coin coin) async {

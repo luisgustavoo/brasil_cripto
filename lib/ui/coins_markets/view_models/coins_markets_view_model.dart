@@ -20,7 +20,7 @@ class CoinsMarketViewModel extends ChangeNotifier {
   late final Command1<void, ({String names, String vsCurrency})>
   fetchCoinsMarkets;
   List<Coin> coins = [];
-  Timer? _timer;
+  // Timer? _timer;
 
   Future<Result<void>> _fetchCoinsMarkets(
     ({String names, String vsCurrency}) queryParameters,
@@ -42,25 +42,25 @@ class CoinsMarketViewModel extends ChangeNotifier {
     }
   }
 
-  void startAutoRefresh(
-    ({String names, String vsCurrency}) queryParameters, {
-    Duration interval = const Duration(seconds: 70),
-  }) {
-    _timer?.cancel();
-    _timer = Timer.periodic(interval, (_) async {
-      // await fetchCoinsMarkets.execute(queryParameters);
-      await _fetchCoinsMarkets(queryParameters);
-    });
-  }
+  // void startAutoRefresh(
+  //   ({String names, String vsCurrency}) queryParameters, {
+  //   Duration interval = const Duration(seconds: 70),
+  // }) {
+  //   _timer?.cancel();
+  //   _timer = Timer.periodic(interval, (_) async {
+  //     // await fetchCoinsMarkets.execute(queryParameters);
+  //     await _fetchCoinsMarkets(queryParameters);
+  //   });
+  // }
 
-  void stopAutoRefresh() {
-    _timer?.cancel();
-    _timer = null;
-  }
+  // void stopAutoRefresh() {
+  //   _timer?.cancel();
+  //   _timer = null;
+  // }
 
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _timer?.cancel();
+  //   super.dispose();
+  // }
 }
