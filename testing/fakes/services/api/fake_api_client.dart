@@ -9,7 +9,7 @@ import 'package:injectable/injectable.dart';
 import '../../../models/coin.dart';
 import '../../../models/market.dart';
 
-@Injectable(as: ApiClient, env: [Environment.test])
+@Injectable(env: [Environment.test])
 class FakeApiClient implements ApiClient {
   @override
   Future<Result<List<CoinsMarketsApiModel>>> fetchCoinsMarkets(

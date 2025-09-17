@@ -24,7 +24,6 @@ Future<void> testApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: AppTheme.lightTheme,
-
       home: InheritedGoRouter(
         goRouter: goRouter ?? MockGoRouter(),
         child: Scaffold(body: body),

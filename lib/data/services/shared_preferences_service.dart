@@ -4,7 +4,7 @@ import 'package:brasil_cripto/utils/result.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-@injectable
+@Injectable(env: [Environment.dev])
 class SharedPreferencesService {
   SharedPreferencesService(SharedPreferences sharedPreferences)
     : _sharedPreferences = sharedPreferences;

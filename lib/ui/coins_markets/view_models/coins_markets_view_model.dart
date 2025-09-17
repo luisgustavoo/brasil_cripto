@@ -8,7 +8,7 @@ import 'package:brasil_cripto/utils/result.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
-@singleton
+@lazySingleton
 class CoinsMarketViewModel extends ChangeNotifier {
   CoinsMarketViewModel({
     required CoinsMarketsRepository coinsMarketsRepository,

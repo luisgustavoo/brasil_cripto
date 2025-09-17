@@ -33,9 +33,12 @@ import 'package:brasil_cripto/ui/coins_markets/view_models/coins_markets_view_mo
     as _i606;
 import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart'
     as _i657;
+import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
+
+const String _dev = 'dev';
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -49,12 +52,15 @@ extension GetItInjectableX on _i174.GetIt {
       () => registerModule.prefs,
       preResolve: true,
     );
-    gh.factory<_i260.HttpClient>(() => _i450.DioHttpClient());
+    gh.factoryParam<_i260.HttpClient, _i361.BaseOptions?, dynamic>(
+      (options, _) => _i450.DioHttpClient(options: options),
+    );
     gh.factory<_i653.ApiClient>(
       () => _i653.ApiClient(httpClient: gh<_i260.HttpClient>()),
     );
     gh.factory<_i1038.SharedPreferencesService>(
       () => _i1038.SharedPreferencesService(gh<_i460.SharedPreferences>()),
+      registerFor: {_dev},
     );
     gh.factory<_i751.LocalDataService>(
       () => _i751.LocalDataService(
@@ -76,17 +82,17 @@ extension GetItInjectableX on _i174.GetIt {
         coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),
       ),
     );
+    gh.lazySingleton<_i606.CoinsMarketViewModel>(
+      () => _i606.CoinsMarketViewModel(
+        coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),
+      ),
+    );
     gh.lazySingleton<_i1013.CoinsDetailsViewModel>(
       () => _i1013.CoinsDetailsViewModel(
         coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),
       ),
     );
-    gh.singleton<_i606.CoinsMarketViewModel>(
-      () => _i606.CoinsMarketViewModel(
-        coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),
-      ),
-    );
-    gh.singleton<_i657.FavoriteViewModel>(
+    gh.lazySingleton<_i657.FavoriteViewModel>(
       () => _i657.FavoriteViewModel(
         favoriteGetUseCase: gh<_i561.FavoriteGetUseCase>(),
         favoritesRepository: gh<_i568.FavoritesRepository>(),

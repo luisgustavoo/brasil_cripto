@@ -3,11 +3,10 @@ import 'package:brasil_cripto/routing/router.dart';
 import 'package:brasil_cripto/ui/core/l10n/app_localizations.dart';
 import 'package:brasil_cripto/ui/core/themes/theme.dart';
 import 'package:flutter/material.dart' hide Router;
-import 'package:injectable/injectable.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await configureDependencies(environment: Environment.dev);
+  await configureDependencies();
   runApp(const MainApp());
 }
 
