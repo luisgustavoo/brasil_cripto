@@ -1,4 +1,5 @@
 import 'package:brasil_cripto/domain/use_cases/favorites/favorite_get_use_case.dart';
+import 'package:brasil_cripto/domain/use_cases/favorites/favorite_toggle_use_case.dart';
 import 'package:brasil_cripto/ui/coins_markets/view_models/coins_markets_view_model.dart';
 import 'package:brasil_cripto/ui/coins_markets/widgets/coins_market_screen.dart';
 import 'package:brasil_cripto/ui/core/l10n/app_localizations.dart';
@@ -14,6 +15,7 @@ void main() {
   late MockGoRouter goRouter;
   late CoinsMarketViewModel viewModel;
   late FavoriteGetUseCase favoriteGetUseCase;
+  late FavoriteToggleUseCase favoriteToggleUseCase;
   late AppLocalizations l10n;
 
   setUp(() {
@@ -22,9 +24,13 @@ void main() {
       favoritesRepository: FakeFavoritesRepositoryLocal(),
       coinsMarketsRepository: FakeCoinsMarketsRepositoryRemote(),
     );
+    favoriteToggleUseCase = FavoriteToggleUseCase(
+      favoritesRepository: FakeFavoritesRepositoryLocal(),
+    );
     viewModel = CoinsMarketViewModel(
       coinsMarketsRepository: FakeCoinsMarketsRepositoryRemote(),
       favoriteGetUseCase: favoriteGetUseCase,
+      favoriteToggleUseCase: favoriteToggleUseCase,
     );
   });
 
@@ -57,6 +63,7 @@ void main() {
       await tester.testTextInput.receiveAction(TextInputAction.done);
       await tester.pump(const Duration(milliseconds: 100));
       expect(find.text('(BTC)'), findsOneWidget);
+      viewModel.dispose();
     });
   });
 }

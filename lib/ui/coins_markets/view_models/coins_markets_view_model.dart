@@ -60,13 +60,18 @@ class CoinsMarketViewModel extends ChangeNotifier {
   }
 
   Future<Result<void>> _toggleFavorite(String name) async {
-    final result = await _favoriteToggleUseCase.toggleFavorite(name);
-    switch (result) {
-      case Ok():
-        return const Result.ok(null);
-      case Error():
-        log('Erro ao alterar favorito $name', error: result.error);
-        return Result.error(result.error);
+    try {
+      final result = await _favoriteToggleUseCase.toggleFavorite(name);
+      switch (result) {
+        case Ok():
+          await _getFavorites('usd');
+          return const Result.ok(null);
+        case Error():
+          log('Erro ao alterar favorito $name', error: result.error);
+          return Result.error(result.error);
+      }
+    } finally {
+      notifyListeners();
     }
   }
 
@@ -75,7 +80,6 @@ class CoinsMarketViewModel extends ChangeNotifier {
     switch (result) {
       case Ok():
         favoriteCoins = [...result.value];
-        notifyListeners();
         return const Result.ok(null);
       case Error():
         log('Erro ao listar os favoritos', error: result.error);

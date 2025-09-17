@@ -86,6 +86,11 @@ extension GetItInjectableX on _i174.GetIt {
         coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),
       ),
     );
+    gh.factory<_i225.FavoriteToggleUseCase>(
+      () => _i225.FavoriteToggleUseCase(
+        favoritesRepository: gh<_i568.FavoritesRepository>(),
+      ),
+    );
     gh.lazySingleton<_i606.CoinsMarketViewModel>(
       () => _i606.CoinsMarketViewModel(
         coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),

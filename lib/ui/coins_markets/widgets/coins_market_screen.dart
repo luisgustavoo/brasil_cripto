@@ -1,10 +1,8 @@
-import 'package:brasil_cripto/config/dependencies.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/routing/routes.dart';
 import 'package:brasil_cripto/ui/coins_markets/view_models/coins_markets_view_model.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/core/ui/coins_card.dart';
-import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -23,8 +21,8 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
     with AutomaticKeepAliveClientMixin {
   CoinsMarketViewModel get viewModel => widget.viewModel;
   late final TextEditingController searchController;
-  bool _isLoading = false;
-  bool _hasError = false;
+  bool isLoading = false;
+  bool hasError = false;
   String vsCurrency = '';
 
   @override
@@ -39,8 +37,8 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
       return;
     }
     setState(() {
-      _isLoading = viewModel.fetchCoinsMarkets.running;
-      _hasError = viewModel.fetchCoinsMarkets.error;
+      isLoading = viewModel.fetchCoinsMarkets.running;
+      hasError = viewModel.fetchCoinsMarkets.error;
     });
   }
 
@@ -98,10 +96,10 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
       listenable: viewModel,
       builder: (context, child) {
         final coins = viewModel.coins;
-        if (_isLoading) {
+        if (isLoading) {
           return const _LoadingState();
         }
-        if (_hasError) {
+        if (hasError) {
           return _ErrorState(message: context.l10n.errorLoadingData);
         }
         if (coins.isEmpty) {

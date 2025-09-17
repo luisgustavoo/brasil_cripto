@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:brasil_cripto/data/repositories/favorites/favorites_repository.dart';
 import 'package:brasil_cripto/utils/result.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class FavoriteToggleUseCase {
   FavoriteToggleUseCase({
     required FavoritesRepository favoritesRepository,
