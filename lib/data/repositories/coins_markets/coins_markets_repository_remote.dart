@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository.dart';
 import 'package:brasil_cripto/data/services/api/api_client.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
@@ -13,10 +12,6 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
     : _apiClient = apiClient;
 
   final ApiClient _apiClient;
-  final _coinsMarketsController = StreamController<List<Coin>>.broadcast();
-
-  @override
-  Stream<List<Coin>> get coinsMarketsStream => _coinsMarketsController.stream;
 
   @override
   Future<Result<List<Coin>>> fetchCoinsMarkets(
@@ -28,8 +23,6 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
       switch (result) {
         case Ok():
           final coinsMarketsList = result.value.map(Coin.fromApi).toList();
-          _coinsMarketsController.add(coinsMarketsList);
-          await _addListener(names, vsCurrency);
           return Result.ok(coinsMarketsList);
         case Error():
           return Result.error(result.error);
@@ -40,13 +33,13 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
   }
 
   @override
-  Future<Result<Market>> fetchCoinsMarketsDetails(
+  Future<Result<Market>> fetchCoinsMarketsChart(
     String id,
     String vsCurrency,
     int days,
   ) async {
     try {
-      final result = await _apiClient.fetchCoinsMarketsDetails(
+      final result = await _apiClient.fetchCoinsMarketsChart(
         id,
         vsCurrency,
         days,
@@ -60,31 +53,5 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
     } on Exception catch (e) {
       return Result.error(e);
     }
-  }
-
-  Future<void> _addListener(
-    String? names,
-    String vsCurrency,
-  ) async {
-    await _apiClient.startBackGroundFetchCoinsMarkets(
-      (
-        names: names,
-        vsCurrency: vsCurrency,
-      ),
-    );
-
-    _apiClient.coinsMarketsStream.listen(
-      (event) {
-        final coinsMarketsList = event.map(Coin.fromApi).toList();
-        _coinsMarketsController.add(coinsMarketsList);
-      },
-    );
-  }
-
-  @override
-  Future<Result<void>> stopBackGroundFetchCoinsMarkets() async {
-    await _coinsMarketsController.close();
-    _apiClient.stopBackGroundFetchCoinsMarkets();
-    return const Result.ok(null);
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository.dart';
@@ -7,7 +8,7 @@ import 'package:brasil_cripto/utils/result.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 
-@lazySingleton
+@singleton
 class CoinsMarketViewModel extends ChangeNotifier {
   CoinsMarketViewModel({
     required CoinsMarketsRepository coinsMarketsRepository,
@@ -16,11 +17,10 @@ class CoinsMarketViewModel extends ChangeNotifier {
   }
   final CoinsMarketsRepository _coinsMarketsRepository;
 
-  Stream<List<Coin>> get coinsMarketsStream =>
-      _coinsMarketsRepository.coinsMarketsStream;
-
   late final Command1<void, ({String names, String vsCurrency})>
   fetchCoinsMarkets;
+  List<Coin> coins = [];
+  Timer? _timer;
 
   Future<Result<void>> _fetchCoinsMarkets(
     ({String names, String vsCurrency}) queryParameters,
@@ -32,6 +32,7 @@ class CoinsMarketViewModel extends ChangeNotifier {
     );
     switch (result) {
       case Ok():
+        coins = [...result.value];
         notifyListeners();
         return const Result.ok(null);
       case Error():
@@ -39,5 +40,27 @@ class CoinsMarketViewModel extends ChangeNotifier {
         notifyListeners();
         return Result.error(result.error);
     }
+  }
+
+  void startAutoRefresh(
+    ({String names, String vsCurrency}) queryParameters, {
+    Duration interval = const Duration(seconds: 70),
+  }) {
+    _timer?.cancel();
+    _timer = Timer.periodic(interval, (_) async {
+      // await fetchCoinsMarkets.execute(queryParameters);
+      await _fetchCoinsMarkets(queryParameters);
+    });
+  }
+
+  void stopAutoRefresh() {
+    _timer?.cancel();
+    _timer = null;
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 }

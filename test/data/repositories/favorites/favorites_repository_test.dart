@@ -1,15 +1,16 @@
-import 'package:brasil_cripto/data/repositories/favorites/favorites_repository.dart';
+import 'package:brasil_cripto/data/repositories/favorites/favorites_repository_local.dart';
 import 'package:brasil_cripto/data/services/local/local_data_service.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/domain/models/sparkline.dart';
 import 'package:brasil_cripto/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../testing/fakes/services/api/fake_api_client.dart';
 import '../../../../testing/fakes/services/fake_shared_preferences_service.dart';
 import '../../../../testing/utils/result.dart';
 
 void main() {
-  late FavoritesRepository favoritesRepository;
+  late FavoritesRepositoryLocal favoritesRepository;
   final kCoin = Coin(
     id: 'bitcoin',
     symbol: 'btc',
@@ -27,7 +28,7 @@ void main() {
   );
 
   setUp(() {
-    favoritesRepository = FavoritesRepository(
+    favoritesRepository = FavoritesRepositoryLocal(
       localDataService: LocalDataService(
         sharedPreferencesService: FakeSharedPreferencesService(),
       ),
@@ -43,7 +44,7 @@ void main() {
     test('should add coin to favorites and retrieve it', () async {
       final toggleResult = await favoritesRepository.toggleFavorite(kCoin);
       expect(toggleResult, isA<Ok<void>>());
-      final result = await favoritesRepository.getFavorites();
+      final result = await favoritesRepository.getFavorites('usd');
       expect(result, isA<Ok<List<Coin>>>());
       final favorites = result.asOk.value;
       expect(favorites.isNotEmpty, true);

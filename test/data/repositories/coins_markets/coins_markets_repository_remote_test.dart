@@ -1,4 +1,4 @@
-import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository.dart';
+import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository_remote.dart';
 import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository_remote.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/domain/models/market.dart';
@@ -12,7 +12,7 @@ void main() {
   late CoinsMarketsRepository coinsMarketsRepository;
 
   setUp(() {
-    coinsMarketsRepository = CoinsMarketsRepositoryRemote(
+    coinsMarketsRepository = CoinsMarketsRepository(
       apiClient: FakeApiClient(),
     );
   });
@@ -35,7 +35,7 @@ void main() {
       await subscription.cancel();
     });
     test('should fetch coin market details successfully', () async {
-      final result = await coinsMarketsRepository.fetchCoinsMarketsDetails(
+      final result = await coinsMarketsRepository.fetchCoinsMarketsChart(
         'Bitcoin',
         'usd',
         1,

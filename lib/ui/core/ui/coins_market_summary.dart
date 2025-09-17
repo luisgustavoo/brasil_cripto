@@ -75,7 +75,7 @@ class _CoinsMarketSummaryState extends State<CoinsMarketSummary> {
             begin: _currentPrice,
             end: widget.coin.currentPrice,
           ),
-          duration: const Duration(seconds: 3),
+          duration: const Duration(seconds: 2),
           builder: (context, value, child) {
             return Text(formatCurrencyValue(value, locale));
           },
@@ -99,7 +99,7 @@ class _CoinsMarketSummaryState extends State<CoinsMarketSummary> {
             begin: _totalVolume,
             end: widget.coin.totalVolume,
           ),
-          duration: const Duration(seconds: 3),
+          duration: const Duration(seconds: 2),
           builder: (context, value, child) {
             return Text(formatCurrencyValue(value, locale));
           },
@@ -122,7 +122,7 @@ class _CoinsMarketSummaryState extends State<CoinsMarketSummary> {
             begin: _marketCap,
             end: widget.coin.marketCap,
           ),
-          duration: const Duration(seconds: 3),
+          duration: const Duration(seconds: 2),
           builder: (context, value, child) {
             return Text(formatCurrencyValue(value, locale));
           },

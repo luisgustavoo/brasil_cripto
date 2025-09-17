@@ -14,7 +14,7 @@ class HttpClientInterceptor extends Interceptor {
   ) async {
     final authRequired = options.extra['auth_required'] as bool? ?? true;
     if (authRequired) {
-      options.headers['x-cg-demo-api-key'] = Env.coingeckoApiKey;
+      options.headers['x-cg-demo-api-key'] = Env.coinGeckoApiKey;
     }
     if (!kReleaseMode) {
       log('########### Request LOG ###########');

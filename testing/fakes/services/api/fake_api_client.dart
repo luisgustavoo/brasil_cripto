@@ -26,32 +26,35 @@ class FakeApiClient implements ApiClient {
 
   late List<dynamic> jsonCoinsMarketsResponse;
   late Map<String, dynamic> jsonCoinsMarketsDetailsResponse;
-  StreamController<List<CoinsMarketsApiModel>> _controller =
-      StreamController<List<CoinsMarketsApiModel>>.broadcast();
+  StreamController<List<CoinsMarketsApiModel>> _favoritesCoinsController =
+      StreamController<List<CoinsMarketsApiModel>>();
+  StreamController<List<CoinsMarketsApiModel>> _coinsMarketsController =
+      StreamController<List<CoinsMarketsApiModel>>();
 
   @override
   Stream<List<CoinsMarketsApiModel>> get coinsMarketsStream =>
-      _controller.stream;
+      _coinsMarketsController.stream;
 
   @override
   Future<Result<List<CoinsMarketsApiModel>>> fetchCoinsMarkets(
     String? names,
-    String vsCurrency,
-  ) {
+    String vsCurrency, {
+    bool isFavorite = false,
+  }) {
     final coinsMarketsList = List<Map<String, dynamic>>.from(
       jsonCoinsMarketsResponse,
     );
     final coinsMarkets = coinsMarketsList
         .map(CoinsMarketsApiModel.fromJson)
         .toList();
-    _controller
+    _coinsMarketsController
       ..add(coinsMarkets)
       ..close();
     return Future.value(Result.ok(coinsMarkets));
   }
 
   @override
-  Future<Result<MarketApiModel>> fetchCoinsMarketsDetails(
+  Future<Result<MarketApiModel>> fetchCoinsMarketsChart(
     String id,
     String vsCurrency,
     int days,
@@ -63,16 +66,43 @@ class FakeApiClient implements ApiClient {
   }
 
   @override
-  Future<void> startBackGroundFetchCoinsMarkets(
-    ({String? names, String vsCurrency}) queryParameters,
-  ) async {
-    if (_controller.isClosed) {
-      _controller = StreamController<List<CoinsMarketsApiModel>>.broadcast();
+  Future<void> startBackGroundFetchCoinsMarkets({
+    required String vsCurrency,
+    String? names,
+  }) async {
+    if (_coinsMarketsController.isClosed) {
+      _coinsMarketsController = StreamController<List<CoinsMarketsApiModel>>();
+    }
+  }
+
+  @override
+  void stopBackGroundFetch() {
+    _coinsMarketsController.close();
+    _favoritesCoinsController.close();
+  }
+
+  @override
+  Stream<List<CoinsMarketsApiModel>> get favoriteCoinsMarketStream =>
+      _favoritesCoinsController.stream;
+
+  @override
+  Future<void> startBackGroundFetchFavoritesCoins({
+    required String vsCurrency,
+    String? names,
+  }) async {
+    if (_favoritesCoinsController.isClosed) {
+      _favoritesCoinsController =
+          StreamController<List<CoinsMarketsApiModel>>();
     }
   }
 
   @override
   void stopBackGroundFetchCoinsMarkets() {
-    _controller.close();
+    _favoritesCoinsController.close();
+  }
+
+  @override
+  void stopBackGroundFetchFavoritesCoinsMarkets() {
+    _favoritesCoinsController.close();
   }
 }

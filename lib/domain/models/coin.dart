@@ -56,45 +56,4 @@ class Coin {
   final double priceChangePercentage1hInCurrency;
   final double priceChangePercentage24hInCurrency;
   final double priceChangePercentage7dInCurrency;
-
-  @override
-  bool operator ==(covariant Coin other) {
-    if (identical(this, other)) {
-      return true;
-    }
-
-    return other.id == id &&
-        other.symbol == symbol &&
-        other.name == name &&
-        other.image == image &&
-        other.currentPrice == currentPrice &&
-        other.marketCap == marketCap &&
-        other.marketCapRank == marketCapRank &&
-        other.fullyDilutedValuation == fullyDilutedValuation &&
-        other.totalVolume == totalVolume &&
-        other.sparkLineIn7d == sparkLineIn7d &&
-        other.priceChangePercentage1hInCurrency ==
-            priceChangePercentage1hInCurrency &&
-        other.priceChangePercentage24hInCurrency ==
-            priceChangePercentage24hInCurrency &&
-        other.priceChangePercentage7dInCurrency ==
-            priceChangePercentage7dInCurrency;
-  }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^
-        symbol.hashCode ^
-        name.hashCode ^
-        image.hashCode ^
-        currentPrice.hashCode ^
-        marketCap.hashCode ^
-        marketCapRank.hashCode ^
-        fullyDilutedValuation.hashCode ^
-        totalVolume.hashCode ^
-        sparkLineIn7d.hashCode ^
-        priceChangePercentage1hInCurrency.hashCode ^
-        priceChangePercentage24hInCurrency.hashCode ^
-        priceChangePercentage7dInCurrency.hashCode;
-  }
 }

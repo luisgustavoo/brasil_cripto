@@ -1,6 +1,6 @@
-import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository.dart';
 import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository_remote.dart';
-import 'package:brasil_cripto/data/repositories/favorites/favorites_repository.dart';
+import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository_remote.dart';
+import 'package:brasil_cripto/data/repositories/favorites/favorites_repository_local.dart';
 import 'package:brasil_cripto/data/services/local/local_data_service.dart';
 import 'package:brasil_cripto/ui/coins_markets/view_models/coins_markets_view_model.dart';
 import 'package:brasil_cripto/ui/coins_markets/widgets/coins_market_screen.dart';
@@ -33,18 +33,19 @@ void main() {
           sharedPreferencesService: FakeSharedPreferencesService(),
         ),
       )
-      ..registerFactory<FavoritesRepository>(
-        () => FavoritesRepository(
+      ..registerFactory<FavoritesRepositoryLocal>(
+        () => FavoritesRepositoryLocal(
           localDataService: getItTest<LocalDataService>(),
+          apiClient: FakeApiClient(),
         ),
       )
       ..registerFactory<CoinsMarketsRepository>(
-        () => CoinsMarketsRepositoryRemote(apiClient: FakeApiClient()),
+        () => CoinsMarketsRepository(apiClient: FakeApiClient()),
       )
       // ViewModels
       ..registerLazySingleton<FavoriteViewModel>(
         () => FavoriteViewModel(
-          favoritesRepository: getItTest<FavoritesRepository>(),
+          favoritesRepository: getItTest<FavoritesRepositoryLocal>(),
         ),
       )
       ..registerLazySingleton<CoinsMarketViewModel>(

@@ -23,9 +23,9 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
     with AutomaticKeepAliveClientMixin {
   CoinsMarketViewModel get viewModel => widget.viewModel;
   late final TextEditingController searchController;
-
   bool _isLoading = false;
   bool _hasError = false;
+  String vsCurrency = '';
 
   @override
   void initState() {
@@ -52,9 +52,13 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
   }
 
   Future<void> _search() async {
-    final locale = Localizations.localeOf(context);
-    final vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
     await viewModel.fetchCoinsMarkets.execute(
+      (
+        names: searchController.text.toLowerCase(),
+        vsCurrency: vsCurrency,
+      ),
+    );
+    viewModel.startAutoRefresh(
       (
         names: searchController.text.toLowerCase(),
         vsCurrency: vsCurrency,
@@ -62,10 +66,16 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
     );
   }
 
+  Future<void> _toggleFavorites(Coin coin) async {
+    await getIt<FavoriteViewModel>().toggleFavorite.execute(coin.name);
+    await getIt<FavoriteViewModel>().getFavorites.execute(vsCurrency);
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
+    final locale = Localizations.localeOf(context);
+    vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
     return Scaffold(
       body: Column(
         spacing: 32,
@@ -85,10 +95,10 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
   }
 
   Widget _buildBody() {
-    return StreamBuilder(
-      stream: viewModel.coinsMarketsStream,
-      builder: (context, snapshot) {
-        final coins = snapshot.data ?? [];
+    return ListenableBuilder(
+      listenable: viewModel,
+      builder: (context, child) {
+        final coins = viewModel.coins;
         if (_isLoading) {
           return const _LoadingState();
         }
@@ -105,9 +115,7 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
           onTap: (coin) {
             context.push(Routes.coinsDetails, extra: coin);
           },
-          onToggleFavorite: (coin) {
-            getIt<FavoriteViewModel>().toggleFavorite.execute(coin);
-          },
+          onToggleFavorite: _toggleFavorites,
         );
       },
     );
@@ -169,20 +177,26 @@ class _CoinsList extends StatelessWidget {
   final void Function(Coin coin) onTap;
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {},
-      child: ListView.builder(
-        itemCount: coins.length,
-        itemBuilder: (context, index) {
-          final coin = coins[index];
-          return CoinsCard(
-            coin: coin,
-
-            toggleFavorite: onToggleFavorite,
-            onTap: onTap,
-          );
-        },
-      ),
+    final favoriteViewModel = getIt<FavoriteViewModel>();
+    return ListenableBuilder(
+      listenable: favoriteViewModel.getFavorites,
+      builder: (context, child) {
+        return ListView.builder(
+          itemCount: coins.length,
+          itemBuilder: (context, index) {
+            final coin = coins[index];
+            final isFavorite = favoriteViewModel.favoriteCoins.any(
+              (favCoin) => favCoin.name == coin.name,
+            );
+            return CoinsCard(
+              coin: coin,
+              isFavorite: isFavorite,
+              toggleFavorite: onToggleFavorite,
+              onTap: onTap,
+            );
+          },
+        );
+      },
     );
   }
 }

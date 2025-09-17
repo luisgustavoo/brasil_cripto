@@ -16,14 +16,15 @@ class CoinsDetailsViewModel extends ChangeNotifier {
   }
   final CoinsMarketsRepository _coinsMarketsRepository;
 
-  Market? market;
   late final Command1<void, ({String id, String vsCurrency})>
   fetchCoinsMarketsDetails;
+  Market? market;
+
   Future<Result<void>> _fetchCoinsMarketsDetails(
     ({String id, String vsCurrency}) queryParameters,
   ) async {
     final (id: id, vsCurrency: vsCurrency) = queryParameters;
-    final result = await _coinsMarketsRepository.fetchCoinsMarketsDetails(
+    final result = await _coinsMarketsRepository.fetchCoinsMarketsChart(
       id,
       vsCurrency,
       1,

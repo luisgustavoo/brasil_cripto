@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:brasil_cripto/data/services/shared_preferences_service.dart';
-import 'package:brasil_cripto/domain/models/coin.dart';
-import 'package:brasil_cripto/domain/models/sparkline.dart';
 import 'package:brasil_cripto/utils/result.dart';
 import 'package:injectable/injectable.dart';
 
@@ -14,13 +12,12 @@ class LocalDataService {
 
   final SharedPreferencesService _sharedPreferencesService;
 
-  Future<Result<void>> addFavorite(List<Map<String, dynamic>> coins) async {
+  Future<Result<void>> addFavorite(List<String> names) async {
     try {
-      final result = await _sharedPreferencesService.setData(jsonEncode(coins));
-
+      final result = await _sharedPreferencesService.setData(jsonEncode(names));
       switch (result) {
         case Ok<void>():
-          return result;
+          return const Result.ok(null);
         case Error():
           return Result.error(result.error);
       }
@@ -30,7 +27,7 @@ class LocalDataService {
     }
   }
 
-  Future<Result<List<Coin>>> getFavorites() async {
+  Future<Result<List<String>>> getFavorites() async {
     try {
       final result = await _sharedPreferencesService.getData();
       switch (result) {
@@ -39,11 +36,13 @@ class LocalDataService {
           if (value?.isEmpty ?? true) {
             return const Result.ok([]);
           }
+          final names = (jsonDecode(value!) as List<dynamic>)
+              .map(
+                (e) => e.toString(),
+              )
+              .toList();
 
-          final coinsJson = jsonDecode(value!) as List<dynamic>;
-          final coinsMap = List<Map<String, dynamic>>.from(coinsJson);
-          final coins = coinsMap.map(coinFromMap).toList();
-          return Result.ok(coins);
+          return Result.ok(names);
         case Error():
           return Result.error(result.error);
       }
@@ -51,38 +50,5 @@ class LocalDataService {
       log('Erro ao buscar favoritos', error: e);
       return Result.error(e);
     }
-  }
-
-  Coin coinFromMap(Map<String, dynamic> map) {
-    return Coin(
-      id: map['id'] as String,
-      symbol: map['symbol'] as String,
-      name: map['name'] as String,
-      image: map['image'] as String,
-      currentPrice: (map['current_price'] as num).toDouble(),
-      marketCap: (map['market_cap'] as num).toDouble(),
-      marketCapRank: map['market_cap_rank'] as int,
-      fullyDilutedValuation:
-          (map['fully_diluted_valuation'] as num?)?.toDouble() ?? 0,
-      totalVolume: (map['total_volume'] as num?)?.toDouble() ?? 0,
-      sparkLineIn7d: sparkLineFromMap(
-        map['sparkline_in_7d'] as Map<String, dynamic>,
-      ),
-      priceChangePercentage1hInCurrency:
-          (map['price_change_percentage_1h_in_currency'] as num?)?.toDouble() ??
-          0,
-      priceChangePercentage24hInCurrency:
-          (map['price_change_percentage_24h_in_currency'] as num?)
-              ?.toDouble() ??
-          0,
-      priceChangePercentage7dInCurrency:
-          (map['price_change_percentage_7d_in_currency'] as num?)?.toDouble() ??
-          0,
-    );
-  }
-
-  Sparkline sparkLineFromMap(Map<String, dynamic> map) {
-    final listDouble = List<double>.from(map['price'] as List<dynamic>);
-    return Sparkline(price: listDouble);
   }
 }

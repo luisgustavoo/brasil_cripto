@@ -21,17 +21,19 @@ class CoinsDetailsScreen extends StatefulWidget {
 
 class _CoinsDetailsScreenState extends State<CoinsDetailsScreen> {
   CoinsDetailsViewModel get viewModel => widget.viewModel;
+  String vsCurrency = '';
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      final locale = Localizations.localeOf(context);
+      vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
       _fetchCoinDetails();
     });
   }
 
   void _fetchCoinDetails() {
-    final locale = Localizations.localeOf(context);
-    final vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
     viewModel.fetchCoinsMarketsDetails.execute(
       (id: widget.coin.id, vsCurrency: vsCurrency),
     );

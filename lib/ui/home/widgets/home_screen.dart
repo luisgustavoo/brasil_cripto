@@ -2,6 +2,7 @@ import 'package:brasil_cripto/config/dependencies.dart';
 import 'package:brasil_cripto/ui/coins_markets/widgets/coins_market_screen.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/core/themes/dimens.dart';
+import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart';
 import 'package:brasil_cripto/ui/favorites/widgets/favorite_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
           title: Text(
             context.l10n.brazilCripto,
           ),
-          bottom: const TabBar.secondary(
+          bottom: const TabBar(
             tabs: [
               Tab(
                 key: Key(favoriteTabKey),
@@ -45,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: TabBarView(
             children: [
               FavoriteScreen(
-                viewModel: getIt(),
+                viewModel: getIt<FavoriteViewModel>(),
               ),
               CoinsMarketScreen(
                 viewModel: getIt(),

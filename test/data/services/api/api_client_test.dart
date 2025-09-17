@@ -79,7 +79,7 @@ void main() {
           object: jsonCoinsMarketsDetailsResponse,
         );
 
-        final result = await apiClient.fetchCoinsMarketsDetails(id, 'usd', 1);
+        final result = await apiClient.fetchCoinsMarketsChart(id, 'usd', 1);
         expect(result, isA<Ok<void>>());
       },
     );
@@ -92,7 +92,7 @@ void main() {
           showError: true,
         );
 
-        final result = await apiClient.fetchCoinsMarketsDetails(id, 'usd', 1);
+        final result = await apiClient.fetchCoinsMarketsChart(id, 'usd', 1);
         expect(result, result.asError);
       },
     );

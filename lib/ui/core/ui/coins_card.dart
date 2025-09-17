@@ -7,12 +7,12 @@ import 'package:brasil_cripto/ui/core/ui/coin_title.dart';
 import 'package:brasil_cripto/ui/core/ui/coins_market_summary.dart';
 import 'package:brasil_cripto/ui/core/ui/confirm_remove_favorite_dialog.dart';
 import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 class CoinsCard extends StatelessWidget {
   const CoinsCard({
     required this.coin,
+    required this.isFavorite,
     this.toggleFavorite,
     this.onTap,
     super.key,
@@ -21,21 +21,12 @@ class CoinsCard extends StatelessWidget {
   final Coin coin;
   final void Function(Coin coin)? toggleFavorite;
   final void Function(Coin coin)? onTap;
-
-  bool _isFavorite(Coin coin) {
-    final favorites = getIt<FavoriteViewModel>().favorites;
-
-    final favorito = favorites.firstWhereOrNull(
-      (element) => element.id == coin.id,
-    );
-
-    return favorito != null;
-  }
+  final bool isFavorite;
 
   Widget _buildStar(BuildContext context) {
     return IconButton(
       key: Key('favorite-icon-${coin.id}'),
-      icon: _isFavorite(coin)
+      icon: isFavorite
           ? const Icon(
               Icons.star,
               color: Colors.yellow,
@@ -48,8 +39,7 @@ class CoinsCard extends StatelessWidget {
   }
 
   Future<void> _toggleFavorite(BuildContext context) async {
-    final isFav = _isFavorite(coin);
-    if (!isFav) {
+    if (!isFavorite) {
       toggleFavorite?.call(coin);
       return;
     }

@@ -33,16 +33,4 @@ class SharedPreferencesService {
       return Result.error(e);
     }
   }
-
-  // @visibleForTesting
-  // Future<Result<void>> clear() async {
-  //   try {
-  //     _log.finer('Limpando tarefas no SharedPreferences');
-  //     await _sharedPreferences.clear();
-  //     return const Result.ok(null);
-  //   } on Exception catch (e) {
-  //     _log.warning('Erro ao limpar tarefas no SharedPreferences', e);
-  //     return Result.error(e);
-  //   }
-  // }
 }
