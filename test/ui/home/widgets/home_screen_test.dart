@@ -1,74 +1,20 @@
-import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository.dart';
-import 'package:brasil_cripto/data/repositories/favorites/favorites_repository.dart';
-import 'package:brasil_cripto/data/services/api/api_client.dart';
-import 'package:brasil_cripto/data/services/local/local_data_service.dart';
-import 'package:brasil_cripto/domain/use_cases/favorites/favorite_get_use_case.dart';
-import 'package:brasil_cripto/ui/coins_details/view_models/coins_details_view_model.dart';
-import 'package:brasil_cripto/ui/coins_markets/view_models/coins_markets_view_model.dart';
 import 'package:brasil_cripto/ui/coins_markets/widgets/coins_market_screen.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
-import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart';
 import 'package:brasil_cripto/ui/home/widgets/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mocktail/mocktail.dart';
+
 import '../../../../testing/app.dart';
-import '../../../../testing/fakes/repositories/fake_coins_markets_repository_remote.dart';
-import '../../../../testing/fakes/repositories/fake_favorites_repository_local.dart';
-import '../../../../testing/fakes/services/api/fake_api_client.dart';
-import '../../../../testing/fakes/services/fake_shared_preferences_service.dart';
 import '../../../../testing/mocks.dart';
 
 void main() {
   late MockGoRouter goRouter;
+
   final getIt = GetIt.instance;
 
-  void configureDependenciesTest() {
-    getIt
-      ..registerFactory<ApiClient>(
-        FakeApiClient.new,
-      )
-      ..registerFactory(
-        FakeSharedPreferencesService.new,
-      )
-      ..registerFactory(
-        () => LocalDataService(
-          sharedPreferencesService: getIt(),
-        ),
-      )
-      ..registerFactory<CoinsMarketsRepository>(
-        FakeCoinsMarketsRepositoryRemote.new,
-      )
-      ..registerFactory<FavoritesRepository>(
-        FakeFavoritesRepositoryLocal.new,
-      )
-      ..registerFactory(
-        () => FavoriteGetUseCase(
-          coinsMarketsRepository: getIt(),
-          favoritesRepository: getIt(),
-        ),
-      )
-      ..registerLazySingleton(
-        () => CoinsMarketViewModel(
-          coinsMarketsRepository: getIt(),
-        ),
-      )
-      ..registerLazySingleton(
-        () => CoinsDetailsViewModel(
-          coinsMarketsRepository: getIt(),
-        ),
-      )
-      ..registerLazySingleton(
-        () => FavoriteViewModel(
-          favoriteGetUseCase: getIt(),
-          favoritesRepository: getIt(),
-        ),
-      );
-  }
-
   setUp(() {
-    configureDependenciesTest();
     goRouter = MockGoRouter();
   });
 
