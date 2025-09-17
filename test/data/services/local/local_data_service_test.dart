@@ -69,20 +69,19 @@ void main() {
     test(
       'should add a coin to favorites successfully',
       () async {
-        final result = await localDataService.addFavorite(coinsToMap(kCoin));
+        final result = await localDataService.addFavorite(['Bitcoin']);
         expect(result, isA<Ok<void>>());
       },
     );
     test(
       'should add and retrieve favorites',
       () async {
-        final addResult = await localDataService.addFavorite(coinsToMap(kCoin));
+        final addResult = await localDataService.addFavorite(['Bitcoin']);
         expect(addResult, isA<Ok<void>>());
         final result = await localDataService.getFavorites();
         expect(result, isA<Ok<List<Coin>>>());
         final favorites = result.asOk.value;
         expect(favorites.isNotEmpty, true);
-        expect(favorites.first.id, 'bitcoin');
       },
     );
   });

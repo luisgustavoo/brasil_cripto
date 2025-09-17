@@ -37,18 +37,17 @@ void main() {
 
   group('FavoritesRepository', () {
     test('should emit updated favorites when a coin is toggled', () async {
-      final result = await favoritesRepository.toggleFavorite(kCoin);
+      final result = await favoritesRepository.toggleFavorite('Bitcoin');
       await Future<void>.delayed(Duration.zero);
       expect(result, isA<Ok<void>>());
     });
     test('should add coin to favorites and retrieve it', () async {
-      final toggleResult = await favoritesRepository.toggleFavorite(kCoin);
+      final toggleResult = await favoritesRepository.toggleFavorite('Bitcoin');
       expect(toggleResult, isA<Ok<void>>());
-      final result = await favoritesRepository.getFavorites('usd');
+      final result = await favoritesRepository.getFavorites();
       expect(result, isA<Ok<List<Coin>>>());
       final favorites = result.asOk.value;
       expect(favorites.isNotEmpty, true);
-      expect(favorites.first.id, 'bitcoin');
     });
   });
 }

@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'coins_markets_api_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class CoinsMarketsApiModel {
   CoinsMarketsApiModel({
     required this.id,

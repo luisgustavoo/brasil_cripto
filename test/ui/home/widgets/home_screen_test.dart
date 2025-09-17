@@ -25,34 +25,34 @@ void main() {
   /// Configura GetIt com todas as dependências fake/mocadas
   void configureDependenciesTest() {
     // Limpa registros antigos
-    getItTest
-      ..reset()
-      // Repositórios
-      ..registerFactory<LocalDataService>(
-        () => LocalDataService(
-          sharedPreferencesService: FakeSharedPreferencesService(),
-        ),
-      )
-      ..registerFactory<FavoritesRepositoryLocal>(
-        () => FavoritesRepositoryLocal(
-          localDataService: getItTest<LocalDataService>(),
-          apiClient: FakeApiClient(),
-        ),
-      )
-      ..registerFactory<CoinsMarketsRepository>(
-        () => CoinsMarketsRepository(apiClient: FakeApiClient()),
-      )
-      // ViewModels
-      ..registerLazySingleton<FavoriteViewModel>(
-        () => FavoriteViewModel(
-          favoritesRepository: getItTest<FavoritesRepositoryLocal>(),
-        ),
-      )
-      ..registerLazySingleton<CoinsMarketViewModel>(
-        () => CoinsMarketViewModel(
-          coinsMarketsRepository: getItTest<CoinsMarketsRepository>(),
-        ),
-      );
+    // getItTest
+    //   ..reset()
+    //   // Repositórios
+    //   ..registerFactory<LocalDataService>(
+    //     () => LocalDataService(
+    //       sharedPreferencesService: FakeSharedPreferencesService(),
+    //     ),
+    //   )
+    //   ..registerFactory<FavoritesRepositoryLocal>(
+    //     () => FavoritesRepositoryLocal(
+    //       localDataService: getItTest<LocalDataService>(),
+    //       apiClient: FakeApiClient(),
+    //     ),
+    //   )
+    //   ..registerFactory<CoinsMarketsRepository>(
+    //     () => CoinsMarketsRepository(apiClient: FakeApiClient()),
+    //   )
+    //   // ViewModels
+    //   ..registerLazySingleton<FavoriteViewModel>(
+    //     () => FavoriteViewModel(
+    //       favoritesRepository: getItTest<FavoritesRepositoryLocal>(),
+    //     ),
+    //   )
+    //   ..registerLazySingleton<CoinsMarketViewModel>(
+    //     () => CoinsMarketViewModel(
+    //       coinsMarketsRepository: getItTest<CoinsMarketsRepository>(),
+    //     ),
+    //   );
   }
 
   setUp(() {

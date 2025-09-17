@@ -49,15 +49,15 @@ class MockHttpClientException extends Mock implements HttpClientException {
 }
 
 extension HttpMethodMocks on HttpClient {
-  void mockGet<T>(String path, {T? object, bool? showError = false}) {
+  void mockGet<T>(String path, {Object? object, bool? showError = false}) {
     if (!showError!) {
       when(
         () => get<T>(
           path,
           queryParameters: any(named: 'queryParameters'),
         ),
-      ).thenAnswer((invocation) {
-        return Future.value(MockHttpClientResponse(data: object));
+      ).thenAnswer((invocation) async {
+        return MockHttpClientResponse(data: object as T?);
       });
     }
 

@@ -1,3 +1,4 @@
+import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository.dart';
 import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository_remote.dart';
 import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository_remote.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
@@ -12,16 +13,13 @@ void main() {
   late CoinsMarketsRepository coinsMarketsRepository;
 
   setUp(() {
-    coinsMarketsRepository = CoinsMarketsRepository(
+    coinsMarketsRepository = CoinsMarketsRepositoryRemote(
       apiClient: FakeApiClient(),
     );
   });
   group('CoinsMarketsRepository remote', () {
     test('should fetch coin markets successfully', () async {
       final emittedCoins = <List<Coin>>[];
-      final subscription = coinsMarketsRepository.coinsMarketsStream.listen(
-        emittedCoins.add,
-      );
 
       final result = await coinsMarketsRepository.fetchCoinsMarkets(
         'Bitcoin',
@@ -32,7 +30,6 @@ void main() {
       expect(result.asOk.value.first.id.toLowerCase(), 'bitcoin');
       expect(emittedCoins.length, 1);
       expect(emittedCoins.first.map((c) => c.id), ['bitcoin', 'ethereum']);
-      await subscription.cancel();
     });
     test('should fetch coin market details successfully', () async {
       final result = await coinsMarketsRepository.fetchCoinsMarketsChart(

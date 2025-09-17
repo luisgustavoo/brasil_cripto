@@ -17,7 +17,7 @@ class FakeApiClient implements ApiClient {
     String vsCurrency, {
     bool isFavorite = false,
   }) {
-    return Future.value(Result.ok(kCoinsMarketsApiModel));
+    return Future.value(Result.ok([kCoinsMarketsApiModel]));
   }
 
   @override
