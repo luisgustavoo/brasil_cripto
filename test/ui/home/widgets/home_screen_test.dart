@@ -59,10 +59,14 @@ void main() {
       );
   }
 
-  setUpAll(() async {
+  setUp(() {
     configureDependenciesTest();
     goRouter = MockGoRouter();
   });
+
+  tearDown(
+    () async => getIt.reset(),
+  );
 
   Future<void> loadHomeScreen(WidgetTester tester) async {
     await testApp(
