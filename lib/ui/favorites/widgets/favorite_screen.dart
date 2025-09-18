@@ -70,7 +70,7 @@ class _FavoriteScreenState extends State<FavoriteScreen>
 
   Widget _buildBody() {
     return ListenableBuilder(
-      listenable: widget.viewModel.getFavorites,
+      listenable: widget.viewModel,
       builder: (context, child) {
         final coins = widget.viewModel.favoriteCoins;
         if (_isLoading) {
