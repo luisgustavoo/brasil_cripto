@@ -56,12 +56,6 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
         vsCurrency: vsCurrency,
       ),
     );
-    viewModel.startAutoRefresh(
-      (
-        names: searchController.text.toLowerCase(),
-        vsCurrency: vsCurrency,
-      ),
-    );
   }
 
   void _toggleFavorites(Coin coin) {
@@ -179,12 +173,9 @@ class _CoinsList extends StatelessWidget {
       itemCount: coins.length,
       itemBuilder: (context, index) {
         final coin = coins[index];
-        final isFavorite = viewModel.favoriteCoins.any(
-          (favCoin) => favCoin.name == coin.name,
-        );
         return CoinsCard(
           coin: coin,
-          isFavorite: isFavorite,
+          isFavorite: coin.isFavorite,
           toggleFavorite: onToggleFavorite,
           onTap: onTap,
         );

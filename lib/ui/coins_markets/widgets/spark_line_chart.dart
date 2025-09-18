@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 
 class SparkLineChart extends StatefulWidget {
   const SparkLineChart({
-    required this.coinsMarkets,
+    required this.coin,
     super.key,
   });
 
-  final Coin coinsMarkets;
+  final Coin coin;
 
   @override
   State<SparkLineChart> createState() => _SparkLineChartState();
@@ -28,11 +28,7 @@ class _SparkLineChartState extends State<SparkLineChart> {
           gridData: const FlGridData(show: false),
           lineBarsData: [
             LineChartBarData(
-              color:
-                  widget
-                      .coinsMarkets
-                      .priceChangePercentage7dInCurrency
-                      .isNegative
+              color: widget.coin.priceChangePercentage7dInCurrency.isNegative
                   ? AppColors.darkNegative
                   : AppColors.darkPositive,
               barWidth: 1,
@@ -41,7 +37,7 @@ class _SparkLineChartState extends State<SparkLineChart> {
               isStrokeCapRound: true,
               isStrokeJoinRound: true,
               dotData: const FlDotData(show: false),
-              spots: widget.coinsMarkets.sparkLineIn7d.price
+              spots: widget.coin.sparkLineIn7d.price
                   .asMap()
                   .entries
                   .map((e) => FlSpot(e.key.toDouble(), e.value))

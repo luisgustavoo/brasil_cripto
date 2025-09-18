@@ -69,28 +69,29 @@ class _FavoriteScreenState extends State<FavoriteScreen>
   }
 
   Widget _buildBody() {
-    return ListenableBuilder(
-      listenable: widget.viewModel,
-      builder: (context, child) {
-        final coins = widget.viewModel.favoriteCoins;
-        if (_isLoading) {
-          return const _LoadingState();
-        }
-        if (_hasError) {
-          return _ErrorState(message: context.l10n.errorLoadingData);
-        }
-        if (coins.isEmpty) {
-          return _EmptyState(message: context.l10n.noCryptocurrencyFound);
-        }
-        return _CoinsList(
-          coins: coins,
-          onTap: (coin) {
-            context.push(Routes.coinsDetails, extra: coin);
-          },
-          onToggleFavorite: _toggleFavorites,
-        );
-      },
-    );
+    return SizedBox.shrink();
+    // return ListenableBuilder(
+    //   listenable: widget.viewModel,
+    //   builder: (context, child) {
+    //     final coins = widget.viewModel.favoriteCoins;
+    //     if (_isLoading) {
+    //       return const _LoadingState();
+    //     }
+    //     if (_hasError) {
+    //       return _ErrorState(message: context.l10n.errorLoadingData);
+    //     }
+    //     if (coins.isEmpty) {
+    //       return _EmptyState(message: context.l10n.noCryptocurrencyFound);
+    //     }
+    //     return _CoinsList(
+    //       coins: coins,
+    //       onTap: (coin) {
+    //         context.push(Routes.coinsDetails, extra: coin);
+    //       },
+    //       onToggleFavorite: _toggleFavorites,
+    //     );
+    //   },
+    // );
   }
 
   @override
@@ -157,12 +158,9 @@ class _CoinsList extends StatelessWidget {
           itemCount: coins.length,
           itemBuilder: (context, index) {
             final coin = coins[index];
-            final isFavorite = favoriteViewModel.favoriteCoins.any(
-              (favCoin) => favCoin.name == coin.name,
-            );
             return CoinsCard(
               coin: coin,
-              isFavorite: isFavorite,
+              isFavorite: coin.isFavorite,
               toggleFavorite: onToggleFavorite,
               onTap: onTap,
             );

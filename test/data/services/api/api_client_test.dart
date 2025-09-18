@@ -25,7 +25,10 @@ void main() {
           object: [kCoinsMarketsApiModel.toJson()],
         );
 
-        final result = await apiClient.fetchCoinsMarkets('Bitcoin', 'usd');
+        final result = await apiClient.fetchCoinsMarkets(
+          'usd',
+          names: 'Bitcoin',
+        );
         expect(result.asOk.value, isNotEmpty);
       },
     );
@@ -36,7 +39,10 @@ void main() {
           '/coins/markets',
         );
 
-        final result = await apiClient.fetchCoinsMarkets('Bitcoin', 'usd');
+        final result = await apiClient.fetchCoinsMarkets(
+          'usd',
+          names: 'Bitcoin',
+        );
         expect(result.asOk.value, isEmpty);
       },
     );
@@ -49,7 +55,10 @@ void main() {
           showError: true,
         );
 
-        final result = await apiClient.fetchCoinsMarkets('Bitcoin', 'usd');
+        final result = await apiClient.fetchCoinsMarkets(
+          'usd',
+          names: 'Bitcoin',
+        );
         expect(result, result.asError);
       },
     );
@@ -64,7 +73,11 @@ void main() {
           '/coins/$id/market_chart',
           object: kMarketApiModel.toJson(),
         );
-        final result = await apiClient.fetchCoinsMarketsChart(id, 'usd', 1);
+        final result = await apiClient.fetchCoinsMarketsChart(
+          id: id,
+          vsCurrency: 'usd',
+          days: 1,
+        );
         expect(result, isA<Ok<void>>());
       },
     );
@@ -76,7 +89,11 @@ void main() {
           showError: true,
         );
 
-        final result = await apiClient.fetchCoinsMarketsChart(id, 'usd', 1);
+        final result = await apiClient.fetchCoinsMarketsChart(
+          id: id,
+          vsCurrency: 'usd',
+          days: 1,
+        );
         expect(result, result.asError);
       },
     );

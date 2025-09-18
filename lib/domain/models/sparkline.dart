@@ -1,15 +1,10 @@
-import 'package:brasil_cripto/data/services/api/models/spark_line_api_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Sparkline {
-  Sparkline({
-    required this.price,
-  });
+part 'sparkline.freezed.dart';
 
-  factory Sparkline.fromApi(SparkLineApiModel model) {
-    return Sparkline(
-      price: model.price,
-    );
-  }
-
-  final List<double> price;
+@freezed
+abstract class Sparkline with _$Sparkline {
+  const factory Sparkline({
+    required List<double> price,
+  }) = _Sparkline;
 }

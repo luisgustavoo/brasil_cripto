@@ -12,7 +12,6 @@ final kCoin = Coin(
   currentPrice: 114939,
   marketCap: 2289604075725,
   marketCapRank: 1,
-  fullyDilutedValuation: 2289604075725,
   totalVolume: 50315182506,
   sparkLineIn7d: kSparkLine,
   priceChangePercentage1hInCurrency: -0.09244336875638641,

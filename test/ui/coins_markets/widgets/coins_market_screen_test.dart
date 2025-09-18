@@ -1,5 +1,3 @@
-import 'package:brasil_cripto/domain/use_cases/favorites/favorite_get_use_case.dart';
-import 'package:brasil_cripto/domain/use_cases/favorites/favorite_toggle_use_case.dart';
 import 'package:brasil_cripto/ui/coins_markets/view_models/coins_markets_view_model.dart';
 import 'package:brasil_cripto/ui/coins_markets/widgets/coins_market_screen.dart';
 import 'package:brasil_cripto/ui/core/l10n/app_localizations.dart';
@@ -8,29 +6,19 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../testing/app.dart';
 import '../../../../testing/fakes/repositories/fake_coins_markets_repository_remote.dart';
-import '../../../../testing/fakes/repositories/fake_favorites_repository_local.dart';
 import '../../../../testing/mocks.dart';
 
 void main() {
   late MockGoRouter goRouter;
   late CoinsMarketViewModel viewModel;
-  late FavoriteGetUseCase favoriteGetUseCase;
-  late FavoriteToggleUseCase favoriteToggleUseCase;
+
   late AppLocalizations l10n;
 
   setUp(() {
     goRouter = MockGoRouter();
-    favoriteGetUseCase = FavoriteGetUseCase(
-      favoritesRepository: FakeFavoritesRepositoryLocal(),
-      coinsMarketsRepository: FakeCoinsMarketsRepositoryRemote(),
-    );
-    favoriteToggleUseCase = FavoriteToggleUseCase(
-      favoritesRepository: FakeFavoritesRepositoryLocal(),
-    );
+
     viewModel = CoinsMarketViewModel(
       coinsMarketsRepository: FakeCoinsMarketsRepositoryRemote(),
-      favoriteGetUseCase: favoriteGetUseCase,
-      favoriteToggleUseCase: favoriteToggleUseCase,
     );
   });
 

@@ -1,19 +1,12 @@
-import 'package:brasil_cripto/data/services/api/models/market_api_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Market {
-  Market({
-    required this.prices,
-    required this.marketCaps,
-    required this.totalVolumes,
-  });
-  factory Market.fromApi(MarketApiModel model) {
-    return Market(
-      marketCaps: model.marketCaps,
-      totalVolumes: model.totalVolumes,
-      prices: model.totalVolumes,
-    );
-  }
-  final List<List<double>> prices;
-  final List<List<double>> marketCaps;
-  final List<List<double>> totalVolumes;
+part 'market.freezed.dart';
+
+@freezed
+abstract class Market with _$Market {
+  const factory Market({
+    required List<List<double>> prices,
+    required List<List<double>> marketCaps,
+    required List<List<double>> totalVolumes,
+  }) = _Market;
 }

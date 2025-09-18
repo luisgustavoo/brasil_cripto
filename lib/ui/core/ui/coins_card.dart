@@ -82,7 +82,7 @@ class CoinsCard extends StatelessWidget {
                         return SizedBox(
                           height: 100,
                           width: constraints.maxWidth,
-                          child: SparkLineChart(coinsMarkets: coin),
+                          child: SparkLineChart(coin: coin),
                         );
                       },
                     ),

@@ -11,22 +11,22 @@ class SharedPreferencesService {
 
   final SharedPreferences _sharedPreferences;
 
-  static const kTodosCollectionKey = '__favorites_collection_key__';
+  static const kFavoriteKey = '__favorite_key__';
 
-  Future<Result<String?>> getData() async {
+  Future<Result<List<String>?>> getData() async {
     try {
       log('Buscando os favoritos no SharedPreferences');
-      return Result.ok(_sharedPreferences.getString(kTodosCollectionKey));
+      return Result.ok(_sharedPreferences.getStringList(kFavoriteKey));
     } on Exception catch (e) {
       log('Erro ao buscar favoritos no SharedPreferences', error: e);
       return Result.error(e);
     }
   }
 
-  Future<Result<void>> setData(String value) async {
+  Future<Result<void>> setData(List<String> values) async {
     try {
       log('Adicionando favoritos no SharedPreferences');
-      await _sharedPreferences.setString(kTodosCollectionKey, value);
+      await _sharedPreferences.setStringList(kFavoriteKey, values);
       return const Result.ok(null);
     } on Exception catch (e) {
       log('Erro ao adicionar favoritos no SharedPreferences', error: e);

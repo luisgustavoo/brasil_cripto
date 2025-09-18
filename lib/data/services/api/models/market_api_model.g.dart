@@ -6,8 +6,8 @@ part of 'market_api_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MarketApiModel _$MarketApiModelFromJson(Map<String, dynamic> json) =>
-    MarketApiModel(
+_MarketApiModel _$MarketApiModelFromJson(Map<String, dynamic> json) =>
+    _MarketApiModel(
       prices: (json['prices'] as List<dynamic>)
           .map(
             (e) =>
@@ -28,7 +28,7 @@ MarketApiModel _$MarketApiModelFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$MarketApiModelToJson(MarketApiModel instance) =>
+Map<String, dynamic> _$MarketApiModelToJson(_MarketApiModel instance) =>
     <String, dynamic>{
       'prices': instance.prices,
       'market_caps': instance.marketCaps,

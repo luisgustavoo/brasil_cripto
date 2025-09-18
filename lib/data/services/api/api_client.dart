@@ -14,9 +14,10 @@ class ApiClient {
   final HttpClient _httpClient;
 
   Future<Result<List<CoinsMarketsApiModel>>> fetchCoinsMarkets(
+    String vsCurrency, {
+    String? ids,
     String? names,
-    String vsCurrency,
-  ) async {
+  }) async {
     try {
       final response = await _httpClient.auth().get<List<dynamic>>(
         '/coins/markets',
@@ -47,11 +48,11 @@ class ApiClient {
     }
   }
 
-  Future<Result<MarketApiModel>> fetchCoinsMarketsChart(
-    String id,
-    String vsCurrency,
-    int days,
-  ) async {
+  Future<Result<MarketApiModel>> fetchCoinsMarketsChart({
+    required String id,
+    required String vsCurrency,
+    required int days,
+  }) async {
     try {
       final response = await _httpClient.auth().get<Map<String, dynamic>>(
         '/coins/$id/market_chart',

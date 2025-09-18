@@ -2,12 +2,10 @@ import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repo
 import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/domain/models/market.dart';
 import 'package:brasil_cripto/utils/result.dart';
-import 'package:injectable/injectable.dart';
 
 import '../../models/coin.dart';
 import '../../models/market.dart';
 
-@Injectable(as: CoinsMarketsRepository, env: [Environment.test])
 class FakeCoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
   @override
   Future<Result<List<Coin>>> fetchCoinsMarkets(
@@ -23,6 +21,6 @@ class FakeCoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
     String vsCurrency,
     int days,
   ) async {
-    return Result.ok(kMarket);
+    return const Result.ok(kMarket);
   }
 }

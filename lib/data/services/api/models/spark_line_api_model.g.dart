@@ -6,12 +6,12 @@ part of 'spark_line_api_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-SparkLineApiModel _$SparkLineApiModelFromJson(Map<String, dynamic> json) =>
-    SparkLineApiModel(
+_SparkLineApiModel _$SparkLineApiModelFromJson(Map<String, dynamic> json) =>
+    _SparkLineApiModel(
       price: (json['price'] as List<dynamic>)
           .map((e) => (e as num).toDouble())
           .toList(),
     );
 
-Map<String, dynamic> _$SparkLineApiModelToJson(SparkLineApiModel instance) =>
+Map<String, dynamic> _$SparkLineApiModelToJson(_SparkLineApiModel instance) =>
     <String, dynamic>{'price': instance.price};
