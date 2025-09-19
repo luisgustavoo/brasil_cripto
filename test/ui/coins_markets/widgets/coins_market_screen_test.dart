@@ -14,10 +14,10 @@ import '../../../../testing/mocks.dart';
 
 void main() {
   late MockGoRouter goRouter;
-  late CoinsMarketViewModel viewModel;
   late FakeSharedPreferencesService sharedPreferencesService;
   late FakeApiClient apiClient;
   late FakeFavoritesRepositoryRemote favoritesRepository;
+  late CoinsMarketViewModel viewModel;
   late AppLocalizations l10n;
 
   setUp(() {

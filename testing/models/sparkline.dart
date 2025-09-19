@@ -1,7 +1,7 @@
 import 'package:brasil_cripto/data/services/api/models/spark_line_api_model.dart';
 import 'package:brasil_cripto/domain/models/sparkline.dart';
 
-final kSparkLine = Sparkline(
+const kSparkLine = Sparkline(
   price: [
     112361.22450543038,
     113225.00021261438,
@@ -12,7 +12,7 @@ final kSparkLine = Sparkline(
   ],
 );
 
-final kSparkLineApiModel = SparkLineApiModel(
+const kSparkLineApiModel = SparkLineApiModel(
   price: [
     112361.22450543038,
     113225.00021261438,
@@ -22,7 +22,7 @@ final kSparkLineApiModel = SparkLineApiModel(
     114970.87662702953,
   ],
 );
-final kSparkLineApiModel2 = SparkLineApiModel(
+const kSparkLineApiModel2 = SparkLineApiModel(
   price: [
     4417.627470360946,
     4465.500324291025,

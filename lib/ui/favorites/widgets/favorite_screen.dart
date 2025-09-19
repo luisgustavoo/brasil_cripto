@@ -22,8 +22,6 @@ class FavoriteScreen extends StatefulWidget {
 class _FavoriteScreenState extends State<FavoriteScreen>
     with AutomaticKeepAliveClientMixin {
   FavoriteViewModel get viewModel => widget.viewModel;
-  bool _isLoading = false;
-  bool _hasError = false;
   String vsCurrency = '';
 
   @override
@@ -34,30 +32,12 @@ class _FavoriteScreenState extends State<FavoriteScreen>
         final locale = Localizations.localeOf(context);
         vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
         viewModel.getFavorites.execute(vsCurrency);
-        viewModel.getFavorites.addListener(_commandListener);
       },
     );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    viewModel.getFavorites.removeListener(_commandListener);
-  }
-
-  void _commandListener() {
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      _isLoading = viewModel.getFavorites.running;
-      _hasError = viewModel.getFavorites.error;
-    });
-  }
-
   Future<void> _toggleFavorites(Coin coin) async {
-    await getIt<FavoriteViewModel>().toggleFavorite.execute(coin.name);
-    await getIt<FavoriteViewModel>().getFavorites.execute(vsCurrency);
+    await viewModel.toggleFavorite.execute(coin);
   }
 
   @override
@@ -69,29 +49,28 @@ class _FavoriteScreenState extends State<FavoriteScreen>
   }
 
   Widget _buildBody() {
-    return SizedBox.shrink();
-    // return ListenableBuilder(
-    //   listenable: widget.viewModel,
-    //   builder: (context, child) {
-    //     final coins = widget.viewModel.favoriteCoins;
-    //     if (_isLoading) {
-    //       return const _LoadingState();
-    //     }
-    //     if (_hasError) {
-    //       return _ErrorState(message: context.l10n.errorLoadingData);
-    //     }
-    //     if (coins.isEmpty) {
-    //       return _EmptyState(message: context.l10n.noCryptocurrencyFound);
-    //     }
-    //     return _CoinsList(
-    //       coins: coins,
-    //       onTap: (coin) {
-    //         context.push(Routes.coinsDetails, extra: coin);
-    //       },
-    //       onToggleFavorite: _toggleFavorites,
-    //     );
-    //   },
-    // );
+    return ListenableBuilder(
+      listenable: widget.viewModel,
+      builder: (context, child) {
+        final coins = widget.viewModel.coins;
+        if (viewModel.getFavorites.running) {
+          return const _LoadingState();
+        }
+        if (viewModel.getFavorites.error) {
+          return _ErrorState(message: context.l10n.errorLoadingData);
+        }
+        if (coins.isEmpty) {
+          return _EmptyState(message: context.l10n.noCryptocurrencyFound);
+        }
+        return _CoinsList(
+          coins: coins,
+          onTap: (coin) {
+            context.push(Routes.coinsDetails, extra: coin);
+          },
+          onToggleFavorite: _toggleFavorites,
+        );
+      },
+    );
   }
 
   @override

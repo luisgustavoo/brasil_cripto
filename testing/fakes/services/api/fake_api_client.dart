@@ -17,7 +17,7 @@ class FakeApiClient implements ApiClient {
     String? names,
   }) {
     requestCount++;
-    return Future.value(Result.ok([kCoinsMarketsApiModel]));
+    return Future.value(const Result.ok([kCoinsMarketsApiModel]));
   }
 
   @override

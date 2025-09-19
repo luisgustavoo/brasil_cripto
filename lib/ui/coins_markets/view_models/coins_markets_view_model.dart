@@ -23,7 +23,6 @@ class CoinsMarketViewModel extends ChangeNotifier {
   late final Command1<void, ({String names, String vsCurrency})>
   fetchCoinsMarkets;
   late final Command1<void, Coin> toggleFavorite;
-
   List<Coin> coins = [];
 
   Future<Result<void>> _fetchCoinsMarkets(

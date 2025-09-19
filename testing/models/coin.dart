@@ -3,7 +3,7 @@ import 'package:brasil_cripto/domain/models/coin.dart';
 
 import 'sparkline.dart';
 
-final kCoin = Coin(
+const kCoin = Coin(
   id: 'bitcoin',
   symbol: 'btc',
   name: 'Bitcoin',
@@ -19,7 +19,7 @@ final kCoin = Coin(
   priceChangePercentage7dInCurrency: 2.3870313659883893,
 );
 
-final kCoinsMarketsApiModel = CoinsMarketsApiModel(
+const kCoinsMarketsApiModel = CoinsMarketsApiModel(
   id: 'bitcoin',
   symbol: 'btc',
   name: 'Bitcoin',

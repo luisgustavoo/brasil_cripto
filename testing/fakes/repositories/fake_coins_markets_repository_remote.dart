@@ -13,7 +13,7 @@ class FakeCoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
     String? ids,
     String? names,
   }) async {
-    return Result.ok([kCoin]);
+    return const Result.ok([kCoin]);
   }
 
   @override
