@@ -9,12 +9,14 @@ import '../../../../testing/fakes/services/fake_shared_preferences_service.dart'
 import '../../../../testing/utils/result.dart';
 
 void main() {
+  late FakeApiClient apiClient;
   late FavoritesRepository favoritesRepository;
 
   setUp(() {
+    apiClient = FakeApiClient();
     favoritesRepository = FavoritesRepositoryRemote(
       preferencesService: FakeSharedPreferencesService(),
-      apiClient: FakeApiClient(),
+      apiClient: apiClient,
     );
   });
 
@@ -39,6 +41,7 @@ void main() {
         expect(result, isA<Ok<void>>());
         final getResult = await favoritesRepository.getFavorites('usd');
         expect(getResult.asOk.value, isEmpty);
+        expect(apiClient.requestCount, 0);
       },
     );
   });

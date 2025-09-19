@@ -9,12 +9,14 @@ import '../../../models/coin.dart';
 import '../../../models/market.dart';
 
 class FakeApiClient implements ApiClient {
+  int requestCount = 0;
   @override
   Future<Result<List<CoinsMarketsApiModel>>> fetchCoinsMarkets(
     String vsCurrency, {
     String? ids,
     String? names,
   }) {
+    requestCount++;
     return Future.value(Result.ok([kCoinsMarketsApiModel]));
   }
 
@@ -24,6 +26,7 @@ class FakeApiClient implements ApiClient {
     required String vsCurrency,
     required int days,
   }) {
+    requestCount++;
     return Future.value(const Result.ok(kMarketApiModel));
   }
 }

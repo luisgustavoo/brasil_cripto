@@ -9,33 +9,43 @@ import '../../../../testing/fakes/services/api/fake_api_client.dart';
 import '../../../../testing/utils/result.dart';
 
 void main() {
+  late FakeApiClient apiClient;
   late CoinsMarketsRepository coinsMarketsRepository;
 
   setUp(() {
+    apiClient = FakeApiClient();
     coinsMarketsRepository = CoinsMarketsRepositoryRemote(
-      apiClient: FakeApiClient(),
+      apiClient: apiClient,
     );
   });
-  group('CoinsMarketsRepository remote', () {
-    test('should fetch coin markets successfully', () async {
-      final result = await coinsMarketsRepository.fetchCoinsMarkets(
-        'Bitcoin',
-        'usd',
-      );
-      expect(result, isA<Ok<List<Coin>>>());
-      expect(result.asOk.value.isNotEmpty, true);
-      expect(result.asOk.value.first.id.toLowerCase(), 'bitcoin');
-    });
-    test('should fetch coin market details successfully', () async {
-      final result = await coinsMarketsRepository.fetchCoinsMarketsChart(
-        'Bitcoin',
-        'usd',
-        1,
-      );
-      expect(result, isA<Ok<Market>>());
-      expect(result.asOk.value.prices, isNotNull);
-      expect(result.asOk.value.totalVolumes, isNotNull);
-      expect(result.asOk.value.marketCaps, isNotNull);
-    });
+  group('CoinsMarketsRepository', () {
+    test(
+      'should return a list of coins when fetching markets succeeds',
+      () async {
+        final result = await coinsMarketsRepository.fetchCoinsMarkets(
+          'Bitcoin',
+          'usd',
+        );
+        expect(result, isA<Ok<List<Coin>>>());
+        expect(result.asOk.value.isNotEmpty, true);
+        expect(result.asOk.value.first.id.toLowerCase(), 'bitcoin');
+        expect(apiClient.requestCount, 1);
+      },
+    );
+    test(
+      'should return market details when fetching market chart succeeds',
+      () async {
+        final result = await coinsMarketsRepository.fetchCoinsMarketsChart(
+          'Bitcoin',
+          'usd',
+          1,
+        );
+        expect(result, isA<Ok<Market>>());
+        expect(result.asOk.value.prices, isNotNull);
+        expect(result.asOk.value.totalVolumes, isNotNull);
+        expect(result.asOk.value.marketCaps, isNotNull);
+        expect(apiClient.requestCount, 1);
+      },
+    );
   });
 }
