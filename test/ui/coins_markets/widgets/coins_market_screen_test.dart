@@ -3,6 +3,7 @@ import 'package:brasil_cripto/ui/coins_markets/widgets/coins_market_screen.dart'
 import 'package:brasil_cripto/ui/core/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../../../testing/app.dart';
 import '../../../../testing/fakes/repositories/fake_coins_markets_repository_remote.dart';
@@ -68,14 +69,24 @@ void main() {
       },
     );
     testWidgets('should display Bitcoin ticker when searched', (tester) async {
-      await loadScreen(tester);
-      final searchField = find.byKey(const Key(searchEditKey));
-      await tester.tap(searchField);
-      await tester.pumpAndSettle();
-      await tester.enterText(searchField, 'Bitcoin');
-      await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.pump();
+      await search(tester);
       expect(find.text('(BTC)'), findsOneWidget);
     });
+    testWidgets(
+      'should navigate to details screen when tapping on Bitcoin card',
+      (tester) async {
+        when(
+          () => goRouter.push(any<String>(), extra: any(named: 'extra')),
+        ).thenAnswer((_) async => null);
+        await search(tester);
+        final card = find.widgetWithText(Card, 'Bitcoin');
+        expect(card, findsOneWidget);
+        await tester.tap(card);
+        await tester.pump();
+        verify(
+          () => goRouter.push(any<String>(), extra: any(named: 'extra')),
+        ).called(1);
+      },
+    );
   });
 }
