@@ -48,6 +48,16 @@ void main() {
     await tester.pumpAndSettle();
   }
 
+  Future<void> search(WidgetTester tester) async {
+    await loadScreen(tester);
+    final searchField = find.byKey(const Key(searchEditKey));
+    await tester.tap(searchField);
+    await tester.pumpAndSettle();
+    await tester.enterText(searchField, 'Bitcoin');
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pump();
+  }
+
   group('Coins Market Screen', () {
     testWidgets(
       'should display no cryptocurrency message and search field initially',
