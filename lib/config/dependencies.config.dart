@@ -70,14 +70,15 @@ extension GetItInjectableX on _i174.GetIt {
       () =>
           _i423.CoinsMarketsRepositoryRemote(apiClient: gh<_i653.ApiClient>()),
     );
-    gh.lazySingleton<_i606.CoinsMarketViewModel>(
-      () => _i606.CoinsMarketViewModel(
-        coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),
-      ),
-    );
     gh.lazySingleton<_i1013.CoinsDetailsViewModel>(
       () => _i1013.CoinsDetailsViewModel(
         coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i606.CoinsMarketViewModel>(
+      () => _i606.CoinsMarketViewModel(
+        coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),
+        favoritesRepository: gh<_i568.FavoritesRepository>(),
       ),
     );
     return this;

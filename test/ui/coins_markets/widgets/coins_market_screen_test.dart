@@ -6,19 +6,31 @@ import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../testing/app.dart';
 import '../../../../testing/fakes/repositories/fake_coins_markets_repository_remote.dart';
+import '../../../../testing/fakes/repositories/fake_favorites_repository_remote.dart';
+import '../../../../testing/fakes/services/api/fake_api_client.dart';
+import '../../../../testing/fakes/services/fake_shared_preferences_service.dart';
 import '../../../../testing/mocks.dart';
+import '../../../../testing/utils/print_widgets.dart';
 
 void main() {
   late MockGoRouter goRouter;
   late CoinsMarketViewModel viewModel;
-
+  late FakeSharedPreferencesService sharedPreferencesService;
+  late FakeApiClient apiClient;
+  late FakeFavoritesRepositoryRemote favoritesRepository;
   late AppLocalizations l10n;
 
   setUp(() {
     goRouter = MockGoRouter();
-
+    apiClient = FakeApiClient();
+    sharedPreferencesService = FakeSharedPreferencesService();
+    favoritesRepository = FakeFavoritesRepositoryRemote(
+      apiClient: apiClient,
+      preferencesService: sharedPreferencesService,
+    );
     viewModel = CoinsMarketViewModel(
       coinsMarketsRepository: FakeCoinsMarketsRepositoryRemote(),
+      favoritesRepository: favoritesRepository,
     );
   });
 
@@ -36,22 +48,24 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  group('coins market screen ...', () {
-    testWidgets('1', (tester) async {
-      await loadScreen(tester);
-      expect(find.text(l10n.noCryptocurrencyFound), findsOneWidget);
-      expect(find.byType(TextField), findsOneWidget);
-    });
-    testWidgets('2', (tester) async {
+  group('Coins Market Screen', () {
+    testWidgets(
+      'should display no cryptocurrency message and search field initially',
+      (tester) async {
+        await loadScreen(tester);
+        expect(find.text(l10n.noCryptocurrencyFound), findsOneWidget);
+        expect(find.byType(TextField), findsOneWidget);
+      },
+    );
+    testWidgets('should display Bitcoin ticker when searched', (tester) async {
       await loadScreen(tester);
       final searchField = find.byKey(const Key(searchEditKey));
       await tester.tap(searchField);
       await tester.pumpAndSettle();
       await tester.enterText(searchField, 'Bitcoin');
       await tester.testTextInput.receiveAction(TextInputAction.done);
-      await tester.pump(const Duration(milliseconds: 100));
+      await tester.pump();
       expect(find.text('(BTC)'), findsOneWidget);
-      viewModel.dispose();
     });
   });
 }

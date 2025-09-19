@@ -23,8 +23,8 @@ void main() {
       'should return a list of coins when fetching markets succeeds',
       () async {
         final result = await coinsMarketsRepository.fetchCoinsMarkets(
-          'Bitcoin',
           'usd',
+          names: 'Bitcoin',
         );
         expect(result, isA<Ok<List<Coin>>>());
         expect(result.asOk.value.isNotEmpty, true);
@@ -36,9 +36,9 @@ void main() {
       'should return market details when fetching market chart succeeds',
       () async {
         final result = await coinsMarketsRepository.fetchCoinsMarketsChart(
-          'Bitcoin',
-          'usd',
-          1,
+          vsCurrency: 'usd',
+          id: 'bitcoin',
+          days: 1,
         );
         expect(result, isA<Ok<Market>>());
         expect(result.asOk.value.prices, isNotNull);

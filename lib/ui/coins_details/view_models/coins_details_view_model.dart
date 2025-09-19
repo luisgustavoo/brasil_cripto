@@ -25,9 +25,9 @@ class CoinsDetailsViewModel extends ChangeNotifier {
   ) async {
     final (id: id, vsCurrency: vsCurrency) = queryParameters;
     final result = await _coinsMarketsRepository.fetchCoinsMarketsChart(
-      id,
-      vsCurrency,
-      1,
+      id: id,
+      vsCurrency: vsCurrency,
+      days: 1,
     );
     switch (result) {
       case Ok():

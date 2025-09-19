@@ -4,13 +4,14 @@ import 'package:brasil_cripto/utils/result.dart';
 
 abstract class CoinsMarketsRepository {
   Future<Result<List<Coin>>> fetchCoinsMarkets(
+    String vsCurrency, {
+    String? ids,
     String? names,
-    String vsCurrency,
-  );
+  });
 
-  Future<Result<Market>> fetchCoinsMarketsChart(
-    String id,
-    String vsCurrency,
-    int days,
-  );
+  Future<Result<Market>> fetchCoinsMarketsChart({
+    required String id,
+    required String vsCurrency,
+    required int days,
+  });
 }

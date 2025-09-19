@@ -9,18 +9,19 @@ import '../../models/market.dart';
 class FakeCoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
   @override
   Future<Result<List<Coin>>> fetchCoinsMarkets(
+    String vsCurrency, {
+    String? ids,
     String? names,
-    String vsCurrency,
-  ) async {
+  }) async {
     return Result.ok([kCoin]);
   }
 
   @override
-  Future<Result<Market>> fetchCoinsMarketsChart(
-    String id,
-    String vsCurrency,
-    int days,
-  ) async {
+  Future<Result<Market>> fetchCoinsMarketsChart({
+    required String id,
+    required String vsCurrency,
+    required int days,
+  }) async {
     return const Result.ok(kMarket);
   }
 }

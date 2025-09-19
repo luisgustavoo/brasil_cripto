@@ -28,7 +28,8 @@ class ApiClient {
           'price_change_percentage': '1h,24h,7d',
           if (names?.isEmpty ?? true) 'per_page': 10,
           if (names?.isEmpty ?? true) 'page': 1,
-          'names': names,
+          if (names?.isNotEmpty ?? false) 'names': names,
+          if (ids?.isNotEmpty ?? false) 'ids': ids,
         },
       );
 

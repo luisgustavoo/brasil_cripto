@@ -59,7 +59,7 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
   }
 
   void _toggleFavorites(Coin coin) {
-    viewModel.toggleFavorite.execute(coin.name);
+    viewModel.toggleFavorite.execute(coin);
   }
 
   @override

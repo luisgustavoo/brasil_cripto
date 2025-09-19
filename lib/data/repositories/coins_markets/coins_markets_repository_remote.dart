@@ -17,9 +17,10 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
 
   @override
   Future<Result<List<Coin>>> fetchCoinsMarkets(
+    String vsCurrency, {
+    String? ids,
     String? names,
-    String vsCurrency,
-  ) async {
+  }) async {
     try {
       final result = await _apiClient.fetchCoinsMarkets(
         vsCurrency,
@@ -60,11 +61,11 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
   }
 
   @override
-  Future<Result<Market>> fetchCoinsMarketsChart(
-    String id,
-    String vsCurrency,
-    int days,
-  ) async {
+  Future<Result<Market>> fetchCoinsMarketsChart({
+    required String id,
+    required String vsCurrency,
+    required int days,
+  }) async {
     try {
       final result = await _apiClient.fetchCoinsMarketsChart(
         id: id,
