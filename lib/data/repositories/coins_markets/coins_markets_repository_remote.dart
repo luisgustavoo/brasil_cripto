@@ -1,7 +1,7 @@
 import 'dart:async';
+
 import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository.dart';
 import 'package:brasil_cripto/data/services/api/api_client.dart';
-import 'package:brasil_cripto/data/services/api/models/spark_line_api_model.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/domain/models/market.dart';
 import 'package:brasil_cripto/domain/models/sparkline.dart';

@@ -58,7 +58,7 @@ Map<String, dynamic> _$CoinsMarketsApiModelToJson(
   'current_price': instance.currentPrice,
   'market_cap': instance.marketCap,
   'market_cap_rank': instance.marketCapRank,
-  'sparkline_in_7d': instance.sparkLineIn7d,
+  'sparkline_in_7d': instance.sparkLineIn7d.toJson(),
   'price_change_percentage_1h_in_currency':
       instance.priceChangePercentage1hInCurrency,
   'price_change_percentage_24h_in_currency':

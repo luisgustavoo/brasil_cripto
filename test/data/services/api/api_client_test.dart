@@ -18,27 +18,25 @@ void main() {
 
   group('ApiClient fetchCoinsMarkets', () {
     test(
-      'should return a non-empty list when coins markets API returns data',
+      'should return a non-empty list when the API responds with data',
       () async {
         mockHttpClient.mockGet<List<dynamic>>(
           '/coins/markets',
           object: [kCoinsMarketsApiModel.toJson()],
         );
-
         final result = await apiClient.fetchCoinsMarkets(
           'usd',
           names: 'Bitcoin',
         );
-        expect(result.asOk.value, isNotEmpty);
+        expect(result.asOk.value.first.name, 'Bitcoin');
       },
     );
     test(
-      'should return a empty list when coins markets API returns data',
+      'should return an empty list when the API responds with no data',
       () async {
         mockHttpClient.mockGet<List<dynamic>>(
           '/coins/markets',
         );
-
         final result = await apiClient.fetchCoinsMarkets(
           'usd',
           names: 'Bitcoin',
@@ -46,15 +44,13 @@ void main() {
         expect(result.asOk.value, isEmpty);
       },
     );
-
     test(
-      'should return an error when coins markets API request fails',
+      'should return an error when the API request fails',
       () async {
         mockHttpClient.mockGet<List<dynamic>>(
           '/coins/markets',
           showError: true,
         );
-
         final result = await apiClient.fetchCoinsMarkets(
           'usd',
           names: 'Bitcoin',
@@ -63,11 +59,10 @@ void main() {
       },
     );
   });
-
   group('ApiClient fetchCoinsMarketsDetails', () {
     const id = 'bitcoin';
     test(
-      'should return Ok when coins market details API request succeeds',
+      'should return Ok when the API request succeeds',
       () async {
         mockHttpClient.mockGet<Map<String, dynamic>>(
           '/coins/$id/market_chart',
@@ -82,13 +77,12 @@ void main() {
       },
     );
     test(
-      'should return Error when coins market details API request fails',
+      'should return an error when the API request fails',
       () async {
         mockHttpClient.mockGet<Map<String, dynamic>>(
           '/coins/$id/market_chart',
           showError: true,
         );
-
         final result = await apiClient.fetchCoinsMarketsChart(
           id: id,
           vsCurrency: 'usd',

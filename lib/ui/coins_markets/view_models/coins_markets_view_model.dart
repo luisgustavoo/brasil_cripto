@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
@@ -17,7 +16,6 @@ class CoinsMarketViewModel extends ChangeNotifier {
     toggleFavorite = Command1(_toggleFavorite);
   }
   final CoinsMarketsRepository _coinsMarketsRepository;
-
   late final Command1<void, ({String names, String vsCurrency})>
   fetchCoinsMarkets;
   late final Command1<void, String> toggleFavorite;

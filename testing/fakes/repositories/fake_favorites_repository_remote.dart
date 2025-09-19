@@ -46,6 +46,9 @@ class FakeFavoritesRepositoryRemote implements FavoritesRepository {
 
   @override
   Future<Result<List<Coin>>> getFavorites(String vsCurrency) async {
+    if (_ids.isEmpty) {
+      return const Result.ok(<Coin>[]);
+    }
     final ids = _ids.map((e) => e).join(',');
     final result = await _apiClient.fetchCoinsMarkets(vsCurrency, ids: ids);
     switch (result) {

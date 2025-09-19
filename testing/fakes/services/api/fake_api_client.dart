@@ -24,6 +24,6 @@ class FakeApiClient implements ApiClient {
     required String vsCurrency,
     required int days,
   }) {
-    return Future.value(Result.ok(kMarketApiModel));
+    return Future.value(const Result.ok(kMarketApiModel));
   }
 }
