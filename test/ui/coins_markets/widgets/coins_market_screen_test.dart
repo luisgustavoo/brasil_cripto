@@ -11,7 +11,6 @@ import '../../../../testing/fakes/repositories/fake_favorites_repository_remote.
 import '../../../../testing/fakes/services/api/fake_api_client.dart';
 import '../../../../testing/fakes/services/fake_shared_preferences_service.dart';
 import '../../../../testing/mocks.dart';
-import '../../../../testing/utils/print_widgets.dart';
 
 void main() {
   late MockGoRouter goRouter;
