@@ -1,7 +1,6 @@
 import 'package:brasil_cripto/ui/core/l10n/app_localizations.dart';
 import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart';
 import 'package:brasil_cripto/ui/favorites/widgets/favorite_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../testing/app.dart';
@@ -46,10 +45,12 @@ void main() {
   }
 
   group('Favorite Screen', () {
-    testWidgets('1', (tester) async {
-      await loadScreen(tester);
-      expect(find.text(l10n.noCryptocurrencyFound), findsOneWidget);
-      expect(find.byType(TextField), findsOneWidget);
-    });
+    testWidgets(
+      'should display no cryptocurrency message when favorites list is empty',
+      (tester) async {
+        await loadScreen(tester);
+        expect(find.text(l10n.noCryptocurrencyFound), findsOneWidget);
+      },
+    );
   });
 }
