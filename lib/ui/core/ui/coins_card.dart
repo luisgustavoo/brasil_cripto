@@ -1,16 +1,15 @@
 import 'package:brasil_cripto/domain/models/coin.dart';
-import 'package:brasil_cripto/ui/coins_markets/widgets/spark_line_chart.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/core/themes/dimens.dart';
 import 'package:brasil_cripto/ui/core/ui/coin_title.dart';
 import 'package:brasil_cripto/ui/core/ui/coins_market_summary.dart';
 import 'package:brasil_cripto/ui/core/ui/confirm_remove_favorite_dialog.dart';
+import 'package:brasil_cripto/ui/home/widgets/home_spark_line_chart.dart';
 import 'package:flutter/material.dart';
 
 class CoinsCard extends StatelessWidget {
   const CoinsCard({
     required this.coin,
-    required this.isFavorite,
     this.toggleFavorite,
     this.onTap,
     super.key,
@@ -19,12 +18,11 @@ class CoinsCard extends StatelessWidget {
   final Coin coin;
   final void Function(Coin coin)? toggleFavorite;
   final void Function(Coin coin)? onTap;
-  final bool isFavorite;
 
   Widget _buildStar(BuildContext context) {
     return IconButton(
       key: Key('favorite-icon-${coin.id}'),
-      icon: isFavorite
+      icon: coin.isFavorite
           ? const Icon(
               Icons.star,
               color: Colors.yellow,
@@ -37,7 +35,7 @@ class CoinsCard extends StatelessWidget {
   }
 
   Future<void> _toggleFavorite(BuildContext context) async {
-    if (!isFavorite) {
+    if (!coin.isFavorite) {
       toggleFavorite?.call(coin);
       return;
     }
@@ -82,7 +80,7 @@ class CoinsCard extends StatelessWidget {
                         return SizedBox(
                           height: 100,
                           width: constraints.maxWidth,
-                          child: SparkLineChart(coin: coin),
+                          child: HomeSparkLineChart(coin: coin),
                         );
                       },
                     ),

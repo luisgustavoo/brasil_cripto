@@ -1,51 +1,37 @@
 import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/routing/routes.dart';
-import 'package:brasil_cripto/ui/coins_markets/view_models/coins_markets_view_model.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/core/ui/coins_card.dart';
+import 'package:brasil_cripto/ui/home/view_models/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 const String searchEditKey = 'search-edit-key';
 
-class CoinsMarketScreen extends StatefulWidget {
-  const CoinsMarketScreen({required this.viewModel, super.key});
+class HomeCoinsMarketTab extends StatefulWidget {
+  const HomeCoinsMarketTab({required this.viewModel, super.key});
 
-  final CoinsMarketViewModel viewModel;
+  final HomeViewModel viewModel;
 
   @override
-  State<CoinsMarketScreen> createState() => _CoinsMarketScreenState();
+  State<HomeCoinsMarketTab> createState() => _HomeCoinsMarketTabState();
 }
 
-class _CoinsMarketScreenState extends State<CoinsMarketScreen>
+class _HomeCoinsMarketTabState extends State<HomeCoinsMarketTab>
     with AutomaticKeepAliveClientMixin {
-  CoinsMarketViewModel get viewModel => widget.viewModel;
+  HomeViewModel get viewModel => widget.viewModel;
   late final TextEditingController searchController;
-  bool isLoading = false;
-  bool hasError = false;
   String vsCurrency = '';
 
   @override
   void initState() {
     super.initState();
     searchController = TextEditingController();
-    viewModel.fetchCoinsMarkets.addListener(_commandListener);
-  }
-
-  void _commandListener() {
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      isLoading = viewModel.fetchCoinsMarkets.running;
-      hasError = viewModel.fetchCoinsMarkets.error;
-    });
   }
 
   @override
   void dispose() {
     searchController.dispose();
-    viewModel.fetchCoinsMarkets.removeListener(_commandListener);
     super.dispose();
   }
 
@@ -90,17 +76,16 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
       listenable: viewModel,
       builder: (context, child) {
         final coins = viewModel.coins;
-        if (isLoading) {
+        if (viewModel.fetchCoinsMarkets.running) {
           return const _LoadingState();
         }
-        if (hasError) {
+        if (viewModel.fetchCoinsMarkets.error) {
           return _ErrorState(message: context.l10n.errorLoadingData);
         }
         if (coins.isEmpty) {
           return _EmptyState(message: context.l10n.noCryptocurrencyFound);
         }
         return _CoinsList(
-          viewModel: viewModel,
           coins: coins,
           onTap: (coin) {
             context.push(Routes.coinsDetails, extra: coin);
@@ -159,14 +144,12 @@ class _CoinsList extends StatelessWidget {
     required this.coins,
     required this.onToggleFavorite,
     required this.onTap,
-    required this.viewModel,
   });
 
   final List<Coin> coins;
-  final CoinsMarketViewModel viewModel;
-
   final void Function(Coin coin) onToggleFavorite;
   final void Function(Coin coin) onTap;
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -175,7 +158,6 @@ class _CoinsList extends StatelessWidget {
         final coin = coins[index];
         return CoinsCard(
           coin: coin,
-          isFavorite: coin.isFavorite,
           toggleFavorite: onToggleFavorite,
           onTap: onTap,
         );

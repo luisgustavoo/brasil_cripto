@@ -25,10 +25,8 @@ import 'package:brasil_cripto/data/services/shared_preferences_service.dart'
     as _i1038;
 import 'package:brasil_cripto/ui/coins_details/view_models/coins_details_view_model.dart'
     as _i1013;
-import 'package:brasil_cripto/ui/coins_markets/view_models/coins_markets_view_model.dart'
-    as _i606;
-import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart'
-    as _i657;
+import 'package:brasil_cripto/ui/home/view_models/home_view_model.dart'
+    as _i582;
 import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
@@ -72,14 +70,9 @@ extension GetItInjectableX on _i174.GetIt {
         coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),
       ),
     );
-    gh.lazySingleton<_i606.CoinsMarketViewModel>(
-      () => _i606.CoinsMarketViewModel(
+    gh.singleton<_i582.HomeViewModel>(
+      () => _i582.HomeViewModel(
         coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),
-        favoritesRepository: gh<_i568.FavoritesRepository>(),
-      ),
-    );
-    gh.lazySingleton<_i657.FavoriteViewModel>(
-      () => _i657.FavoriteViewModel(
         favoritesRepository: gh<_i568.FavoritesRepository>(),
       ),
     );

@@ -1,27 +1,27 @@
-import 'package:brasil_cripto/config/dependencies.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/routing/routes.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/core/ui/coins_card.dart';
-import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart';
+import 'package:brasil_cripto/ui/home/view_models/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class FavoriteScreen extends StatefulWidget {
-  const FavoriteScreen({
+class HomeFavoriteCoinsMarketTab extends StatefulWidget {
+  const HomeFavoriteCoinsMarketTab({
     required this.viewModel,
     super.key,
   });
 
-  final FavoriteViewModel viewModel;
+  final HomeViewModel viewModel;
 
   @override
-  State<FavoriteScreen> createState() => _FavoriteScreenState();
+  State<HomeFavoriteCoinsMarketTab> createState() =>
+      _HomeFavoriteCoinsMarketTabState();
 }
 
-class _FavoriteScreenState extends State<FavoriteScreen>
+class _HomeFavoriteCoinsMarketTabState extends State<HomeFavoriteCoinsMarketTab>
     with AutomaticKeepAliveClientMixin {
-  FavoriteViewModel get viewModel => widget.viewModel;
+  HomeViewModel get viewModel => widget.viewModel;
   String vsCurrency = '';
 
   @override
@@ -52,18 +52,18 @@ class _FavoriteScreenState extends State<FavoriteScreen>
     return ListenableBuilder(
       listenable: widget.viewModel,
       builder: (context, child) {
-        final coins = widget.viewModel.coins;
+        final favoriteCoins = widget.viewModel.favoriteCoins;
         if (viewModel.getFavorites.running) {
           return const _LoadingState();
         }
         if (viewModel.getFavorites.error) {
           return _ErrorState(message: context.l10n.errorLoadingData);
         }
-        if (coins.isEmpty) {
+        if (favoriteCoins.isEmpty) {
           return _EmptyState(message: context.l10n.noCryptocurrencyFound);
         }
         return _CoinsList(
-          coins: coins,
+          coins: favoriteCoins,
           onTap: (coin) {
             context.push(Routes.coinsDetails, extra: coin);
           },
@@ -124,26 +124,18 @@ class _CoinsList extends StatelessWidget {
   });
 
   final List<Coin> coins;
-
   final void Function(Coin coin) onToggleFavorite;
   final void Function(Coin coin) onTap;
   @override
   Widget build(BuildContext context) {
-    final favoriteViewModel = getIt<FavoriteViewModel>();
-    return ListenableBuilder(
-      listenable: favoriteViewModel.getFavorites,
-      builder: (context, child) {
-        return ListView.builder(
-          itemCount: coins.length,
-          itemBuilder: (context, index) {
-            final coin = coins[index];
-            return CoinsCard(
-              coin: coin,
-              isFavorite: coin.isFavorite,
-              toggleFavorite: onToggleFavorite,
-              onTap: onTap,
-            );
-          },
+    return ListView.builder(
+      itemCount: coins.length,
+      itemBuilder: (context, index) {
+        final coin = coins[index];
+        return CoinsCard(
+          coin: coin,
+          toggleFavorite: onToggleFavorite,
+          onTap: onTap,
         );
       },
     );

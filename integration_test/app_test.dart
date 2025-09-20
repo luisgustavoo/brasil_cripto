@@ -1,10 +1,10 @@
 import 'package:brasil_cripto/config/dependencies.dart';
 import 'package:brasil_cripto/routing/router.dart';
-import 'package:brasil_cripto/ui/coins_markets/widgets/coins_market_screen.dart';
 import 'package:brasil_cripto/ui/core/l10n/app_localizations.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/core/themes/theme.dart';
 import 'package:brasil_cripto/ui/core/ui/coins_card.dart';
+import 'package:brasil_cripto/ui/home/widgets/home_coins_market_tab.dart';
 import 'package:brasil_cripto/ui/home/widgets/home_screen.dart';
 import 'package:flutter/material.dart' hide Router;
 import 'package:flutter_test/flutter_test.dart';

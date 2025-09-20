@@ -3,8 +3,8 @@ import 'package:brasil_cripto/ui/core/themes/colors.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class SparkLineChart extends StatefulWidget {
-  const SparkLineChart({
+class HomeSparkLineChart extends StatefulWidget {
+  const HomeSparkLineChart({
     required this.coin,
     super.key,
   });
@@ -12,10 +12,10 @@ class SparkLineChart extends StatefulWidget {
   final Coin coin;
 
   @override
-  State<SparkLineChart> createState() => _SparkLineChartState();
+  State<HomeSparkLineChart> createState() => _HomeSparkLineChartState();
 }
 
-class _SparkLineChartState extends State<SparkLineChart> {
+class _HomeSparkLineChartState extends State<HomeSparkLineChart> {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
