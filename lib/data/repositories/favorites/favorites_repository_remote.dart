@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:brasil_cripto/data/repositories/favorites/favorites_repository.dart';
@@ -21,6 +22,9 @@ class FavoritesRepositoryRemote implements FavoritesRepository {
   final SharedPreferencesService _preferencesService;
   final ApiClient _apiClient;
   late List<String> _ids = [];
+  final _controller = StreamController<List<Coin>>();
+  Timer? _timer;
+  String vsCurrency = 'brl';
 
   Future<void> _init() async {
     final result = await _preferencesService.getData();
@@ -31,6 +35,24 @@ class FavoritesRepositoryRemote implements FavoritesRepository {
         log('Erro ao buscar ids dos favoritos');
     }
   }
+
+  void _start({Duration interval = const Duration(seconds: 70)}) {
+    if (_timer != null) {
+      return;
+    }
+    _timer = Timer.periodic(interval, (_) async {
+      await getFavorites(vsCurrency);
+    });
+  }
+
+  void _stop() {
+    _controller.close();
+    _timer?.cancel();
+    _timer = null;
+  }
+
+  @override
+  Stream<List<Coin>> get favoriteCoins => _controller.stream;
 
   @override
   Future<Result<void>> addFavorite(String id) async {
@@ -51,6 +73,7 @@ class FavoritesRepositoryRemote implements FavoritesRepository {
     if (_ids.isEmpty) {
       return const Result.ok(<Coin>[]);
     }
+    this.vsCurrency = vsCurrency;
     final ids = _ids.map((e) => e).join(',');
     final result = await _apiClient.fetchCoinsMarkets(vsCurrency, ids: ids);
     switch (result) {
@@ -77,6 +100,8 @@ class FavoritesRepositoryRemote implements FavoritesRepository {
             );
           },
         ).toList();
+        _start();
+        _controller.add(coins);
         return Result.ok(coins);
       case Error():
         return Result.error(result.error);
@@ -95,5 +120,10 @@ class FavoritesRepositoryRemote implements FavoritesRepository {
         _ids.add(id);
         return Result.error(result.error);
     }
+  }
+
+  @override
+  void stopPollingService() {
+    _stop();
   }
 }

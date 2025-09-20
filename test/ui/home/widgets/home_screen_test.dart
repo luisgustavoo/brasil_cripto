@@ -36,7 +36,29 @@ void main() {
         l10n = appLocalizations;
       },
     );
+    await tester.pump();
+  }
+
+  Future<void> searchItem(WidgetTester tester) async {
+    await loadScreen(tester);
+    final marketTab = find.byKey(const Key(marketTabKey));
+    await tester.tap(marketTab);
     await tester.pumpAndSettle();
+    final searchField = find.byKey(const Key(searchEditKey));
+    await tester.tap(searchField);
+    await tester.pump();
+    await tester.showKeyboard(searchField);
+    await tester.enterText(searchField, 'Bitcoin');
+    await tester.pump();
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.pump();
+  }
+
+  Future<void> addFavorite(WidgetTester tester) async {
+    await searchItem(tester);
+    final starBorderIcon = find.byIcon(Icons.star_border).at(0);
+    await tester.tap(starBorderIcon);
+    await tester.pump(const Duration(milliseconds: 100));
   }
 
   group('Home Screen', () {
@@ -45,61 +67,35 @@ void main() {
       expect(find.text(l10n.brazilCripto), findsOneWidget);
       expect(find.text(l10n.noCryptocurrencyFound), findsOneWidget);
     });
-    // testWidgets(
-    //   'should navigate to coin details after search',
-    //   (tester) async {
-    //     when(
-    //       () => goRouter.push(any<String>(), extra: any(named: 'extra')),
-    //     ).thenAnswer((_) async => null);
-    //     await loadScreen(tester);
-    //     final marketTab = find.byKey(const Key(marketTabKey));
-    //     await tester.tap(marketTab);
-    //     await tester.pumpAndSettle();
-    //     final searchField = find.byKey(const Key(searchEditKey));
-    //     await tester.tap(searchField);
-    //     await tester.pumpAndSettle();
-    //     await tester.showKeyboard(searchField);
-    //     await tester.enterText(searchField, 'Bitcoin');
-    //     await tester.pumpAndSettle();
-    //     await tester.testTextInput.receiveAction(TextInputAction.done);
-    //     await tester.pump();
-    //     expect(find.text('(BTC)'), findsOneWidget);
-    //     final bitcoinCard = find.byType(CoinsCard);
-    //     expect(bitcoinCard, findsOneWidget);
-    //     await tester.tap(bitcoinCard);
-    //     await tester.pump();
-    //     verify(
-    //       () => goRouter.push(any<String>(), extra: any(named: 'extra')),
-    //     ).called(1);
-    //   },
-    // );
-
-    // testWidgets(
-    //   'should search for Bitcoin and favorite it',
-    //   (tester) async {
-    //     await loadScreen(tester);
-    //     final marketTab = find.byKey(const Key(marketTabKey));
-    //     await tester.tap(marketTab);
-    //     await tester.pumpAndSettle();
-    //     final searchField = find.byKey(const Key(searchEditKey));
-    //     await tester.tap(searchField);
-    //     await tester.pumpAndSettle();
-    //     await tester.showKeyboard(searchField);
-    //     await tester.enterText(searchField, 'Bitcoin');
-    //     await tester.pumpAndSettle();
-    //     await tester.testTextInput.receiveAction(TextInputAction.done);
-    //     await tester.pump();
-    //     expect(find.text('(BTC)'), findsOneWidget);
-    //     final starBorderIcon = find.byIcon(Icons.star_border).at(0);
-    //     await tester.tap(starBorderIcon);
-    //     await tester.pump();
-    //     final favoriteTab = find.byKey(const Key(favoriteTabKey));
-    //     await tester.tap(favoriteTab);
-    //     await tester.pumpAndSettle();
-    //     final starIcon = find.byIcon(Icons.star).at(0);
-    //     expect(starIcon, findsOneWidget);
-    //   },
-    // );
+    testWidgets(
+      'should navigate to coin details after search',
+      (tester) async {
+        when(
+          () => goRouter.push(any<String>(), extra: any(named: 'extra')),
+        ).thenAnswer((_) async => null);
+        await searchItem(tester);
+        expect(find.text('(BTC)'), findsOneWidget);
+        final bitcoinCard = find.byType(CoinsCard);
+        expect(bitcoinCard, findsOneWidget);
+        await tester.tap(bitcoinCard);
+        await tester.pump();
+        verify(
+          () => goRouter.push(any<String>(), extra: any(named: 'extra')),
+        ).called(1);
+      },
+    );
+    testWidgets(
+      'should search for Bitcoin and favorite it',
+      (tester) async {
+        await searchItem(tester);
+        await addFavorite(tester);
+        // final favoriteTab = find.byKey(const Key(favoriteTabKey));
+        // await tester.tap(favoriteTab);
+        // await tester.pump();
+        // final starIcon = find.byIcon(Icons.star).at(0);
+        // expect(starIcon, findsOneWidget);
+      },
+    );
     // testWidgets(
     //   'remove favorite',
     //   (tester) async {

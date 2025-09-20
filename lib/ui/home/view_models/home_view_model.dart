@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository.dart';
 import 'package:brasil_cripto/data/repositories/favorites/favorites_repository.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
@@ -16,6 +18,7 @@ class HomeViewModel extends ChangeNotifier {
     fetchCoinsMarkets = Command1(_fetchCoinsMarkets);
     toggleFavorite = Command1(_toggleFavorite);
     getFavorites = Command1(_getFavorites);
+    _init();
   }
 
   final CoinsMarketsRepository _coinsMarketsRepository;
@@ -26,8 +29,18 @@ class HomeViewModel extends ChangeNotifier {
   late final Command1<void, String> getFavorites;
   late String vsCurrency = '';
   late ({String names, String vsCurrency}) queryParameters;
+  late StreamSubscription<List<Coin>> _subscription;
   List<Coin> coins = [];
   List<Coin> favoriteCoins = [];
+
+  void _init() {
+    _subscription = _favoritesRepository.favoriteCoins.listen(
+      (favoriteCoins) {
+        this.favoriteCoins = [...favoriteCoins];
+        notifyListeners();
+      },
+    );
+  }
 
   Future<Result<void>> _fetchCoinsMarkets(
     ({String names, String vsCurrency}) queryParameters,
@@ -71,7 +84,6 @@ class HomeViewModel extends ChangeNotifier {
       final result = await _favoritesRepository.getFavorites(vsCurrency);
       switch (result) {
         case Ok():
-          favoriteCoins = [...result.value];
           return const Result.ok(null);
         case Error():
           return Result.error(result.error);
@@ -87,5 +99,12 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<Result<void>> _removeFavorite(String id) async {
     return _favoritesRepository.removeFavorite(id);
+  }
+
+  @override
+  void dispose() {
+    _favoritesRepository.stopPollingService();
+    _subscription.cancel();
+    super.dispose();
   }
 }

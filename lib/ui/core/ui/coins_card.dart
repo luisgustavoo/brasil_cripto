@@ -54,6 +54,7 @@ class CoinsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      key: Key(coin.id),
       onTap: () {
         onTap?.call(coin);
       },

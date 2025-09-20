@@ -52,7 +52,7 @@ class _HomeFavoriteCoinsMarketTabState extends State<HomeFavoriteCoinsMarketTab>
     return ListenableBuilder(
       listenable: widget.viewModel,
       builder: (context, child) {
-        final favoriteCoins = widget.viewModel.favoriteCoins;
+        final favoriteCoins = viewModel.favoriteCoins;
         if (viewModel.getFavorites.running) {
           return const _LoadingState();
         }

@@ -93,7 +93,6 @@ class _CoinsMarketSummaryState extends State<CoinsMarketSummary> {
           style: _titleStyle,
           overflow: TextOverflow.ellipsis,
         ),
-
         TweenAnimationBuilder<double>(
           tween: Tween<double>(
             begin: _totalVolume,
@@ -198,6 +197,7 @@ class _CoinsMarketSummaryState extends State<CoinsMarketSummary> {
   Widget build(BuildContext context) {
     final locale = Localizations.localeOf(context);
     return Column(
+      key: Key(widget.coin.id),
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 8,
       children: [

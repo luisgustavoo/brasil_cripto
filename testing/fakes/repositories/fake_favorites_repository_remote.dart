@@ -26,4 +26,10 @@ class FakeFavoritesRepositoryRemote implements FavoritesRepository {
     _ids.remove(id);
     return const Result.ok(null);
   }
+
+  @override
+  void stopPollingService() {}
+
+  @override
+  Stream<List<Coin>> get favoriteCoins => Stream.value([kCoin]);
 }
