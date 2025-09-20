@@ -8,29 +8,18 @@ import 'package:mocktail/mocktail.dart';
 import '../../../../testing/app.dart';
 import '../../../../testing/fakes/repositories/fake_coins_markets_repository_remote.dart';
 import '../../../../testing/fakes/repositories/fake_favorites_repository_remote.dart';
-import '../../../../testing/fakes/services/api/fake_api_client.dart';
-import '../../../../testing/fakes/services/fake_shared_preferences_service.dart';
 import '../../../../testing/mocks.dart';
 
 void main() {
   late MockGoRouter goRouter;
-  late FakeSharedPreferencesService sharedPreferencesService;
-  late FakeApiClient apiClient;
-  late FakeFavoritesRepositoryRemote favoritesRepository;
   late CoinsMarketViewModel viewModel;
   late AppLocalizations l10n;
 
   setUp(() {
     goRouter = MockGoRouter();
-    apiClient = FakeApiClient();
-    sharedPreferencesService = FakeSharedPreferencesService();
-    favoritesRepository = FakeFavoritesRepositoryRemote(
-      apiClient: apiClient,
-      preferencesService: sharedPreferencesService,
-    );
     viewModel = CoinsMarketViewModel(
       coinsMarketsRepository: FakeCoinsMarketsRepositoryRemote(),
-      favoritesRepository: favoritesRepository,
+      favoritesRepository: FakeFavoritesRepositoryRemote(),
     );
   });
 

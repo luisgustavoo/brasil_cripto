@@ -55,20 +55,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i1038.SharedPreferencesService>(
       () => _i1038.SharedPreferencesService(gh<_i460.SharedPreferences>()),
     );
+    gh.lazySingleton<_i11.CoinsMarketsRepository>(
+      () => _i423.CoinsMarketsRepositoryRemote(
+        apiClient: gh<_i653.ApiClient>(),
+        preferencesService: gh<_i1038.SharedPreferencesService>(),
+      ),
+    );
     gh.lazySingleton<_i568.FavoritesRepository>(
       () => _i350.FavoritesRepositoryRemote(
         preferencesService: gh<_i1038.SharedPreferencesService>(),
         apiClient: gh<_i653.ApiClient>(),
       ),
-    );
-    gh.lazySingleton<_i657.FavoriteViewModel>(
-      () => _i657.FavoriteViewModel(
-        favoritesRepository: gh<_i568.FavoritesRepository>(),
-      ),
-    );
-    gh.factory<_i11.CoinsMarketsRepository>(
-      () =>
-          _i423.CoinsMarketsRepositoryRemote(apiClient: gh<_i653.ApiClient>()),
     );
     gh.lazySingleton<_i1013.CoinsDetailsViewModel>(
       () => _i1013.CoinsDetailsViewModel(
@@ -78,6 +75,11 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i606.CoinsMarketViewModel>(
       () => _i606.CoinsMarketViewModel(
         coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),
+        favoritesRepository: gh<_i568.FavoritesRepository>(),
+      ),
+    );
+    gh.lazySingleton<_i657.FavoriteViewModel>(
+      () => _i657.FavoriteViewModel(
         favoritesRepository: gh<_i568.FavoritesRepository>(),
       ),
     );

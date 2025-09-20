@@ -73,6 +73,7 @@ class FavoritesRepositoryRemote implements FavoritesRepository {
                   coin.priceChangePercentage24hInCurrency,
               priceChangePercentage7dInCurrency:
                   coin.priceChangePercentage7dInCurrency,
+              isFavorite: true,
             );
           },
         ).toList();

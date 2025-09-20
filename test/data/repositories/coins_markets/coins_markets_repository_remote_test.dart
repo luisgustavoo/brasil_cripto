@@ -6,6 +6,7 @@ import 'package:brasil_cripto/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../testing/fakes/services/api/fake_api_client.dart';
+import '../../../../testing/fakes/services/fake_shared_preferences_service.dart';
 import '../../../../testing/utils/result.dart';
 
 void main() {
@@ -16,6 +17,7 @@ void main() {
     apiClient = FakeApiClient();
     coinsMarketsRepository = CoinsMarketsRepositoryRemote(
       apiClient: apiClient,
+      preferencesService: FakeSharedPreferencesService(),
     );
   });
   group('CoinsMarketsRepository', () {
