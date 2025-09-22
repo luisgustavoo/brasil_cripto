@@ -76,6 +76,7 @@ class _HomeCoinsMarketTabState extends State<HomeCoinsMarketTab>
       listenable: viewModel,
       builder: (context, child) {
         final coins = viewModel.coins;
+
         if (viewModel.fetchCoinsMarkets.running) {
           return const _LoadingState();
         }
@@ -85,6 +86,7 @@ class _HomeCoinsMarketTabState extends State<HomeCoinsMarketTab>
         if (coins.isEmpty) {
           return _EmptyState(message: context.l10n.noCryptocurrencyFound);
         }
+
         return _CoinsList(
           coins: coins,
           onTap: (coin) {
@@ -158,7 +160,7 @@ class _CoinsList extends StatelessWidget {
         final coin = coins[index];
         return CoinsCard(
           coin: coin,
-          toggleFavorite: onToggleFavorite,
+          onToggleFavorite: onToggleFavorite,
           onTap: onTap,
         );
       },

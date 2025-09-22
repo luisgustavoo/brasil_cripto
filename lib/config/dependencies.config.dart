@@ -74,7 +74,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i582.HomeViewModel(
         coinsMarketsRepository: gh<_i11.CoinsMarketsRepository>(),
         favoritesRepository: gh<_i568.FavoritesRepository>(),
-      ),
+      )..init(),
     );
     return this;
   }

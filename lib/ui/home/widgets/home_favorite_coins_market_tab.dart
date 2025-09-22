@@ -134,7 +134,7 @@ class _CoinsList extends StatelessWidget {
         final coin = coins[index];
         return CoinsCard(
           coin: coin,
-          toggleFavorite: onToggleFavorite,
+          onToggleFavorite: onToggleFavorite,
           onTap: onTap,
         );
       },

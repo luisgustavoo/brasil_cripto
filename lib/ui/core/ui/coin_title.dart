@@ -22,13 +22,13 @@ class CoinTitle extends StatelessWidget {
           height: imageSize,
           width: imageSize,
           fit: BoxFit.cover,
-          placeholder: (context, url) => SizedBox(
-            height: imageSize,
-            width: imageSize,
-            child: const CircularProgressIndicator(
-              strokeWidth: 0.5,
-            ),
-          ),
+          // placeholder: (context, url) => SizedBox(
+          //   height: imageSize,
+          //   width: imageSize,
+          //   child: const CircularProgressIndicator(
+          //     strokeWidth: 0.5,
+          //   ),
+          // ),
           errorWidget: (context, url, error) => Icon(
             Icons.error,
             size: imageSize,

@@ -10,13 +10,13 @@ import 'package:flutter/material.dart';
 class CoinsCard extends StatelessWidget {
   const CoinsCard({
     required this.coin,
-    this.toggleFavorite,
+    this.onToggleFavorite,
     this.onTap,
     super.key,
   });
 
   final Coin coin;
-  final void Function(Coin coin)? toggleFavorite;
+  final void Function(Coin coin)? onToggleFavorite;
   final void Function(Coin coin)? onTap;
 
   Widget _buildStar(BuildContext context) {
@@ -36,7 +36,7 @@ class CoinsCard extends StatelessWidget {
 
   Future<void> _toggleFavorite(BuildContext context) async {
     if (!coin.isFavorite) {
-      toggleFavorite?.call(coin);
+      onToggleFavorite?.call(coin);
       return;
     }
     final confirmed = await showConfirmRemoveFavoriteDialog(
@@ -47,7 +47,7 @@ class CoinsCard extends StatelessWidget {
       cancelLabel: context.l10n.cancel,
     );
     if (confirmed ?? false) {
-      toggleFavorite?.call(coin);
+      onToggleFavorite?.call(coin);
     }
   }
 

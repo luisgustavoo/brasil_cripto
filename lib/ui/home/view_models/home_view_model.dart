@@ -18,7 +18,6 @@ class HomeViewModel extends ChangeNotifier {
     fetchCoinsMarkets = Command1(_fetchCoinsMarkets);
     toggleFavorite = Command1(_toggleFavorite);
     getFavorites = Command1(_getFavorites);
-    _init();
   }
 
   final CoinsMarketsRepository _coinsMarketsRepository;
@@ -29,11 +28,12 @@ class HomeViewModel extends ChangeNotifier {
   late final Command1<void, String> getFavorites;
   late String vsCurrency = '';
   late ({String names, String vsCurrency}) queryParameters;
-  late StreamSubscription<List<Coin>> _subscription;
+  StreamSubscription<List<Coin>>? _subscription;
   List<Coin> coins = [];
   List<Coin> favoriteCoins = [];
 
-  void _init() {
+  @postConstruct
+  void init() {
     _subscription = _favoritesRepository.favoriteCoins.listen(
       (favoriteCoins) {
         this.favoriteCoins = [...favoriteCoins];
@@ -103,8 +103,8 @@ class HomeViewModel extends ChangeNotifier {
 
   @override
   void dispose() {
+    _subscription?.cancel();
     _favoritesRepository.stopPollingService();
-    _subscription.cancel();
     super.dispose();
   }
 }
