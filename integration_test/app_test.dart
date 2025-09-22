@@ -43,12 +43,6 @@ void main() {
   }
 
   group('end-to-end test', () {
-    // testWidgets('should display title and empty state', (tester) async {
-    //   await loadHomeScreen(tester);
-    //   expect(find.text(l10n.brazilCripto), findsOneWidget);
-    //   expect(find.text(l10n.noCryptocurrencyFound), findsOneWidget);
-    // });
-
     testWidgets('should navigate to coin details after search', (tester) async {
       await loadHomeScreen(tester);
       final marketTab = find.byKey(const Key(marketTabKey));
@@ -70,7 +64,7 @@ void main() {
       final backButton = find.byType(BackButton);
       await tester.tap(backButton);
       await tester.pumpAndSettle();
-    }, skip: true);
+    });
     testWidgets('should search for Bitcoin and favorite it', (tester) async {
       // Pesquisa o item
       await loadHomeScreen(tester);
@@ -93,9 +87,8 @@ void main() {
       final favoriteTab = find.byKey(const Key(favoriteTabKey));
       await tester.tap(favoriteTab);
       await tester.pumpAndSettle();
-      await Future<void>.delayed(const Duration(seconds: 1));
-      // final starIcon = find.byIcon(Icons.star);
-      // expect(starIcon, findsOneWidget);
+      final starIcon = find.byIcon(Icons.star);
+      expect(starIcon, findsOneWidget);
     });
     testWidgets('remove favorite', (tester) async {
       await loadHomeScreen(tester);
