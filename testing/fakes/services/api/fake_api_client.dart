@@ -1,78 +1,32 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:brasil_cripto/data/services/api/api_client.dart';
 import 'package:brasil_cripto/data/services/api/models/coins_markets_api_model.dart';
 import 'package:brasil_cripto/data/services/api/models/market_api_model.dart';
 import 'package:brasil_cripto/utils/result.dart';
 
-import '../../../fixture/fixture_reader.dart';
+import '../../../models/coin.dart';
+import '../../../models/market.dart';
 
 class FakeApiClient implements ApiClient {
-  FakeApiClient() {
-    final jsonCoinsMarketsData = FixtureReader.getJsonData(
-      'fakes/services/fixture/coins_markets_response.json',
-    );
-    jsonCoinsMarketsResponse =
-        jsonDecode(jsonCoinsMarketsData) as List<dynamic>;
-    final jsonCoinsMarketsDetailsData = FixtureReader.getJsonData(
-      'fakes/services/fixture/coins_markets_details_response.json',
-    );
-    jsonCoinsMarketsResponse =
-        jsonDecode(jsonCoinsMarketsData) as List<dynamic>;
-    jsonCoinsMarketsDetailsResponse =
-        jsonDecode(jsonCoinsMarketsDetailsData) as Map<String, dynamic>;
-  }
-
-  late List<dynamic> jsonCoinsMarketsResponse;
-  late Map<String, dynamic> jsonCoinsMarketsDetailsResponse;
-  StreamController<List<CoinsMarketsApiModel>> _controller =
-      StreamController<List<CoinsMarketsApiModel>>.broadcast();
-
-  @override
-  Stream<List<CoinsMarketsApiModel>> get coinsMarketsStream =>
-      _controller.stream;
-
+  int requestCount = 0;
   @override
   Future<Result<List<CoinsMarketsApiModel>>> fetchCoinsMarkets(
+    String vsCurrency, {
+    String? ids,
     String? names,
-    String vsCurrency,
-  ) {
-    final coinsMarketsList = List<Map<String, dynamic>>.from(
-      jsonCoinsMarketsResponse,
-    );
-    final coinsMarkets = coinsMarketsList
-        .map(CoinsMarketsApiModel.fromJson)
-        .toList();
-    _controller
-      ..add(coinsMarkets)
-      ..close();
-    return Future.value(Result.ok(coinsMarkets));
+  }) {
+    requestCount++;
+    return Future.value(const Result.ok([kCoinsMarketsApiModel]));
   }
 
   @override
-  Future<Result<MarketApiModel>> fetchCoinsMarketsDetails(
-    String id,
-    String vsCurrency,
-    int days,
-  ) {
-    final marketApiModel = MarketApiModel.fromJson(
-      jsonCoinsMarketsDetailsResponse,
-    );
-    return Future.value(Result.ok(marketApiModel));
-  }
-
-  @override
-  Future<void> startBackGroundFetchCoinsMarkets(
-    ({String? names, String vsCurrency}) queryParameters,
-  ) async {
-    if (_controller.isClosed) {
-      _controller = StreamController<List<CoinsMarketsApiModel>>.broadcast();
-    }
-  }
-
-  @override
-  void stopBackGroundFetchCoinsMarkets() {
-    _controller.close();
+  Future<Result<MarketApiModel>> fetchCoinsMarketsChart({
+    required String id,
+    required String vsCurrency,
+    required int days,
+  }) {
+    requestCount++;
+    return Future.value(const Result.ok(kMarketApiModel));
   }
 }

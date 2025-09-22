@@ -2,16 +2,16 @@ import 'package:brasil_cripto/data/services/shared_preferences_service.dart';
 import 'package:brasil_cripto/utils/result.dart';
 
 class FakeSharedPreferencesService implements SharedPreferencesService {
-  String value = '';
+  List<String>? values = [];
 
   @override
-  Future<Result<String?>> getData() {
-    return Future.value(Result.ok(value));
+  Future<Result<List<String>?>> getData() {
+    return Future.value(Result.ok(values));
   }
 
   @override
-  Future<Result<void>> setData(String value) {
-    this.value = value;
+  Future<Result<void>> setData(List<String> values) {
+    this.values = values;
     return Future.value(const Result.ok(null));
   }
 }

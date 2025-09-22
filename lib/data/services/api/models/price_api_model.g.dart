@@ -6,11 +6,11 @@ part of 'price_api_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PriceApiModel _$PriceApiModelFromJson(Map<String, dynamic> json) =>
-    PriceApiModel(
+_PriceApiModel _$PriceApiModelFromJson(Map<String, dynamic> json) =>
+    _PriceApiModel(
       timestamp: (json['timestamp'] as num).toInt(),
       value: (json['value'] as num).toDouble(),
     );
 
-Map<String, dynamic> _$PriceApiModelToJson(PriceApiModel instance) =>
+Map<String, dynamic> _$PriceApiModelToJson(_PriceApiModel instance) =>
     <String, dynamic>{'timestamp': instance.timestamp, 'value': instance.value};

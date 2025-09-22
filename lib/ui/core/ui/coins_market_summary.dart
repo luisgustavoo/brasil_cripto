@@ -75,7 +75,7 @@ class _CoinsMarketSummaryState extends State<CoinsMarketSummary> {
             begin: _currentPrice,
             end: widget.coin.currentPrice,
           ),
-          duration: const Duration(seconds: 1),
+          duration: const Duration(seconds: 2),
           builder: (context, value, child) {
             return Text(formatCurrencyValue(value, locale));
           },
@@ -93,13 +93,12 @@ class _CoinsMarketSummaryState extends State<CoinsMarketSummary> {
           style: _titleStyle,
           overflow: TextOverflow.ellipsis,
         ),
-
         TweenAnimationBuilder<double>(
           tween: Tween<double>(
             begin: _totalVolume,
             end: widget.coin.totalVolume,
           ),
-          duration: const Duration(seconds: 1),
+          duration: const Duration(seconds: 2),
           builder: (context, value, child) {
             return Text(formatCurrencyValue(value, locale));
           },
@@ -122,7 +121,7 @@ class _CoinsMarketSummaryState extends State<CoinsMarketSummary> {
             begin: _marketCap,
             end: widget.coin.marketCap,
           ),
-          duration: const Duration(seconds: 1),
+          duration: const Duration(seconds: 2),
           builder: (context, value, child) {
             return Text(formatCurrencyValue(value, locale));
           },
@@ -198,6 +197,7 @@ class _CoinsMarketSummaryState extends State<CoinsMarketSummary> {
   Widget build(BuildContext context) {
     final locale = Localizations.localeOf(context);
     return Column(
+      key: Key(widget.coin.id),
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 8,
       children: [

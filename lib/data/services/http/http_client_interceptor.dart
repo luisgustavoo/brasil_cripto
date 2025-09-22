@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:brasil_cripto/config/env.dart';
@@ -14,7 +15,7 @@ class HttpClientInterceptor extends Interceptor {
   ) async {
     final authRequired = options.extra['auth_required'] as bool? ?? true;
     if (authRequired) {
-      options.headers['x-cg-demo-api-key'] = Env.coingeckoApiKey;
+      options.headers['x-cg-demo-api-key'] = Env.coinGeckoApiKey;
     }
     if (!kReleaseMode) {
       log('########### Request LOG ###########');
@@ -34,7 +35,9 @@ class HttpClientInterceptor extends Interceptor {
   ) {
     if (!kReleaseMode) {
       log('########### Response LOG ###########');
-      log('data: ${response.data}');
+      log(
+        'data: ${const JsonEncoder.withIndent('   ').convert(response.data)}',
+      );
       log('########### Response LOG ###########');
     }
 

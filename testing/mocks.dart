@@ -4,8 +4,6 @@ import 'package:brasil_cripto/data/services/http/http_client_response.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 
-class FakeObject extends Fake {}
-
 class MockGoRouter extends Mock implements GoRouter {}
 
 class MockHttpClient extends Mock implements HttpClient {
@@ -49,15 +47,15 @@ class MockHttpClientException extends Mock implements HttpClientException {
 }
 
 extension HttpMethodMocks on HttpClient {
-  void mockGet<T>(String path, {T? object, bool? showError = false}) {
+  void mockGet<T>(String path, {Object? object, bool? showError = false}) {
     if (!showError!) {
       when(
         () => get<T>(
           path,
           queryParameters: any(named: 'queryParameters'),
         ),
-      ).thenAnswer((invocation) {
-        return Future.value(MockHttpClientResponse(data: object));
+      ).thenAnswer((invocation) async {
+        return MockHttpClientResponse(data: object as T?);
       });
     }
 

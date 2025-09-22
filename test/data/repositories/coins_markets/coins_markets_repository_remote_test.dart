@@ -6,42 +6,48 @@ import 'package:brasil_cripto/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../testing/fakes/services/api/fake_api_client.dart';
+import '../../../../testing/fakes/services/fake_shared_preferences_service.dart';
 import '../../../../testing/utils/result.dart';
 
 void main() {
+  late FakeApiClient apiClient;
   late CoinsMarketsRepository coinsMarketsRepository;
 
   setUp(() {
+    apiClient = FakeApiClient();
     coinsMarketsRepository = CoinsMarketsRepositoryRemote(
-      apiClient: FakeApiClient(),
+      apiClient: apiClient,
+      preferencesService: FakeSharedPreferencesService(),
     );
   });
-  group('CoinsMarketsRepository remote', () {
-    test('should fetch coin markets successfully', () async {
-      final emittedCoins = <List<Coin>>[];
-      final subscription = coinsMarketsRepository.coinsMarketsStream.listen(
-        emittedCoins.add,
-      );
-
-      final result = await coinsMarketsRepository.fetchCoinsMarkets(
-        'Bitcoin',
-        'usd',
-      );
-      expect(result, isA<Ok<List<Coin>>>());
-      expect(result.asOk.value.isNotEmpty, true);
-      expect(result.asOk.value.first.id.toLowerCase(), 'bitcoin');
-      expect(emittedCoins.length, 1);
-      expect(emittedCoins.first.map((c) => c.id), ['bitcoin', 'ethereum']);
-      await subscription.cancel();
-    });
-    test('should fetch coin market details successfully', () async {
-      final result = await coinsMarketsRepository.fetchCoinsMarketsDetails(
-        'Bitcoin',
-        'usd',
-        1,
-      );
-      expect(result, isA<Ok<Market>>());
-      expect(result.asOk.value, isNotNull);
-    });
+  group('CoinsMarketsRepository', () {
+    test(
+      'should return a list of coins when fetching markets succeeds',
+      () async {
+        final result = await coinsMarketsRepository.fetchCoinsMarkets(
+          'usd',
+          names: 'Bitcoin',
+        );
+        expect(result, isA<Ok<List<Coin>>>());
+        expect(result.asOk.value.isNotEmpty, true);
+        expect(result.asOk.value.first.id.toLowerCase(), 'bitcoin');
+        expect(apiClient.requestCount, 1);
+      },
+    );
+    test(
+      'should return market details when fetching market chart succeeds',
+      () async {
+        final result = await coinsMarketsRepository.fetchCoinsMarketsChart(
+          vsCurrency: 'usd',
+          id: 'bitcoin',
+          days: 1,
+        );
+        expect(result, isA<Ok<Market>>());
+        expect(result.asOk.value.prices, isNotNull);
+        expect(result.asOk.value.totalVolumes, isNotNull);
+        expect(result.asOk.value.marketCaps, isNotNull);
+        expect(apiClient.requestCount, 1);
+      },
+    );
   });
 }

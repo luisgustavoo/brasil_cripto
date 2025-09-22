@@ -1,26 +1,16 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'market_api_model.freezed.dart';
 part 'market_api_model.g.dart';
 
-@JsonSerializable()
-class MarketApiModel {
-  MarketApiModel({
-    required this.prices,
-    required this.marketCaps,
-    required this.totalVolumes,
-  });
+@freezed
+abstract class MarketApiModel with _$MarketApiModel {
+  const factory MarketApiModel({
+    required List<List<double>> prices,
+    required List<List<double>> marketCaps,
+    required List<List<double>> totalVolumes,
+  }) = _MarketApiModel;
 
   factory MarketApiModel.fromJson(Map<String, dynamic> json) =>
       _$MarketApiModelFromJson(json);
-
-  @JsonKey(name: 'prices')
-  final List<List<double>> prices;
-
-  @JsonKey(name: 'market_caps')
-  final List<List<double>> marketCaps;
-
-  @JsonKey(name: 'total_volumes')
-  final List<List<double>> totalVolumes;
-
-  Map<String, dynamic> toJson() => _$MarketApiModelToJson(this);
 }

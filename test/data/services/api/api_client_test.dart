@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:brasil_cripto/data/services/api/api_client.dart';
 import 'package:brasil_cripto/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../../../../testing/fixture/fixture_reader.dart';
 import '../../../../testing/mocks.dart';
+import '../../../../testing/models/coin.dart';
+import '../../../../testing/models/market.dart';
 import '../../../../testing/utils/result.dart';
 
 void main() {
@@ -18,81 +17,77 @@ void main() {
   });
 
   group('ApiClient fetchCoinsMarkets', () {
-    late List<dynamic> jsonCoinsMarketsResponse;
-    final jsonCoinsMarketsData = FixtureReader.getJsonData(
-      'fakes/services/fixture/coins_markets_response.json',
-    );
-    jsonCoinsMarketsResponse =
-        jsonDecode(jsonCoinsMarketsData) as List<dynamic>;
-
     test(
-      'should return a non-empty list when coins markets API returns data',
+      'should return a non-empty list when the API responds with data',
       () async {
         mockHttpClient.mockGet<List<dynamic>>(
           '/coins/markets',
-          object: jsonCoinsMarketsResponse,
+          object: [kCoinsMarketsApiModel.toJson()],
         );
-
-        final result = await apiClient.fetchCoinsMarkets('Bitcoin', 'usd');
-        expect(result.asOk.value, isNotEmpty);
+        final result = await apiClient.fetchCoinsMarkets(
+          'usd',
+          names: 'Bitcoin',
+        );
+        expect(result.asOk.value.first.name, 'Bitcoin');
       },
     );
     test(
-      'should return a empty list when coins markets API returns data',
+      'should return an empty list when the API responds with no data',
       () async {
         mockHttpClient.mockGet<List<dynamic>>(
           '/coins/markets',
         );
-
-        final result = await apiClient.fetchCoinsMarkets('Bitcoin', 'usd');
+        final result = await apiClient.fetchCoinsMarkets(
+          'usd',
+          names: 'Bitcoin',
+        );
         expect(result.asOk.value, isEmpty);
       },
     );
-
     test(
-      'should return an error when coins markets API request fails',
+      'should return an error when the API request fails',
       () async {
         mockHttpClient.mockGet<List<dynamic>>(
           '/coins/markets',
           showError: true,
         );
-
-        final result = await apiClient.fetchCoinsMarkets('Bitcoin', 'usd');
+        final result = await apiClient.fetchCoinsMarkets(
+          'usd',
+          names: 'Bitcoin',
+        );
         expect(result, result.asError);
       },
     );
   });
-
   group('ApiClient fetchCoinsMarketsDetails', () {
-    final jsonCoinsMarketsDetailsData = FixtureReader.getJsonData(
-      'fakes/services/fixture/coins_markets_details_response.json',
-    );
-    final jsonCoinsMarketsDetailsResponse =
-        jsonDecode(jsonCoinsMarketsDetailsData) as Map<String, dynamic>;
-
     const id = 'bitcoin';
     test(
-      'should return Ok when coins market details API request succeeds',
+      'should return Ok when the API request succeeds',
       () async {
         mockHttpClient.mockGet<Map<String, dynamic>>(
           '/coins/$id/market_chart',
-          object: jsonCoinsMarketsDetailsResponse,
+          object: kMarketApiModel.toJson(),
         );
-
-        final result = await apiClient.fetchCoinsMarketsDetails(id, 'usd', 1);
+        final result = await apiClient.fetchCoinsMarketsChart(
+          id: id,
+          vsCurrency: 'usd',
+          days: 1,
+        );
         expect(result, isA<Ok<void>>());
       },
     );
-
     test(
-      'should return Error when coins market details API request fails',
+      'should return an error when the API request fails',
       () async {
         mockHttpClient.mockGet<Map<String, dynamic>>(
           '/coins/$id/market_chart',
           showError: true,
         );
-
-        final result = await apiClient.fetchCoinsMarketsDetails(id, 'usd', 1);
+        final result = await apiClient.fetchCoinsMarketsChart(
+          id: id,
+          vsCurrency: 'usd',
+          days: 1,
+        );
         expect(result, result.asError);
       },
     );

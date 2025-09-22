@@ -1,16 +1,11 @@
-import 'package:brasil_cripto/data/services/api/models/price_api_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Price {
-  Price({
-    required this.timestamp,
-    required this.value,
-  });
-  factory Price.fromApi(PriceApiModel model) {
-    return Price(
-      timestamp: model.timestamp,
-      value: model.value,
-    );
-  }
-  final int timestamp;
-  final double value;
+part 'price.freezed.dart';
+
+@freezed
+abstract class Price with _$Price {
+  const factory Price({
+    required int timestamp,
+    required double value,
+  }) = _Price;
 }

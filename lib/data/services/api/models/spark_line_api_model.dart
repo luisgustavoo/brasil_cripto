@@ -1,14 +1,13 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'spark_line_api_model.freezed.dart';
 part 'spark_line_api_model.g.dart';
 
-@JsonSerializable()
-class SparkLineApiModel {
-  SparkLineApiModel({required this.price});
+@Freezed(fromJson: true, toJson: true)
+abstract class SparkLineApiModel with _$SparkLineApiModel {
+  const factory SparkLineApiModel({required List<double> price}) =
+      _SparkLineApiModel;
 
   factory SparkLineApiModel.fromJson(Map<String, dynamic> json) =>
       _$SparkLineApiModelFromJson(json);
-
-  final List<double> price;
-
-  Map<String, dynamic> toJson() => _$SparkLineApiModelToJson(this);
 }
