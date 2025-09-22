@@ -71,6 +71,7 @@ class FavoritesRepositoryRemote implements FavoritesRepository {
   @override
   Future<Result<List<Coin>>> getFavorites(String vsCurrency) async {
     if (_ids.isEmpty) {
+      _controller.add([]);
       return const Result.ok(<Coin>[]);
     }
     this.vsCurrency = vsCurrency;

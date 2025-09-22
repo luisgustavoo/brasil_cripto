@@ -21,7 +21,6 @@ class _HomeCoinsMarketTabState extends State<HomeCoinsMarketTab>
     with AutomaticKeepAliveClientMixin {
   HomeViewModel get viewModel => widget.viewModel;
   late final TextEditingController searchController;
-  String vsCurrency = '';
 
   @override
   void initState() {
@@ -37,10 +36,7 @@ class _HomeCoinsMarketTabState extends State<HomeCoinsMarketTab>
 
   Future<void> _search() async {
     await viewModel.fetchCoinsMarkets.execute(
-      (
-        names: searchController.text.toLowerCase(),
-        vsCurrency: vsCurrency,
-      ),
+      searchController.text.toLowerCase(),
     );
   }
 
@@ -51,8 +47,6 @@ class _HomeCoinsMarketTabState extends State<HomeCoinsMarketTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final locale = Localizations.localeOf(context);
-    vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
     return Scaffold(
       body: Column(
         spacing: 32,
@@ -73,7 +67,10 @@ class _HomeCoinsMarketTabState extends State<HomeCoinsMarketTab>
 
   Widget _buildBody() {
     return ListenableBuilder(
-      listenable: viewModel,
+      listenable: Listenable.merge([
+        viewModel.fetchCoinsMarkets,
+        viewModel.toggleFavorite,
+      ]),
       builder: (context, child) {
         final coins = viewModel.coins;
 

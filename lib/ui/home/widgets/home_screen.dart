@@ -23,6 +23,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    widget.viewModel.vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(

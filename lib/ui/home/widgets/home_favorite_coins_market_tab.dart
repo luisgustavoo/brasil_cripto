@@ -22,16 +22,13 @@ class HomeFavoriteCoinsMarketTab extends StatefulWidget {
 class _HomeFavoriteCoinsMarketTabState extends State<HomeFavoriteCoinsMarketTab>
     with AutomaticKeepAliveClientMixin {
   HomeViewModel get viewModel => widget.viewModel;
-  String vsCurrency = '';
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback(
       (timeStamp) {
-        final locale = Localizations.localeOf(context);
-        vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
-        viewModel.getFavorites.execute(vsCurrency);
+        viewModel.getFavorites.execute();
       },
     );
   }
@@ -50,7 +47,10 @@ class _HomeFavoriteCoinsMarketTabState extends State<HomeFavoriteCoinsMarketTab>
 
   Widget _buildBody() {
     return ListenableBuilder(
-      listenable: widget.viewModel,
+      listenable: Listenable.merge([
+        widget.viewModel.getFavorites,
+        widget.viewModel.toggleFavorite,
+      ]),
       builder: (context, child) {
         final favoriteCoins = viewModel.favoriteCoins;
         if (viewModel.getFavorites.running) {

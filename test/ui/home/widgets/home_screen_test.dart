@@ -21,10 +21,13 @@ void main() {
     goRouter = MockGoRouter();
     favoritesRepository = FakeFavoritesRepositoryRemote();
     coinsMarketsRepository = FakeCoinsMarketsRepositoryRemote();
-    viewModel = HomeViewModel(
-      coinsMarketsRepository: coinsMarketsRepository,
-      favoritesRepository: favoritesRepository,
-    )..init();
+    viewModel =
+        HomeViewModel(
+            coinsMarketsRepository: coinsMarketsRepository,
+            favoritesRepository: favoritesRepository,
+          )
+          ..init()
+          ..vsCurrency = 'brl';
   });
 
   Future<void> loadScreen(WidgetTester tester) async {
@@ -51,7 +54,7 @@ void main() {
       (tester) async {
         await favoritesRepository.addFavorite('bitcoin');
         await loadScreen(tester);
-        await viewModel.getFavorites.execute('brl');
+        await viewModel.getFavorites.execute();
         await tester.pumpAndSettle();
         expect(find.text(kCoin.name), findsOneWidget);
         favoritesRepository.stopPollingService();
@@ -64,7 +67,7 @@ void main() {
         await favoritesRepository.addFavorite('bitcoin');
         await favoritesRepository.removeFavorite('bitcoin');
         await tester.pumpAndSettle();
-        await viewModel.getFavorites.execute('brl');
+        await viewModel.getFavorites.execute();
         expect(viewModel.favoriteCoins, isEmpty);
         favoritesRepository.stopPollingService();
       },
@@ -75,9 +78,7 @@ void main() {
         await loadScreen(tester);
         final marketTab = find.byKey(const Key(marketTabKey));
         await tester.tap(marketTab);
-        await viewModel.fetchCoinsMarkets.execute(
-          (names: 'Bitcoin', vsCurrency: 'brl'),
-        );
+        await viewModel.fetchCoinsMarkets.execute('Bitcoin');
         await tester.pumpAndSettle();
         expect(find.text(kCoin.name), findsOneWidget);
         favoritesRepository.stopPollingService();
@@ -92,9 +93,7 @@ void main() {
       await loadScreen(tester);
       final marketTab = find.byKey(const Key(marketTabKey));
       await tester.tap(marketTab);
-      await viewModel.fetchCoinsMarkets.execute(
-        (names: 'Bitcoin', vsCurrency: 'brl'),
-      );
+      await viewModel.fetchCoinsMarkets.execute('Bitcoin');
       await tester.pumpAndSettle();
       final card = find.byType(CoinsCard);
       await tester.tap(card);

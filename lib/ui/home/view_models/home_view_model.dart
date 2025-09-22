@@ -17,17 +17,16 @@ class HomeViewModel extends ChangeNotifier {
        _favoritesRepository = favoritesRepository {
     fetchCoinsMarkets = Command1(_fetchCoinsMarkets);
     toggleFavorite = Command1(_toggleFavorite);
-    getFavorites = Command1(_getFavorites);
+    getFavorites = Command0(_getFavorites);
   }
 
   final CoinsMarketsRepository _coinsMarketsRepository;
   final FavoritesRepository _favoritesRepository;
-  late final Command1<void, ({String names, String vsCurrency})>
-  fetchCoinsMarkets;
+  late final Command1<void, String?> fetchCoinsMarkets;
   late final Command1<void, Coin> toggleFavorite;
-  late final Command1<void, String> getFavorites;
-  late String vsCurrency = '';
-  late ({String names, String vsCurrency}) queryParameters;
+  late final Command0<void> getFavorites;
+  String vsCurrency = '';
+  String? names;
   StreamSubscription<List<Coin>>? _subscription;
   List<Coin> coins = [];
   List<Coin> favoriteCoins = [];
@@ -42,13 +41,9 @@ class HomeViewModel extends ChangeNotifier {
     );
   }
 
-  Future<Result<void>> _fetchCoinsMarkets(
-    ({String names, String vsCurrency}) queryParameters,
-  ) async {
+  Future<Result<void>> _fetchCoinsMarkets([String? names]) async {
     try {
-      final (names: names, vsCurrency: vsCurrency) = queryParameters;
-      this.vsCurrency = vsCurrency;
-      this.queryParameters = queryParameters;
+      this.names = names;
       final result = await _coinsMarketsRepository.fetchCoinsMarkets(
         vsCurrency,
         names: names,
@@ -72,19 +67,14 @@ class HomeViewModel extends ChangeNotifier {
       }
       return _addFavorite(coin.id);
     } finally {
-      if (favoriteCoins.isNotEmpty) {
-        await _getFavorites(vsCurrency);
-      }
-      if (coins.isNotEmpty) {
-        await _fetchCoinsMarkets(queryParameters);
-      }
+      await _getFavorites();
+      await _fetchCoinsMarkets(names);
       notifyListeners();
     }
   }
 
-  Future<Result<void>> _getFavorites(String vsCurrency) async {
+  Future<Result<void>> _getFavorites() async {
     try {
-      this.vsCurrency = vsCurrency;
       final result = await _favoritesRepository.getFavorites(vsCurrency);
       switch (result) {
         case Ok():

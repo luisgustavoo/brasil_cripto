@@ -21,22 +21,19 @@ class CoinsDetailsScreen extends StatefulWidget {
 
 class _CoinsDetailsScreenState extends State<CoinsDetailsScreen> {
   CoinsDetailsViewModel get viewModel => widget.viewModel;
-  String vsCurrency = '';
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((timestamp) {
       final locale = Localizations.localeOf(context);
-      vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
+      viewModel.vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
       _fetchCoinDetails();
     });
   }
 
   void _fetchCoinDetails() {
-    viewModel.fetchCoinsMarketsDetails.execute(
-      (id: widget.coin.id, vsCurrency: vsCurrency),
-    );
+    viewModel.fetchCoinsMarketsDetails.execute(widget.coin.id);
   }
 
   Widget _buildContent() {
@@ -72,7 +69,7 @@ class _CoinsDetailsScreenState extends State<CoinsDetailsScreen> {
         child: SizedBox(
           height: MediaQuery.sizeOf(context).height,
           child: ListenableBuilder(
-            listenable: viewModel,
+            listenable: viewModel.fetchCoinsMarketsDetails,
             builder: (context, child) => _buildContent(),
           ),
         ),
