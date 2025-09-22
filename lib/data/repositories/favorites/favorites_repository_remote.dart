@@ -48,7 +48,6 @@ class FavoritesRepositoryRemote implements FavoritesRepository {
         case Ok():
           log('####### REFRESH DATA(FavoritesRepositoryRemote) #######');
           _controller?.add(result.value);
-          _controller?.add(result.value);
         case Error():
           log('Erro ao buscar dados dos favoritos', error: result.error);
       }
