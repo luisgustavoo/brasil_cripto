@@ -21,13 +21,10 @@ void main() {
     goRouter = MockGoRouter();
     favoritesRepository = FakeFavoritesRepositoryRemote();
     coinsMarketsRepository = FakeCoinsMarketsRepositoryRemote();
-    viewModel =
-        HomeViewModel(
-            coinsMarketsRepository: coinsMarketsRepository,
-            favoritesRepository: favoritesRepository,
-          )
-          ..init()
-          ..vsCurrency = 'brl';
+    viewModel = HomeViewModel(
+      coinsMarketsRepository: coinsMarketsRepository,
+      favoritesRepository: favoritesRepository,
+    )..vsCurrency = 'brl';
   });
 
   Future<void> loadScreen(WidgetTester tester) async {

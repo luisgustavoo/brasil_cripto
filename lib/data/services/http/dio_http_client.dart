@@ -10,7 +10,10 @@ import 'package:injectable/injectable.dart';
 class DioHttpClient implements HttpClient {
   DioHttpClient({@factoryParam BaseOptions? options}) {
     _dio = Dio(options ?? _options)
-      ..interceptors.addAll([LogInterceptor(), HttpClientInterceptor()]);
+      ..interceptors.addAll([
+        // LogInterceptor(),
+        HttpClientInterceptor(),
+      ]);
   }
 
   late Dio _dio;

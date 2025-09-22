@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:brasil_cripto/data/repositories/coins_markets/coins_markets_repository.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/domain/models/market.dart';
@@ -7,6 +9,8 @@ import '../../models/coin.dart';
 import '../../models/market.dart';
 
 class FakeCoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
+  StreamController<List<Coin>>? _controller;
+
   @override
   Future<Result<List<Coin>>> fetchCoinsMarkets(
     String vsCurrency, {
@@ -24,4 +28,17 @@ class FakeCoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
   }) async {
     return const Result.ok(kMarket);
   }
+
+  @override
+  void starPollingService() {
+    _controller = StreamController<List<Coin>>();
+  }
+
+  @override
+  void stopPollingService() {
+    _controller?.close();
+  }
+
+  @override
+  Stream<List<Coin>>? get coins => _controller?.stream ?? const Stream.empty();
 }

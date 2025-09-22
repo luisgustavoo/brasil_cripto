@@ -20,6 +20,10 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
   final ApiClient _apiClient;
   final SharedPreferencesService _preferencesService;
   late List<String> _ids = [];
+  StreamController<List<Coin>>? _controller;
+  Timer? _timer;
+  String vsCurrency = 'brl';
+  String? names;
 
   Future<void> _getIds() async {
     final result = await _preferencesService.getData();
@@ -31,12 +35,44 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
     }
   }
 
+  void _start({Duration interval = const Duration(seconds: 60)}) {
+    if (_timer != null) {
+      return;
+    }
+    if (_controller?.isClosed ?? true) {
+      _controller = StreamController<List<Coin>>();
+    }
+    _timer = Timer.periodic(interval, (_) async {
+      final result = await fetchCoinsMarkets(
+        vsCurrency,
+        names: names,
+      );
+      switch (result) {
+        case Ok():
+          log('####### REFRESH DATA(CoinsMarketsRepositoryRemote) #######');
+          _controller?.add(result.value);
+        case Error():
+          log('Erro ao buscar dados dos favoritos', error: result.error);
+      }
+    });
+  }
+
+  void _stop() {
+    _controller?.close();
+    _timer?.cancel();
+    _timer = null;
+  }
+
+  @override
+  Stream<List<Coin>>? get coins => _controller?.stream;
+
   @override
   Future<Result<List<Coin>>> fetchCoinsMarkets(
     String vsCurrency, {
-    String? ids,
     String? names,
   }) async {
+    this.names = names;
+    this.vsCurrency = vsCurrency;
     await _getIds();
     try {
       final result = await _apiClient.fetchCoinsMarkets(
@@ -105,5 +141,15 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
     } on Exception catch (e) {
       return Result.error(e);
     }
+  }
+
+  @override
+  void starPollingService() {
+    _start();
+  }
+
+  @override
+  void stopPollingService() {
+    _stop();
   }
 }

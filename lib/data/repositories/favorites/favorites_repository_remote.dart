@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:brasil_cripto/data/repositories/favorites/favorites_repository.dart';
 import 'package:brasil_cripto/data/services/api/api_client.dart';
 import 'package:brasil_cripto/data/services/shared_preferences_service.dart';
@@ -22,7 +21,7 @@ class FavoritesRepositoryRemote implements FavoritesRepository {
   final SharedPreferencesService _preferencesService;
   final ApiClient _apiClient;
   late List<String> _ids = [];
-  final _controller = StreamController<List<Coin>>();
+  StreamController<List<Coin>>? _controller;
   Timer? _timer;
   String vsCurrency = 'brl';
 
@@ -36,23 +35,34 @@ class FavoritesRepositoryRemote implements FavoritesRepository {
     }
   }
 
-  void _start({Duration interval = const Duration(seconds: 70)}) {
+  void _start({Duration interval = const Duration(seconds: 60)}) {
     if (_timer != null) {
       return;
     }
+    if (_controller?.isClosed ?? true) {
+      _controller = StreamController<List<Coin>>();
+    }
     _timer = Timer.periodic(interval, (_) async {
-      await getFavorites(vsCurrency);
+      final result = await getFavorites(vsCurrency);
+      switch (result) {
+        case Ok():
+          log('####### REFRESH DATA(FavoritesRepositoryRemote) #######');
+          _controller?.add(result.value);
+          _controller?.add(result.value);
+        case Error():
+          log('Erro ao buscar dados dos favoritos', error: result.error);
+      }
     });
   }
 
   void _stop() {
-    _controller.close();
+    _controller?.close();
     _timer?.cancel();
     _timer = null;
   }
 
   @override
-  Stream<List<Coin>> get favoriteCoins => _controller.stream;
+  Stream<List<Coin>>? get favoriteCoins => _controller?.stream;
 
   @override
   Future<Result<void>> addFavorite(String id) async {
@@ -71,7 +81,6 @@ class FavoritesRepositoryRemote implements FavoritesRepository {
   @override
   Future<Result<List<Coin>>> getFavorites(String vsCurrency) async {
     if (_ids.isEmpty) {
-      _controller.add([]);
       return const Result.ok(<Coin>[]);
     }
     this.vsCurrency = vsCurrency;
@@ -101,8 +110,6 @@ class FavoritesRepositoryRemote implements FavoritesRepository {
             );
           },
         ).toList();
-        _start();
-        _controller.add(coins);
         return Result.ok(coins);
       case Error():
         return Result.error(result.error);
@@ -126,5 +133,10 @@ class FavoritesRepositoryRemote implements FavoritesRepository {
   @override
   void stopPollingService() {
     _stop();
+  }
+
+  @override
+  void starPollingService() {
+    _start();
   }
 }

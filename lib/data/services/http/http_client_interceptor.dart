@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:brasil_cripto/config/env.dart';
@@ -34,7 +35,9 @@ class HttpClientInterceptor extends Interceptor {
   ) {
     if (!kReleaseMode) {
       log('########### Response LOG ###########');
-      log('data: ${response.data}');
+      log(
+        'data: ${const JsonEncoder.withIndent('   ').convert(response.data)}',
+      );
       log('########### Response LOG ###########');
     }
 

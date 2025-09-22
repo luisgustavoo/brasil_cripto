@@ -27,19 +27,10 @@ class HomeViewModel extends ChangeNotifier {
   late final Command0<void> getFavorites;
   String vsCurrency = '';
   String? names;
-  StreamSubscription<List<Coin>>? _subscription;
+  StreamSubscription<List<Coin>>? _favoriteSubscription;
+  StreamSubscription<List<Coin>>? _coinsMarketSubscription;
   List<Coin> coins = [];
   List<Coin> favoriteCoins = [];
-
-  @postConstruct
-  void init() {
-    _subscription = _favoritesRepository.favoriteCoins.listen(
-      (favoriteCoins) {
-        this.favoriteCoins = [...favoriteCoins];
-        notifyListeners();
-      },
-    );
-  }
 
   Future<Result<void>> _fetchCoinsMarkets([String? names]) async {
     try {
@@ -51,6 +42,13 @@ class HomeViewModel extends ChangeNotifier {
       switch (result) {
         case Ok():
           coins = [...result.value];
+          if (coins.isNotEmpty) {
+            _coinsMarketsRepository.starPollingService();
+            _startCoinsMarketSubscription();
+          } else {
+            _coinsMarketsRepository.stopPollingService();
+            _stopCoinsMarketSubscription();
+          }
           return const Result.ok(null);
         case Error():
           return Result.error(result.error);
@@ -78,6 +76,15 @@ class HomeViewModel extends ChangeNotifier {
       final result = await _favoritesRepository.getFavorites(vsCurrency);
       switch (result) {
         case Ok():
+          favoriteCoins = [...result.value];
+          notifyListeners();
+          if (favoriteCoins.isNotEmpty) {
+            _favoritesRepository.starPollingService();
+            _startFavoriteSubscription();
+          } else {
+            _favoritesRepository.stopPollingService();
+            _stopFavoriteSubscription();
+          }
           return const Result.ok(null);
         case Error():
           return Result.error(result.error);
@@ -95,10 +102,44 @@ class HomeViewModel extends ChangeNotifier {
     return _favoritesRepository.removeFavorite(id);
   }
 
+  void _startFavoriteSubscription() {
+    if (_favoriteSubscription != null) {
+      return;
+    }
+    _favoriteSubscription = _favoritesRepository.favoriteCoins?.listen(
+      (favoriteCoins) {
+        this.favoriteCoins = [...favoriteCoins];
+        notifyListeners();
+      },
+    );
+  }
+
+  void _startCoinsMarketSubscription() {
+    if (_coinsMarketSubscription != null) {
+      return;
+    }
+    _coinsMarketSubscription = _coinsMarketsRepository.coins?.listen(
+      (coins) {
+        this.coins = [...coins];
+        notifyListeners();
+      },
+    );
+  }
+
+  void _stopFavoriteSubscription() {
+    _favoriteSubscription?.cancel();
+  }
+
+  void _stopCoinsMarketSubscription() {
+    _coinsMarketSubscription?.cancel();
+  }
+
   @override
   void dispose() {
-    _subscription?.cancel();
+    _stopFavoriteSubscription();
+    _stopCoinsMarketSubscription();
     _favoritesRepository.stopPollingService();
+    _coinsMarketsRepository.stopPollingService();
     super.dispose();
   }
 }

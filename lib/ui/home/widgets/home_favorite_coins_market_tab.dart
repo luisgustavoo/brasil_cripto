@@ -47,10 +47,7 @@ class _HomeFavoriteCoinsMarketTabState extends State<HomeFavoriteCoinsMarketTab>
 
   Widget _buildBody() {
     return ListenableBuilder(
-      listenable: Listenable.merge([
-        widget.viewModel.getFavorites,
-        widget.viewModel.toggleFavorite,
-      ]),
+      listenable: Listenable.merge([viewModel, viewModel.getFavorites]),
       builder: (context, child) {
         final favoriteCoins = viewModel.favoriteCoins;
         if (viewModel.getFavorites.running) {

@@ -67,10 +67,7 @@ class _HomeCoinsMarketTabState extends State<HomeCoinsMarketTab>
 
   Widget _buildBody() {
     return ListenableBuilder(
-      listenable: Listenable.merge([
-        viewModel.fetchCoinsMarkets,
-        viewModel.toggleFavorite,
-      ]),
+      listenable: Listenable.merge([viewModel, viewModel.fetchCoinsMarkets]),
       builder: (context, child) {
         final coins = viewModel.coins;
 

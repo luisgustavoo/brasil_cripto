@@ -8,12 +8,11 @@ import '../../models/coin.dart';
 
 class FakeFavoritesRepositoryRemote implements FavoritesRepository {
   final List<String> _ids = [];
-  final _controller = StreamController<List<Coin>>();
+  StreamController<List<Coin>>? _controller;
 
   @override
   Future<Result<void>> addFavorite(String id) async {
     _ids.add(id);
-    _controller.add([kCoin]);
     return const Result.ok(null);
   }
 
@@ -28,15 +27,20 @@ class FakeFavoritesRepositoryRemote implements FavoritesRepository {
   @override
   Future<Result<void>> removeFavorite(String id) async {
     _ids.remove(id);
-    _controller.add([]);
     return const Result.ok(null);
   }
 
   @override
   void stopPollingService() {
-    _controller.close();
+    _controller?.close();
   }
 
   @override
-  Stream<List<Coin>> get favoriteCoins => _controller.stream;
+  Stream<List<Coin>> get favoriteCoins =>
+      _controller?.stream ?? const Stream.empty();
+
+  @override
+  void starPollingService() {
+    _controller = StreamController<List<Coin>>();
+  }
 }
