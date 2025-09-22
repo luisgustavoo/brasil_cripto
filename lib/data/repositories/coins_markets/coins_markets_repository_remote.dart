@@ -52,7 +52,7 @@ class CoinsMarketsRepositoryRemote implements CoinsMarketsRepository {
           log('####### REFRESH DATA(CoinsMarketsRepositoryRemote) #######');
           _controller?.add(result.value);
         case Error():
-          log('Erro ao buscar dados dos favoritos', error: result.error);
+          log('Erro ao buscar dados do mercado', error: result.error);
       }
     });
   }
