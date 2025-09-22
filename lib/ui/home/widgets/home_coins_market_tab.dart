@@ -1,71 +1,52 @@
-import 'package:brasil_cripto/config/dependencies.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
 import 'package:brasil_cripto/routing/routes.dart';
-import 'package:brasil_cripto/ui/coins_markets/view_models/coins_markets_view_model.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/core/ui/coins_card.dart';
-import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart';
+import 'package:brasil_cripto/ui/home/view_models/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 const String searchEditKey = 'search-edit-key';
 
-class CoinsMarketScreen extends StatefulWidget {
-  const CoinsMarketScreen({required this.viewModel, super.key});
+class HomeCoinsMarketTab extends StatefulWidget {
+  const HomeCoinsMarketTab({required this.viewModel, super.key});
 
-  final CoinsMarketViewModel viewModel;
+  final HomeViewModel viewModel;
 
   @override
-  State<CoinsMarketScreen> createState() => _CoinsMarketScreenState();
+  State<HomeCoinsMarketTab> createState() => _HomeCoinsMarketTabState();
 }
 
-class _CoinsMarketScreenState extends State<CoinsMarketScreen>
+class _HomeCoinsMarketTabState extends State<HomeCoinsMarketTab>
     with AutomaticKeepAliveClientMixin {
-  CoinsMarketViewModel get viewModel => widget.viewModel;
+  HomeViewModel get viewModel => widget.viewModel;
   late final TextEditingController searchController;
-
-  bool _isLoading = false;
-  bool _hasError = false;
 
   @override
   void initState() {
     super.initState();
     searchController = TextEditingController();
-    viewModel.fetchCoinsMarkets.addListener(_commandListener);
-  }
-
-  void _commandListener() {
-    if (!mounted) {
-      return;
-    }
-    setState(() {
-      _isLoading = viewModel.fetchCoinsMarkets.running;
-      _hasError = viewModel.fetchCoinsMarkets.error;
-    });
   }
 
   @override
   void dispose() {
     searchController.dispose();
-    viewModel.fetchCoinsMarkets.removeListener(_commandListener);
     super.dispose();
   }
 
   Future<void> _search() async {
-    final locale = Localizations.localeOf(context);
-    final vsCurrency = locale.languageCode == 'pt' ? 'brl' : 'usd';
     await viewModel.fetchCoinsMarkets.execute(
-      (
-        names: searchController.text.toLowerCase(),
-        vsCurrency: vsCurrency,
-      ),
+      searchController.text.toLowerCase(),
     );
+  }
+
+  void _toggleFavorites(Coin coin) {
+    viewModel.toggleFavorite.execute(coin);
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
     return Scaffold(
       body: Column(
         spacing: 32,
@@ -85,15 +66,15 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
   }
 
   Widget _buildBody() {
-    return StreamBuilder(
-      stream: viewModel.coinsMarketsStream,
-      builder: (context, snapshot) {
-        final coins = snapshot.data ?? [];
-        if (_isLoading) {
+    return ListenableBuilder(
+      listenable: Listenable.merge([viewModel, viewModel.fetchCoinsMarkets]),
+      builder: (context, child) {
+        final coins = viewModel.coins;
+
+        if (viewModel.fetchCoinsMarkets.running) {
           return const _LoadingState();
         }
-
-        if (_hasError) {
+        if (viewModel.fetchCoinsMarkets.error) {
           return _ErrorState(message: context.l10n.errorLoadingData);
         }
         if (coins.isEmpty) {
@@ -105,9 +86,7 @@ class _CoinsMarketScreenState extends State<CoinsMarketScreen>
           onTap: (coin) {
             context.push(Routes.coinsDetails, extra: coin);
           },
-          onToggleFavorite: (coin) {
-            getIt<FavoriteViewModel>().toggleFavorite.execute(coin);
-          },
+          onToggleFavorite: _toggleFavorites,
         );
       },
     );
@@ -164,25 +143,21 @@ class _CoinsList extends StatelessWidget {
   });
 
   final List<Coin> coins;
-
   final void Function(Coin coin) onToggleFavorite;
   final void Function(Coin coin) onTap;
+
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: () async {},
-      child: ListView.builder(
-        itemCount: coins.length,
-        itemBuilder: (context, index) {
-          final coin = coins[index];
-          return CoinsCard(
-            coin: coin,
-
-            toggleFavorite: onToggleFavorite,
-            onTap: onTap,
-          );
-        },
-      ),
+    return ListView.builder(
+      itemCount: coins.length,
+      itemBuilder: (context, index) {
+        final coin = coins[index];
+        return CoinsCard(
+          coin: coin,
+          onToggleFavorite: onToggleFavorite,
+          onTap: onTap,
+        );
+      },
     );
   }
 }

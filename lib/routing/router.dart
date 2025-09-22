@@ -14,7 +14,9 @@ class Router {
       GoRoute(
         path: Routes.home,
         builder: (context, state) {
-          return const HomeScreen();
+          return HomeScreen(
+            viewModel: getIt(),
+          );
         },
       ),
       GoRoute(

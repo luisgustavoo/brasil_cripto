@@ -1,41 +1,28 @@
-import 'package:brasil_cripto/config/dependencies.dart';
 import 'package:brasil_cripto/domain/models/coin.dart';
-import 'package:brasil_cripto/ui/coins_markets/widgets/spark_line_chart.dart';
 import 'package:brasil_cripto/ui/core/l10n/l10n.dart';
 import 'package:brasil_cripto/ui/core/themes/dimens.dart';
 import 'package:brasil_cripto/ui/core/ui/coin_title.dart';
 import 'package:brasil_cripto/ui/core/ui/coins_market_summary.dart';
 import 'package:brasil_cripto/ui/core/ui/confirm_remove_favorite_dialog.dart';
-import 'package:brasil_cripto/ui/favorites/view_models/favorite_view_model.dart';
-import 'package:collection/collection.dart';
+import 'package:brasil_cripto/ui/home/widgets/home_spark_line_chart.dart';
 import 'package:flutter/material.dart';
 
 class CoinsCard extends StatelessWidget {
   const CoinsCard({
     required this.coin,
-    this.toggleFavorite,
+    this.onToggleFavorite,
     this.onTap,
     super.key,
   });
 
   final Coin coin;
-  final void Function(Coin coin)? toggleFavorite;
+  final void Function(Coin coin)? onToggleFavorite;
   final void Function(Coin coin)? onTap;
-
-  bool _isFavorite(Coin coin) {
-    final favorites = getIt<FavoriteViewModel>().favorites;
-
-    final favorito = favorites.firstWhereOrNull(
-      (element) => element.id == coin.id,
-    );
-
-    return favorito != null;
-  }
 
   Widget _buildStar(BuildContext context) {
     return IconButton(
       key: Key('favorite-icon-${coin.id}'),
-      icon: _isFavorite(coin)
+      icon: coin.isFavorite
           ? const Icon(
               Icons.star,
               color: Colors.yellow,
@@ -48,9 +35,8 @@ class CoinsCard extends StatelessWidget {
   }
 
   Future<void> _toggleFavorite(BuildContext context) async {
-    final isFav = _isFavorite(coin);
-    if (!isFav) {
-      toggleFavorite?.call(coin);
+    if (!coin.isFavorite) {
+      onToggleFavorite?.call(coin);
       return;
     }
     final confirmed = await showConfirmRemoveFavoriteDialog(
@@ -61,13 +47,14 @@ class CoinsCard extends StatelessWidget {
       cancelLabel: context.l10n.cancel,
     );
     if (confirmed ?? false) {
-      toggleFavorite?.call(coin);
+      onToggleFavorite?.call(coin);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      key: Key(coin.id),
       onTap: () {
         onTap?.call(coin);
       },
@@ -79,12 +66,7 @@ class CoinsCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ListenableBuilder(
-                listenable: getIt<FavoriteViewModel>().toggleFavorite,
-                builder: (context, child) {
-                  return _buildStar(context);
-                },
-              ),
+              _buildStar(context),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,7 +81,7 @@ class CoinsCard extends StatelessWidget {
                         return SizedBox(
                           height: 100,
                           width: constraints.maxWidth,
-                          child: SparkLineChart(coinsMarkets: coin),
+                          child: HomeSparkLineChart(coin: coin),
                         );
                       },
                     ),

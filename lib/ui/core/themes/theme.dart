@@ -31,6 +31,9 @@ abstract final class AppTheme {
         foregroundColor: Colors.white,
       ),
     ),
+    tabBarTheme: const TabBarThemeData(
+      indicatorSize: TabBarIndicatorSize.tab,
+    ),
   );
 
   static final ThemeData darkTheme = ThemeData(
@@ -51,6 +54,9 @@ abstract final class AppTheme {
         backgroundColor: AppColors.darkHighlight,
         foregroundColor: Colors.white,
       ),
+    ),
+    tabBarTheme: const TabBarThemeData(
+      indicatorSize: TabBarIndicatorSize.tab,
     ),
   );
 }
