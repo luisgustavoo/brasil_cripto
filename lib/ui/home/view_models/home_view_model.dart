@@ -72,8 +72,12 @@ class HomeViewModel extends ChangeNotifier {
       }
       return _addFavorite(coin.id);
     } finally {
-      await _getFavorites(vsCurrency);
-      await _fetchCoinsMarkets(queryParameters);
+      if (favoriteCoins.isNotEmpty) {
+        await _getFavorites(vsCurrency);
+      }
+      if (coins.isNotEmpty) {
+        await _fetchCoinsMarkets(queryParameters);
+      }
       notifyListeners();
     }
   }
