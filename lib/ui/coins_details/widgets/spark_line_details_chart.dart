@@ -30,7 +30,7 @@ class _SparkLineDetailsChartState extends State<SparkLineDetailsChart> {
       .toList();
 
   Color get _lineColor =>
-      widget.coin.priceChangePercentage7dInCurrency.isNegative
+      widget.coin.priceChangePercentage24hInCurrency.isNegative
       ? AppColors.darkNegative
       : AppColors.darkPositive;
 
