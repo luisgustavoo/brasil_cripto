@@ -35,7 +35,8 @@ void main() {
         theme: AppTheme.lightTheme,
         builder: (context, child) {
           l10n = context.l10n;
-          return child!;
+
+          return child ?? const SizedBox.shrink();
         },
       ),
     );
