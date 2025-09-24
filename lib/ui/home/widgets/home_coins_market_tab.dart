@@ -81,14 +81,20 @@ class _HomeCoinsMarketTabState extends State<HomeCoinsMarketTab>
           return _EmptyState(message: context.l10n.noCryptocurrencyFound);
         }
 
-        return _CoinsList(
-          coins: coins,
-          onTap: (coin) {
-            context.push(Routes.coinsDetails, extra: coin);
-          },
-          onToggleFavorite: _toggleFavorites,
-        );
+        return child!;
       },
+      child: ListenableBuilder(
+        listenable: viewModel,
+        builder: (context, child) {
+          return _CoinsList(
+            coins: viewModel.coins,
+            onTap: (coin) {
+              context.push(Routes.coinsDetails, extra: coin);
+            },
+            onToggleFavorite: _toggleFavorites,
+          );
+        },
+      ),
     );
   }
 

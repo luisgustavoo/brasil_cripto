@@ -47,7 +47,7 @@ class _HomeFavoriteCoinsMarketTabState extends State<HomeFavoriteCoinsMarketTab>
 
   Widget _buildBody() {
     return ListenableBuilder(
-      listenable: Listenable.merge([viewModel, viewModel.getFavorites]),
+      listenable: viewModel.getFavorites,
       builder: (context, child) {
         final favoriteCoins = viewModel.favoriteCoins;
         if (viewModel.getFavorites.running) {
@@ -59,14 +59,21 @@ class _HomeFavoriteCoinsMarketTabState extends State<HomeFavoriteCoinsMarketTab>
         if (favoriteCoins.isEmpty) {
           return _EmptyState(message: context.l10n.noCryptocurrencyFound);
         }
-        return _CoinsList(
-          coins: favoriteCoins,
-          onTap: (coin) {
-            context.push(Routes.coinsDetails, extra: coin);
-          },
-          onToggleFavorite: _toggleFavorites,
-        );
+
+        return child!;
       },
+      child: ListenableBuilder(
+        listenable: viewModel,
+        builder: (context, child) {
+          return _CoinsList(
+            coins: viewModel.favoriteCoins,
+            onTap: (coin) {
+              context.push(Routes.coinsDetails, extra: coin);
+            },
+            onToggleFavorite: _toggleFavorites,
+          );
+        },
+      ),
     );
   }
 
