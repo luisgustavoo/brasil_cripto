@@ -1,5 +1,10 @@
 # Brasil Cripto
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=luisgustavoo_brasil_cripto&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=luisgustavoo_brasil_cripto) &nbsp;&nbsp;[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=luisgustavoo_brasil_cripto)](https://sonarcloud.io/summary/new_code?id=luisgustavoo_brasil_cripto) &nbsp;&nbsp; [![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-dark.svg)](https://sonarcloud.io/summary/new_code?id=luisgustavoo_brasil_cripto)
+
+
+
+
 Aplicativo de consulta de cotações de criptomoedas desenvolvido como **teste técnico para a Brasil Card**.  
 O app segue a arquitetura **MVVM**, seguindo recomendado na documentação oficial do Flutter: [App Architecture Guide](https://docs.flutter.dev/app-architecture).
 
