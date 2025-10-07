@@ -1,6 +1,0 @@
-projectKey=brasil_cripto
-serverUrl=http://localhost:9000
-serverVersion=25.10.0.114319
-dashboardUrl=http://localhost:9000/dashboard?id=brasil_cripto
-ceTaskId=eba39192-6a63-4010-bb0c-d645b157e835
-ceTaskUrl=http://localhost:9000/api/ce/task?id=eba39192-6a63-4010-bb0c-d645b157e835
