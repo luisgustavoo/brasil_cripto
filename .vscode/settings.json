@@ -3,5 +3,9 @@
         "dimens",
         "prefs",
         "sparkline"
-    ]
+    ],
+    "sonarlint.connectedMode.project": {
+        "connectionId": "luisgustavoo",
+        "projectKey": "luisgustavoo_brasil_cripto"
+    }
 }
